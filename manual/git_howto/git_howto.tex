@@ -1,0 +1,83 @@
+\documentclass{jarticle}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{here}
+\usepackage{url}
+\usepackage{ascmac}
+\usepackage[top=30truemm,bottom=30truemm,left=25truemm,right=25truemm]{geometry}
+\title{GitHub入門①}
+\author{木村 薫}
+\begin{document}
+\maketitle
+\section{はじめに}
+GitHub入門①では，既存のリポジトリをインポートし，変更を反映させることが目標である．リポジトリ作成などは含まれていないのであしからず．
+%
+\section{用語解説}
+\begin{description}
+\item[リポジトリ]\mbox{}\\
+  プログラムやソースコード，リソース(画像・音声ファイル)などを保管している場所．
+\item[GitHub]\mbox{}\\
+  リポジトリをホスティング，つまりサーバーを提供しているサイト．無料で使えるが，機能は限られる．
+\item[Git]\mbox{}\\
+  バージョン管理システム．最近はsubversionよりも使われることが多いらしい．
+\end{description}
+%
+\section{準備}
+ユーザ名とメールアドレスを設定しよう\\
+\begin{itembox}[l]{ユーザ名とメールアドレスを設定}
+\begin{verbatim}
+git config --grobal user.name "[名前]"
+git config --grobal user.email "[メールアドレス]"
+\end{verbatim}
+\end{itembox}
+\section{ローカルリポジトリを取得する}
+まず，ディレクトリを作って，そこに移動しよう\\
+\begin{itembox}[l]{ディレクトリをつくる}
+\begin{verbatim}
+mkdir [directory]
+cd [directory]
+\end{verbatim}
+\end{itembox}
+\\
+リモートリポジトリを取得する．\\
+\begin{itembox}[l]{リポジトリを取得する}
+{\tt git clone [url]}
+\end{itembox}
+今回の場合，[url]は\url{https://github.com/kaoru-k/hockey.git}．\\
+\\
+これで，初期設定は終わり．
+%
+\section{ローカルの変更をリモートリポジトリに反映させる}
+ディレクトリ内で，ファイルを作成したり，ソースコードを編集した場合には，それをリモートリポジトリ(GitHub上のリポジトリ)に反映しなければならない．その手順についての説明．
+\subsection{ファイルやディレクトリをインデックスに追加}
+ファイルやフォルダを作成したらインデックスに追加しよう．追加しないと，編集が反映されない．
+\begin{itembox}[l]{ファイルやディレクトリをインデックスに追加}
+{\tt git add [ファイル名]}\\
+もしくは\\
+{\tt git add .}
+\end{itembox}
+\\
+追加ができたらcommitできるようになる．
+\\
+\subsection{変更をリポジトリに書き込む}
+編集がおわったらリポジトリに変更を書きこもう．\\
+\begin{itembox}[l]{変更をリポジトリに書き込む}
+  {\tt git commit -am "[comment]"}
+\end{itembox}
+[comment]には，変更内容についてコメントを入れること．例えば「〜.cの関数○○○を編集した」など．
+\\
+%
+\subsection{リモートリポジトリに反映させる}
+commitした内容をリモートリポジトリに反映する．\\
+\begin{itembox}[l]{ローカルのリポジトリの内容をリモートに反映させる}
+  {\tt git push origin master}
+\end{itembox}
+この時，GitHubのユーザ名とパスワードを尋ねられるので答える(入力を省略する方法は後述)．\\
+これで，自分が編集した内容がリモートに反映された．commitとpushは頻繁にしよう．
+%
+\subsection{リモートの変更をローカルリポジトリに反映する}
+他人の編集を取り込むにはこれを実行する\\
+\begin{itembox}[l]{リモートの変更を取り込む}
+{\tt git pull}
+\end{itembox}
+\end{document}
+  
