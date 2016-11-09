@@ -25,13 +25,13 @@ int initializeVideo(int width, int height, int flags) {
 }
 
 int initializeOpenGL(int width, int height) {
-	if (initializeVideo(width, height, SDL_OPENGL)) {
+	if (initializeVideo(height, height, SDL_OPENGL)) {
 		return 1;
 	}
 
 	// ビューポートを設定する
 	glViewport(0, 0, width, height);
-	glClearColor( 0.0, 0.0, 0.0, 0.0);
+	glClearColor( 0.0, 0.0, 1.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 
 	// 射影行列を設定する
@@ -89,7 +89,7 @@ int main(int argc, char** args) {
 		return 1;
 	}
 
-	if (initializeOpenGL(400, 400)) {
+	if (initializeOpenGL(1024, 768)) {
 		return 1;
 	}
 
@@ -103,7 +103,7 @@ int main(int argc, char** args) {
 		}
 
 		draw();
-
+                
 		SDL_GL_SwapBuffers();
 	}
 }

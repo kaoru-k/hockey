@@ -79,5 +79,19 @@ commitした内容をリモートリポジトリに反映する．\\
 \begin{itembox}[l]{リモートの変更を取り込む}
 {\tt git pull}
 \end{itembox}
+%
+\subsection{ファイル・ディレクトリの削除・名前変更}
+Gitは賢いので，名前を変えても気づいてくれるようだが，一応正しい方法を説明しておく．\\
+\begin{itembox}[l]{ファイル・ディレクトリの削除}
+ファイルの場合は\\
+{\tt git rm [filename]}\\
+\\
+ディレクトリの場合は\\
+{\tt git rm -r [directory]}\\
+\end{itembox}
+\\
+\begin{itembox}[l]{ファイルのリネーム}
+{\tt git mv [変更前] [変更後]}
+\end{itembox}
 \end{document}
   
