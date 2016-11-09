@@ -3,30 +3,30 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
-bool initializeSDL(int flags) {
+int initializeSDL(int flags) {
 	// SDLを初期化する
 	if (SDL_Init(flags) < 0) {
 		fprintf(stderr, "%s\n", SDL_GetError());
-		return false;
+		return 1;
 	}
 	atexit(SDL_Quit);
 
-	return true;
+	return 0;
 }
 
-bool initializeVideo(int width, int height, int flags) {
+int initializeVideo(int width, int height, int flags) {
 	// ビデオモードの設定をする
 	if (0 == SDL_SetVideoMode(width, height, 0, flags)) {
 		fprintf(stderr, "%s\n", SDL_GetError());
-		return false;
+		return 1;
 	}
 
-	return true;
+	return 0;
 }
 
-bool initializeOpenGL(int width, int height) {
-	if (!initializeVideo(width, height, SDL_OPENGL)) {
-		return false;
+int initializeOpenGL(int width, int height) {
+	if (initializeVideo(width, height, SDL_OPENGL)) {
+		return 1;
 	}
 
 	// ビューポートを設定する
@@ -52,7 +52,7 @@ bool initializeOpenGL(int width, int height) {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
-	return true;
+	return 0;
 }
 
 void draw() {
@@ -61,9 +61,9 @@ void draw() {
 	// 視点を設定する
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt( -60.0f, 60.0f,-60.0f,
+	gluLookAt( 0.0f, 50.0f,50.0f,
 	           0.0f,  0.0f, 0.0f,
-	           0.5f, 0.5f, 0.5f);
+	           0.0f, 0.0f, 1.0f);
 
 	// マテリアルを設定する
 	GLfloat ambient  [] = { 0.1f, 0.1f, 0.1f, 1.0f};
@@ -76,21 +76,24 @@ void draw() {
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
 	// 球を描画する
-	GLUquadric* quadric=gluNewQuadric();
+	GLUquadric* quadric = gluNewQuadric();
+	GLUquadric* quadric2= gluNewQuadric();
 	gluCylinder(quadric, 10, 10, 5, 30, 30);
+	gluDisk(quadric2, 0, 10, 30, 30);
 	gluDeleteQuadric(quadric);
+	gluDeleteQuadric(quadric2);
 }
 
 int main(int argc, char** args) {
-	if (!initializeSDL(SDL_INIT_VIDEO)) {
+	if (initializeSDL(SDL_INIT_VIDEO)) {
 		return 1;
 	}
 
-	if (!initializeOpenGL(400, 400)) {
+	if (initializeOpenGL(400, 400)) {
 		return 1;
 	}
 
-	while (true) {
+	while (1) {
 		// イベントを処理する
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
