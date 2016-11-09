@@ -61,9 +61,9 @@ void draw() {
 	// 視点を設定する
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt( -60.0f, 60.0f,-60.0f,
+	gluLookAt( 0.0f, 50.0f,50.0f,
 	           0.0f,  0.0f, 0.0f,
-	           0.5f, 0.5f, 0.5f);
+	           0.0f, 0.0f, 1.0f);
 
 	// マテリアルを設定する
 	GLfloat ambient  [] = { 0.1f, 0.1f, 0.1f, 1.0f};
@@ -76,9 +76,12 @@ void draw() {
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
 	// 球を描画する
-	GLUquadric* quadric=gluNewQuadric();
+	GLUquadric* quadric = gluNewQuadric();
+	GLUquadric* quadric2= gluNewQuadric();
 	gluCylinder(quadric, 10, 10, 5, 30, 30);
+	gluDisk(quadric2, 0, 10, 30, 30);
 	gluDeleteQuadric(quadric);
+	gluDeleteQuadric(quadric2);
 }
 
 int main(int argc, char** args) {
