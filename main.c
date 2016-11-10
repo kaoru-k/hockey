@@ -112,8 +112,8 @@ void draw() {
 // XZ•½–Ê‚Ì•`‰æ
 void drawPlane(void)
 {
-    const GLdouble xsize = 10.0f;
-    const GLdouble ysize = 10.0f;
+    const GLdouble xsize = 100.0f;
+    const GLdouble ysize = 100.0f;
     const int xnum = 20;
     const int ynum = 20;
     GLdouble x;
@@ -152,11 +152,11 @@ int main(int argc, char** args) {
 				return 0;
 			}
 		}
-               
+                draw();
                 drawPlane();
                 drawAxis();
                 glFlush();
-                draw();
+                //  draw();
 		SDL_GL_SwapBuffers();
 	}
 }
