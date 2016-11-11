@@ -3,6 +3,9 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
+SDL_Rect pack;
+SDL_Rect camera = {0.0 , 50.0};
+
 int initializeSDL(int flags) {
 	// SDLを初期化する
 	if (SDL_Init(flags) < 0) {
@@ -61,9 +64,9 @@ void draw() {
 	// 視点を設定する
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt( 0.0f, 50.0f,20.0f,
+	gluLookAt( camera.x, camera.y, 20.0f,
 	           0.0f,  0.0f, 0.0f,
-	           0.0f, 0.0f, 1.0f);
+	           0.0f,  0.0f, 1.0f);
 
 	// マテリアルを設定する
 	GLfloat ambient  [] = { 0.1f, 0.1f, 0.1f, 1.0f};
@@ -77,12 +80,13 @@ void draw() {
 
 
 
-	// 球を描画する
+	// 円球を描画する
 	GLUquadric* quadric = gluNewQuadric();
 	GLUquadric* quadric2= gluNewQuadric();
 	gluCylinder(quadric, 10, 10, 5, 30, 30);
         glTranslatef(0.0f, 0.0f, 5.0f);
 	gluDisk(quadric2, 0, 10, 30, 30);
+	glTranslatef(0.0f, 0.0f, -5.0f);
 	gluDeleteQuadric(quadric);
 	gluDeleteQuadric(quadric2);
 }
@@ -147,8 +151,27 @@ int main(int argc, char** args) {
 		// イベントを処理する
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				return 0;
+			switch (event.type){
+				case SDL_QUIT : return 0;
+						break;
+				case SDL_KEYDOWN : switch(event.key.keysym.sym){
+							case SDLK_ESCAPE: return 0;
+									  break;
+							case SDLK_RIGHT:
+									camera.x -= 10;
+									break;
+							case SDLK_LEFT:
+									camera.x += 10;
+									break;
+							case SDLK_UP:
+									camera.y -= 10;
+									break;
+							case SDLK_DOWN:
+									camera.y += 10;
+									break;
+                    					default:
+									break;
+						   }
 			}
 		}
                 draw();
