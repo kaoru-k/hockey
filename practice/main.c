@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+#include <GL/glut.h>
 
 SDL_Rect pack = {0.0, 0.0};
 SDL_Rect camera = {0.0, 50.0};
@@ -90,6 +91,55 @@ void draw() {
 	glTranslatef(-pack.x, -pack.y, -5.0f);
 	gluDeleteQuadric(quadric);
 	gluDeleteQuadric(quadric2);
+
+	GLdouble vertex[][3] = {
+  	{ 0.0, 0.0, 0.0 },
+ 	{ 100.0, 0.0, 0.0 },
+ 	{ 100.0, 100.0, 0.0 },
+ 	{ 0.0, 100.0, 0.0 },
+  	{ 0.0, 0.0, 100.0 },
+  	{ 100.0, 0.0, 100.0 },
+  	{ 100.0, 100.0, 100.0 },
+  	{ 0.0, 100.0, 100.0 }
+	};
+
+	int edge[][2] = {
+	  { 0, 1 },
+	  { 1, 2 },
+	  { 2, 3 },
+	  { 3, 0 },
+	  { 4, 5 },
+	  { 5, 6 },
+	  { 6, 7 },
+	  { 7, 4 },
+	  { 0, 4 },
+	  { 1, 5 },
+	  { 2, 6 },
+	  { 3, 7 }
+	};
+
+	int face[][4] = {
+ 	{ 0, 1, 2, 3 }, /* A-B-C-D を結ぶ面 */
+  	{ 1, 5, 6, 2 }, /* B-F-G-C を結ぶ面 */	
+ 	{ 5, 4, 7, 6 }, /* F-E-H-G を結ぶ面 */
+  	{ 4, 0, 3, 7 }, /* E-A-D-H を結ぶ面 */
+  	{ 4, 5, 1, 0 }, /* E-F-B-A を結ぶ面 */
+  	{ 3, 2, 6, 7 }  /* D-C-G-H を結ぶ面 */
+	};
+
+	int i,j;
+
+  	/* 図形の描画 */
+	  glColor3d(0.0, 0.0, 0.0);
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(vertex[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+  	  glFlush();
 }
        //大地創造
  void drawAxis(void)
@@ -138,11 +188,11 @@ void drawPlane(void)
     glEnd();
 }
 
-void Keyevent(void)
+int Keyevent(void)
 {
 	// イベントを処理する
 	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
+	if(SDL_PollEvent(&event)) {
 		switch (event.type){
 			case SDL_QUIT : return 0;
 					break;
@@ -178,6 +228,7 @@ void Keyevent(void)
 					   }
 		}
 	}
+	return 1;
 }
 
 int main(int argc, char** args) {
@@ -189,9 +240,11 @@ int main(int argc, char** args) {
 		return 1;
 	}
 
-	while (1) {
+	int flag = 1;
+
+	while (flag) {
 		// イベントを処理する
-		Keyevent;
+		flag = Keyevent();
                 draw();
                 drawPlane();
                 drawAxis();
