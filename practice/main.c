@@ -3,8 +3,8 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
-SDL_Rect pack;
-SDL_Rect camera = {0.0 , 50.0};
+SDL_Rect pack = {0.0, 0.0};
+SDL_Rect camera = {0.0, 50.0};
 
 int initializeSDL(int flags) {
 	// SDLを初期化する
@@ -83,10 +83,11 @@ void draw() {
 	// 円球を描画する
 	GLUquadric* quadric = gluNewQuadric();
 	GLUquadric* quadric2= gluNewQuadric();
+	glTranslatef(pack.x, pack.y, 0.0f);
 	gluCylinder(quadric, 10, 10, 5, 30, 30);
-        glTranslatef(0.0f, 0.0f, 5.0f);
+	glTranslatef(0.0, 0.0, 5.0f);
 	gluDisk(quadric2, 0, 10, 30, 30);
-	glTranslatef(0.0f, 0.0f, -5.0f);
+	glTranslatef(-pack.x, -pack.y, -5.0f);
 	gluDeleteQuadric(quadric);
 	gluDeleteQuadric(quadric2);
 }
@@ -137,6 +138,47 @@ void drawPlane(void)
     glEnd();
 }
 
+void Keyevent(void)
+{
+	// イベントを処理する
+	SDL_Event event;
+	while (SDL_PollEvent(&event)) {
+		switch (event.type){
+			case SDL_QUIT : return 0;
+					break;
+			case SDL_KEYDOWN : switch(event.key.keysym.sym){
+						case SDLK_ESCAPE: return 0;
+								  break;
+						case SDLK_RIGHT:
+								camera.x -= 10;
+								break;
+						case SDLK_LEFT:
+								camera.x += 10;
+								break;
+						case SDLK_UP:
+								camera.y -= 10;
+								break;
+						case SDLK_DOWN:
+								camera.y += 10;
+								break;
+						case SDLK_d:
+								pack.x -= 5;
+								break;
+						case SDLK_a:
+								pack.x += 5;
+								break;
+						case SDLK_w:
+								pack.y -= 5;
+								break;
+						case SDLK_s:
+								pack.y += 5;
+								break;
+                				default:
+								break;
+					   }
+		}
+	}
+}
 
 int main(int argc, char** args) {
 	if (initializeSDL(SDL_INIT_VIDEO)) {
@@ -149,31 +191,7 @@ int main(int argc, char** args) {
 
 	while (1) {
 		// イベントを処理する
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-			switch (event.type){
-				case SDL_QUIT : return 0;
-						break;
-				case SDL_KEYDOWN : switch(event.key.keysym.sym){
-							case SDLK_ESCAPE: return 0;
-									  break;
-							case SDLK_RIGHT:
-									camera.x -= 10;
-									break;
-							case SDLK_LEFT:
-									camera.x += 10;
-									break;
-							case SDLK_UP:
-									camera.y -= 10;
-									break;
-							case SDLK_DOWN:
-									camera.y += 10;
-									break;
-                    					default:
-									break;
-						   }
-			}
-		}
+		Keyevent;
                 draw();
                 drawPlane();
                 drawAxis();
