@@ -4,7 +4,7 @@
 #include <SDL/SDL_opengl.h>
 
 int initializeSDL(int flags) {
-	// SDL‚ğ‰Šú‰»‚·‚é
+	// SDLã‚’åˆæœŸåŒ–ã™ã‚‹
 	if (SDL_Init(flags) < 0) {
 		fprintf(stderr, "%s\n", SDL_GetError());
 		return 1;
@@ -15,7 +15,7 @@ int initializeSDL(int flags) {
 }
 
 int initializeVideo(int width, int height, int flags) {
-	// ƒrƒfƒIƒ‚[ƒh‚Ìİ’è‚ğ‚·‚é
+	// ãƒ“ãƒ‡ã‚ªãƒ¢ãƒ¼ãƒ‰ã®è¨­å®šã‚’ã™ã‚‹
 	if (0 == SDL_SetVideoMode(width, height, 0, flags)) {
 		fprintf(stderr, "%s\n", SDL_GetError());
 		return 1;
@@ -29,17 +29,17 @@ int initializeOpenGL(int width, int height) {
 		return 1;
 	}
 
-	// ƒrƒ…[ƒ|[ƒg‚ğİ’è‚·‚é
+	// ãƒ“ãƒ¥ãƒ¼ãƒãƒ¼ãƒˆã‚’è¨­å®šã™ã‚‹
 	glViewport(0, 0, width, height);
 	glClearColor( 1.0, 1.0, 1.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 
-	// Ë‰es—ñ‚ğİ’è‚·‚é
+	// å°„å½±è¡Œåˆ—ã‚’è¨­å®šã™ã‚‹
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 2.0, 200.0);
 
-	// Æ–¾‚ğİ’è‚·‚é
+	// ç…§æ˜ã‚’è¨­å®šã™ã‚‹
 	static GLfloat position[] = {-10.0f, 10.0f, 10.0f, 1.0f};
 	static GLfloat ambient [] = { 1.0f, 1.0f, 1.0f, 1.0f};
 	static GLfloat diffuse [] = { 1.0f, 1.0f, 1.0f, 1.0f};
@@ -58,14 +58,14 @@ int initializeOpenGL(int width, int height) {
 void draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// ‹“_‚ğİ’è‚·‚é
+	// è¦–ç‚¹ã‚’è¨­å®šã™ã‚‹
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	gluLookAt( 0.0f, 50.0f,20.0f,
 	           0.0f,  0.0f, 0.0f,
 	           0.0f, 0.0f, 1.0f);
 
-	// ƒ}ƒeƒŠƒAƒ‹‚ğİ’è‚·‚é
+	// ãƒãƒ†ãƒªã‚¢ãƒ«ã‚’è¨­å®šã™ã‚‹
 	GLfloat ambient  [] = { 0.1f, 0.1f, 0.1f, 1.0f};
 	GLfloat diffuse  [] = { 1.0f, 1.0f, 1.0f, 1.0f};
 	GLfloat specular [] = { 0.0f, 0.0f, 0.0f, 1.0f};
@@ -75,11 +75,9 @@ void draw() {
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
- 
-        drawPlane();
-        drawAxis();
 
-	// ‹…‚ğ•`‰æ‚·‚é
+
+	// çƒã‚’æç”»ã™ã‚‹
 	GLUquadric* quadric = gluNewQuadric();
 	GLUquadric* quadric2= gluNewQuadric();
 	gluCylinder(quadric, 10, 10, 5, 30, 30);
@@ -88,7 +86,7 @@ void draw() {
 	gluDeleteQuadric(quadric);
 	gluDeleteQuadric(quadric2);
 }
-       //‘å’n‘n‘¢
+       //å¤§åœ°å‰µé€ 
  void drawAxis(void)
 {
     GLdouble axis[][3] =
@@ -110,7 +108,7 @@ void draw() {
     glEnd();
 }
 
-// XZ•½–Ê‚Ì•`‰æ
+// XZå¹³é¢ã®æç”»
 void drawPlane(void)
 {
     const GLdouble xsize = 100.0f;
@@ -146,7 +144,7 @@ int main(int argc, char** args) {
 	}
 
 	while (1) {
-		// ƒCƒxƒ“ƒg‚ğˆ—‚·‚é
+		// ã‚¤ãƒ™ãƒ³ãƒˆã‚’å‡¦ç†ã™ã‚‹
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
@@ -154,6 +152,8 @@ int main(int argc, char** args) {
 			}
 		}
                 draw();
+                drawPlane();
+                drawAxis();
 		SDL_GL_SwapBuffers();
 	}
 }
