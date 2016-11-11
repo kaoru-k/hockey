@@ -12,3 +12,4 @@ void send_data(int cid, void *data, int size);
 void terminate_server(void);
 
 // server_game.c
+void field_set(void);
