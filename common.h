@@ -12,7 +12,7 @@
 #define ATK_W 10       //アタッカーの幅
 
 /* パッド */
-#define PAD_R          //パッドの半径
+#define PAD_R 10       //パッドの半径
 
 /* プレイヤーを表す構造体 */
 typedef struct{
