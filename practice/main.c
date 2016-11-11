@@ -76,7 +76,8 @@ void draw() {
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
  
-
+        drawPlane();
+        drawAxis();
 
 	// ‹…‚ð•`‰æ‚·‚é
 	GLUquadric* quadric = gluNewQuadric();
@@ -153,10 +154,6 @@ int main(int argc, char** args) {
 			}
 		}
                 draw();
-                drawPlane();
-                drawAxis();
-                glFlush();
-                //  draw();
 		SDL_GL_SwapBuffers();
 	}
 }
