@@ -1,4 +1,4 @@
-#include "common.h"
+#include "server.h"
 
 static void field_set(void);
 
@@ -17,7 +17,7 @@ void field_set(void){
     
     //横の壁にぶつかった時
     if(pad.x + PAD_R >= FIELD_W){
-        pad.x = 2 * FIELD_W - PAD.x;
+        pad.x = 2 * FIELD_W - pad.x;
         pad.speed_x = pad.speed_x * (-1);
     }
 
@@ -30,11 +30,11 @@ void field_set(void){
         if(pad.y + PAD_R <= zahyo(p[i].type) && pad.y + PAD_R <= zahyo(p[i].type) + 10 ){
             if(pad.x + PAD_R >= p[i].x && pad.x + PAD_R <= p[i].x + haba(p[i].type) ){
                 pad.speed_y = pad.speed_y * (-1) * bai(p[i].type);  //倍率をかけて返す
-                p[i].hp -= pad.speed_y;      //ｈｐ減少
+                p[i].hp -= pad.speed_y;      //HP減少
                 if(p[i].type == 0)           //アタッカーの返す向き
                     pad.speed_x = 0;
                 else if(p[i].type == 1){
-                    i = i;                   //ｈｐ回復
+                    i = i;                   //HP回復
                 }
             }
         }
@@ -67,9 +67,9 @@ int haba(int type){
 
 int zahyo(int type){
     switch(type){
-    case 0:return ATK_H;
-    case 1:return SUP_H;
-    case 2:return DEF_H;
+    case 0:return ATK_Y;
+    case 1:return SUP_Y;
+    case 2:return DEF_Y;
     }
 }
 
