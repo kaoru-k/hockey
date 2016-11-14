@@ -41,12 +41,12 @@ int initializeOpenGL(int width, int height) {
 	// 射影行列を設定する
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 2.0, 200.0);
+	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 2.0, 460.0);
 
 	// 照明を設定する
 	static GLfloat position[] = {-10.0f, 10.0f, 10.0f, 1.0f};
-	static GLfloat ambient [] = { 1.0f, 1.0f, 1.0f, 1.0f};
-	static GLfloat diffuse [] = { 1.0f, 1.0f, 1.0f, 1.0f};
+	static GLfloat ambient [] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	static GLfloat diffuse [] = { 0.5f, 0.5f, 0.5f, 1.0f};
 	static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
 	glLightfv(GL_LIGHT0, GL_POSITION, position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
@@ -65,15 +65,17 @@ void draw() {
 	// 視点を設定する
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt( camera.x, camera.y, 20.0f,
+	gluLookAt( camera.x, camera.y, 90.0f,
 	           0.0,  0.0f, 0.0f,
 	           0.0f,  0.0f, 1.0f);
 
 	// マテリアルを設定する
-	GLfloat ambient  [] = { 0.1f, 0.1f, 0.1f, 1.0f};
-	GLfloat diffuse  [] = { 1.0f, 1.0f, 1.0f, 1.0f};
-	GLfloat specular [] = { 0.0f, 0.0f, 0.0f, 1.0f};
-	GLfloat shininess[] = { 0.0f};
+	GLfloat position  [] = { 0.0f, 0.0f, 200.0f, 1.0f};
+	GLfloat ambient   [] = { 0.1f, 0.1f, 0.1f, 1.0f};
+	GLfloat diffuse   [] = { 1.0f, 1.0f, 1.0f, 1.0f};
+	GLfloat specular  [] = { 0.0f, 0.0f, 0.0f, 1.0f};
+	GLfloat shininess [] = { 0.0f};
+	glMaterialfv(GL_FRONT, GL_POSITION, position);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
@@ -93,14 +95,25 @@ void draw() {
 	gluDeleteQuadric(quadric2);
 
 	GLdouble vertex[][3] = {
-  	{ 100.0, -100.0, 0.0 },
- 	{ 101.0, -100.0, 0.0 },
- 	{ 101.0, 100.0, 0.0 },
- 	{ 100.0, 100.0, 0.0 },
-  	{ 100.0, -100.0, 30.0 },
-  	{ 101.0, -100.0, 30.0 },
-  	{ 101.0, 100.0, 30.0 },
-  	{ 100.0, 100.0, 30.0 }
+  	{ 100.0, -160.0, 0.0 },
+ 	{ 100.1, -160.0, 0.0 },
+ 	{ 100.1, 160.0, 0.0 },
+ 	{ 100.0, 160.0, 0.0 },
+  	{ 100.0, -160.0, 20.0 },
+  	{ 100.1, -160.0, 20.0 },
+  	{ 100.1, 160.0, 20.0 },
+  	{ 100.0, 160.0, 20.0 }
+	};
+
+	GLdouble vertex2[][3] = {
+  	{ -100.0, -160.0, 0.0 },
+ 	{ -100.1, -160.0, 0.0 },
+ 	{ -100.1, 160.0, 0.0 },
+ 	{ -100.0, 160.0, 0.0 },
+  	{ -100.0, -160.0, 20.0 },
+  	{ -100.1, -160.0, 20.0 },
+  	{ -100.1, 160.0, 20.0 },
+  	{ -100.0, 160.0, 20.0 }
 	};
 
 	int edge[][2] = {
@@ -139,6 +152,15 @@ void draw() {
 	  }	  
   	  glEnd();
 
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(vertex2[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+
   	  glFlush();
 }
        //大地創造
@@ -167,9 +189,9 @@ void draw() {
 void drawPlane(void)
 {
     const GLdouble xsize = 100.0f;
-    const GLdouble ysize = 100.0f;
-    const int xnum = 20;
-    const int ynum = 20;
+    const GLdouble ysize = 160.0f;
+    const int xnum = 10;
+    const int ynum = 10;
     GLdouble x;
     GLdouble y;
 
