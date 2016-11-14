@@ -1,0 +1,1 @@
+LFLAG = -lSDL -lGL -lGL
