@@ -4,7 +4,7 @@
 #include <SDL/SDL_opengl.h>
 #include <GL/glut.h>
 /* フィールド */
-#define FIELD_H  100   //フィールドの縦幅
+#define FIELD_H  160   //フィールドの縦幅
 #define FIELD_W  100   //フィールドの横幅
 #define GOAL_W   0   //ゴールの幅
 
@@ -27,7 +27,7 @@ typedef struct{
     float x;       // プレイヤーのX座標
 }PLAYER;
 
-PLAYER p[6];
+PLAYER p[6] = {{  },{ },{ },{ },{ },{ }};
 
 /* パッドの構造体 */
 typedef struct{
@@ -36,7 +36,7 @@ typedef struct{
     float x;         // パッドのX座標
     float y;         // パッドのY座標
 }PAD;
-PAD pad={1,1,1,1};
+PAD pad={2,2,1,1};
 SDL_Rect pack = {0.0, 0.0};
 SDL_Rect camera = {0.0, 100.0};
 
@@ -69,19 +69,19 @@ void field_set(void){
     pad.x += pad.speed_x;
     pad.y += pad.speed_y;
     
-    int a = 0;/*
+    int a = 1;
     if(pad.speed_y < 0){
-        pad.speed_y = pad.speed_y * (-1);
-        pad.y = pad.y * (-1);
-        a =1;
+        /*pad.speed_y = pad.speed_y * (-1);
+        pad.y = pad.y * (-1);*/
+        a =-1;
     }
-    */
+    
     //横の壁にぶつかった時
-    if(pad.x + PAD_R >= FIELD_W){
-        pad.x = 2 * FIELD_W - pad.x;
+    if(pad.x + PAD_R > FIELD_W){
+        pad.x = 2 * FIELD_W - pad.x - 2 * PAD_R;
         pad.speed_x = pad.speed_x * (-1);
-    }else if(pad.x - PAD_R <= (-1)*FIELD_W){
- 	pad.x = (-2) * FIELD_W + pad.x;
+    }else if(pad.x - PAD_R < (-1)*FIELD_W){
+ 	pad.x = (-2) * FIELD_W - pad.x + 2 * PAD_R;
         pad.speed_x = pad.speed_x * (-1);
     }
  /*   //プレイヤーにぶつかった時
@@ -104,11 +104,11 @@ void field_set(void){
     }
 */
     //縦の壁にぶつかった時
-    if(pad.y + PAD_R >= FIELD_H){
-        pad.y = 2 * FIELD_H - pad.y;
+    if(pad.y + PAD_R > FIELD_H){
+        pad.y = 2 * FIELD_H - pad.y - 2*PAD_R;
         pad.speed_y = pad.speed_y * (-1);
     }else if(pad.y - PAD_R <= (-1)*FIELD_H){
- 	pad.y = (-2) * FIELD_H + pad.y;
+ 	pad.y = (-2) * FIELD_H - pad.y + 2*PAD_R;
         pad.speed_y = pad.speed_y * (-1);
     }
 /*
@@ -118,7 +118,6 @@ void field_set(void){
     }
 */
 }
-
 int initializeSDL(int flags) {
 	// SDLを初期化する
 	if (SDL_Init(flags) < 0) {
@@ -153,12 +152,12 @@ int initializeOpenGL(int width, int height) {
 	// 射影行列を設定する
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 2.0, 200.0);
+	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 2.0, 460.0);
 
 	// 照明を設定する
 	static GLfloat position[] = {-10.0f, 10.0f, 10.0f, 1.0f};
-	static GLfloat ambient [] = { 1.0f, 1.0f, 1.0f, 1.0f};
-	static GLfloat diffuse [] = { 1.0f, 1.0f, 1.0f, 1.0f};
+	static GLfloat ambient [] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	static GLfloat diffuse [] = { 0.5f, 0.5f, 0.5f, 1.0f};
 	static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
 	glLightfv(GL_LIGHT0, GL_POSITION, position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
@@ -177,15 +176,17 @@ void draw() {
 	// 視点を設定する
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt( camera.x, camera.y, 20.0f,
-	           pad.x,  pad.y, 0.0f,
+	gluLookAt( camera.x, camera.y, 90.0f,
+	           0.0,  0.0f, 0.0f,
 	           0.0f,  0.0f, 1.0f);
 
 	// マテリアルを設定する
-	GLfloat ambient  [] = { 0.1f, 0.1f, 0.1f, 1.0f};
-	GLfloat diffuse  [] = { 1.0f, 1.0f, 1.0f, 1.0f};
-	GLfloat specular [] = { 0.0f, 0.0f, 0.0f, 1.0f};
-	GLfloat shininess[] = { 0.0f};
+	GLfloat position  [] = { 0.0f, 0.0f, 200.0f, 1.0f};
+	GLfloat ambient   [] = { 0.1f, 0.1f, 0.1f, 1.0f};
+	GLfloat diffuse   [] = { 1.0f, 1.0f, 1.0f, 1.0f};
+	GLfloat specular  [] = { 0.0f, 0.0f, 0.0f, 1.0f};
+	GLfloat shininess [] = { 0.0f};
+	glMaterialfv(GL_FRONT, GL_POSITION, position);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
@@ -205,14 +206,25 @@ void draw() {
 	gluDeleteQuadric(quadric2);
 
 	GLdouble vertex[][3] = {
-  	{ 100.0, -100.0, 0.0 },
- 	{ 101.0, -100.0, 0.0 },
- 	{ 101.0, 100.0, 0.0 },
- 	{ 100.0, 100.0, 0.0 },
-  	{ 100.0, -100.0, 30.0 },
-  	{ 101.0, -100.0, 30.0 },
-  	{ 101.0, 100.0, 30.0 },
-  	{ 100.0, 100.0, 30.0 }
+  	{ 100.0, -160.0, 0.0 },
+ 	{ 100.1, -160.0, 0.0 },
+ 	{ 100.1, 160.0, 0.0 },
+ 	{ 100.0, 160.0, 0.0 },
+  	{ 100.0, -160.0, 20.0 },
+  	{ 100.1, -160.0, 20.0 },
+  	{ 100.1, 160.0, 20.0 },
+  	{ 100.0, 160.0, 20.0 }
+	};
+
+	GLdouble vertex2[][3] = {
+  	{ -100.0, -160.0, 0.0 },
+ 	{ -100.1, -160.0, 0.0 },
+ 	{ -100.1, 160.0, 0.0 },
+ 	{ -100.0, 160.0, 0.0 },
+  	{ -100.0, -160.0, 20.0 },
+  	{ -100.1, -160.0, 20.0 },
+  	{ -100.1, 160.0, 20.0 },
+  	{ -100.0, 160.0, 20.0 }
 	};
 
 	int edge[][2] = {
@@ -251,6 +263,15 @@ void draw() {
 	  }	  
   	  glEnd();
 
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(vertex2[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+
   	  glFlush();
 }
        //大地創造
@@ -279,9 +300,9 @@ void draw() {
 void drawPlane(void)
 {
     const GLdouble xsize = 100.0f;
-    const GLdouble ysize = 100.0f;
-    const int xnum = 20;
-    const int ynum = 20;
+    const GLdouble ysize = 160.0f;
+    const int xnum = 10;
+    const int ynum = 10;
     GLdouble x;
     GLdouble y;
 
@@ -324,16 +345,16 @@ int Keyevent(void)
 								camera.y += 10;
 								break;
 						case SDLK_d:
-								pad.speed_x -= 5;
+								pack.x -= 5;
 								break;
 						case SDLK_a:
-								pad.speed_x += 5;
+								pack.x += 5;
 								break;
 						case SDLK_w:
-								pad.speed_y -= 5;
+								pack.y -= 5;
 								break;
 						case SDLK_s:
-								pad.speed_y += 5;
+								pack.y += 5;
 								break;
                 				default:
 								break;
