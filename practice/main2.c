@@ -15,7 +15,7 @@
 #define SUP_Y 200      //サポーターのY座標
 #define SUP_W 20       //サポーターの幅
 #define ATK_Y 100      //アタッカーのY座標
-#define ATK_W 10       //アタッカーの幅
+#define ATK_W 50       //アタッカーの幅
 
 /* パッド */
 #define PAD_R 10       //パッドの半径
@@ -270,6 +270,17 @@ void draw() {
   	{ -100.0, 160.0, 20.0 }
 	};
 
+	GLdouble atk_vertex[][3] = {
+  	{ p[0].x - ATK_W, ATK_Y, 0.0 },
+ 	{ p[0].x + ATK_W, ATK_Y, 0.0 },
+ 	{ p[0].x + ATK_W, ATK_Y + 10, 0.0 },
+ 	{ p[0].x - ATK_W, ATK_Y + 10, 0.0 },
+  	{ p[0].x - ATK_W, ATK_Y, 20.0 },
+  	{ p[0].x + ATK_W, ATK_Y, 20.0 },
+  	{ p[0].x + ATK_W, ATK_Y + 10, 20.0 },
+  	{ p[0].x - ATK_W, ATK_Y + 10, 20.0 }
+	};
+
 	int edge[][2] = {
 	  { 0, 1 },
 	  { 1, 2 },
@@ -314,6 +325,13 @@ void draw() {
 	  }	  
   	  glEnd();
 
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(atk_vertex[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
 
   	  glFlush();
 }
@@ -388,10 +406,10 @@ int Keyevent(void)
 								camera.y += 10;
 								break;
 						case SDLK_d:
-								pad.x -= 5;
+								p[0].x -= 5;
 								break;
 						case SDLK_a:
-								pad.x += 5;
+								p[0].x += 5;
 								break;
 						case SDLK_w:
 								pad.y -= 5;
