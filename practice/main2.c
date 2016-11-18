@@ -10,15 +10,15 @@
 #define GOAL_W   0   //ゴールの幅
 
 /* プレイヤー */
-#define DEF_Y 300      //ディフェンダーのY座標
+#define DEF_Y 150      //ディフェンダーのY座標
 #define DEF_W 30       //ディフェンダーの幅
-#define SUP_Y 200      //サポーターのY座標
-#define SUP_W 20       //サポーターの幅
-#define ATK_Y 100      //アタッカーのY座標
-#define ATK_W 50       //アタッカーの幅
+#define SUP_Y 100      //サポーターのY座標
+#define SUP_W 10       //サポーターの幅
+#define ATK_Y 50      //アタッカーのY座標
+#define ATK_W 20       //アタッカーの幅
 
 /* パッド */
-#define PAD_R 10       //パッドの半径
+#define PAD_R 5       //パッドの半径
 
 /* プレイヤーを表す構造体 */
 typedef struct{
@@ -92,7 +92,7 @@ void field_set(void){
     }
     //プレイヤーにぶつかった時
     if(pad.speed_y > 0){
-        if(pad.y + PAD_R > ATK_Y ){
+        if(pad.y + PAD_R >= ATK_Y && pad.y + PAD_R <= ATK_Y + pad.speed_y){
             for(i = 0;i < 2;i++){
                 if(p[i].type == 0)
                     break;
@@ -104,7 +104,7 @@ void field_set(void){
                     i = i;//HPが0以下になった時の処理
                 }
             }
-        }else if(pad.y + PAD_R > SUP_Y){
+        }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + pad.speed_y){
         for(i = 0;i < 2;i++){
             if(p[i].type == 1)
                 break;
@@ -121,31 +121,57 @@ void field_set(void){
             }
             p[2].hp += 10;
         }
-        }else if(pad.y + PAD_R > DEF_Y){
-            if(pad.x > p[2].x - DEF_W && pad.x < p[2].x + DEF_W){
+        }else if(pad.y + PAD_R >= DEF_Y && pad.y + PAD_R <= DEF_Y + pad.speed_y){
+            if(pad.x > p[4].x - DEF_W && pad.x < p[4].x + DEF_W){
                 pad.speed_y = pad.speed_y * (-1);
                 pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                if( (p[2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
-                    p[2].hp = 0;;//HPが0以下になった時の処理
+                if( (p[4].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    p[4].hp = 0;;//HPが0以下になった時の処理
             }
             }
         }
-    }
-/*
-    for(j = 0;j < 2;i++){
-        if(pad.y + PAD_R <= zahyo(p[i].type) && pad.y + PAD_R <= zahyo(p[i].type) + 10 ){
-            if(pad.x + PAD_R >= p[i].x && pad.x + PAD_R <= p[i].x + haba(p[i].type) ){
-                pad.speed_y = pad.speed_y * (-1) * bai(p[i].type);  //倍率をかけて返す
-                p[i].hp -= pad.speed_y;      //ｈｐ減少
-                if(p[i].type == 0)           //アタッカーの返す向き
-                    pad.speed_x = 0;
-                else if(p[i].type == 1){
-                    i = i;                   //ｈｐ回復
+    }else{
+	if(pad.y - PAD_R <= -ATK_Y && pad.y - PAD_R >= -ATK_Y + pad.speed_y){
+            for(i = 0;i < 2;i++){
+                if(p[i+2].type == 0)
+                    break;
+            }
+            if(pad.x > p[i+2].x - ATK_W && pad.x < p[i+2].x + ATK_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    i = i;//HPが0以下になった時の処理
+                }
+            }
+        }else if(-pad.y + PAD_R >= SUP_Y && -pad.y + PAD_R <= SUP_Y - pad.speed_y){
+        for(i = 0;i < 2;i++){
+            if(p[i+2].type == 1)
+                break;
+        }
+        if(pad.x > p[i+2].x - SUP_W && pad.x < p[i+2].x + SUP_W){
+            pad.speed_y = pad.speed_y * (-1);
+            if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                i = i;//HPが0以下になった時の処理
+            }
+            if(i+2 == 0){                   //ｈｐ回復
+                p[1].hp += 10;
+            }else{
+                p[0].hp += 10;
+            }
+            p[2].hp += 10;
+        }
+        }else if(-pad.y + PAD_R >= DEF_Y && -pad.y + PAD_R <= DEF_Y - pad.speed_y){
+            if(pad.x > p[5].x - DEF_W && pad.x < p[5].x + DEF_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                if( (p[5].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    p[5].hp = 0;;//HPが0以下になった時の処理
                 }
             }
         }
     }
-*/
+
+
     //縦の壁にぶつかった時
     if(pad.y + PAD_R > FIELD_H){
         pad.y = 2 * FIELD_H - pad.y - 2*PAD_R;
@@ -270,15 +296,70 @@ void draw() {
   	{ -100.0, 160.0, 20.0 }
 	};
 
-	GLdouble atk_vertex[][3] = {
+	GLdouble atk1_vertex[][3] = {
   	{ p[0].x - ATK_W, ATK_Y, 0.0 },
  	{ p[0].x + ATK_W, ATK_Y, 0.0 },
- 	{ p[0].x + ATK_W, ATK_Y + 10, 0.0 },
- 	{ p[0].x - ATK_W, ATK_Y + 10, 0.0 },
-  	{ p[0].x - ATK_W, ATK_Y, 20.0 },
-  	{ p[0].x + ATK_W, ATK_Y, 20.0 },
-  	{ p[0].x + ATK_W, ATK_Y + 10, 20.0 },
-  	{ p[0].x - ATK_W, ATK_Y + 10, 20.0 }
+ 	{ p[0].x + ATK_W, ATK_Y + 5, 0.0 },
+ 	{ p[0].x - ATK_W, ATK_Y + 5, 0.0 },
+  	{ p[0].x - ATK_W, ATK_Y, 5.0 },
+  	{ p[0].x + ATK_W, ATK_Y, 5.0 },
+  	{ p[0].x + ATK_W, ATK_Y + 5, 5.0 },
+  	{ p[0].x - ATK_W, ATK_Y + 5, 5.0 }
+	};
+
+	GLdouble sup1_vertex[][3] = {
+  	{ p[1].x - SUP_W, SUP_Y, 0.0 },
+ 	{ p[1].x + SUP_W, SUP_Y, 0.0 },
+ 	{ p[1].x + SUP_W, SUP_Y + 5, 0.0 },
+ 	{ p[1].x - SUP_W, SUP_Y + 5, 0.0 },
+  	{ p[1].x - SUP_W, SUP_Y, 5.0 },
+  	{ p[1].x + SUP_W, SUP_Y, 5.0 },
+  	{ p[1].x + SUP_W, SUP_Y + 5, 5.0 },
+  	{ p[1].x - SUP_W, SUP_Y + 5, 5.0 }
+	};
+
+	GLdouble def1_vertex[][3] = {
+  	{ p[4].x - DEF_W, DEF_Y, 0.0 },
+ 	{ p[4].x + DEF_W, DEF_Y, 0.0 },
+ 	{ p[4].x + DEF_W, DEF_Y + 5, 0.0 },
+ 	{ p[4].x - DEF_W, DEF_Y + 5, 0.0 },
+  	{ p[4].x - DEF_W, DEF_Y, 5.0 },
+  	{ p[4].x + DEF_W, DEF_Y, 5.0 },
+  	{ p[4].x + DEF_W, DEF_Y + 5, 5.0 },
+  	{ p[4].x - DEF_W, DEF_Y + 5, 5.0 }
+	};
+
+	GLdouble atk2_vertex[][3] = {
+  	{ p[2].x - ATK_W, -ATK_Y, 0.0 },
+ 	{ p[2].x + ATK_W, -ATK_Y, 0.0 },
+ 	{ p[2].x + ATK_W, -ATK_Y - 5, 0.0 },
+ 	{ p[2].x - ATK_W, -ATK_Y - 5, 0.0 },
+  	{ p[2].x - ATK_W, -ATK_Y, 5.0 },
+  	{ p[2].x + ATK_W, -ATK_Y, 5.0 },
+  	{ p[2].x + ATK_W, -ATK_Y - 5, 5.0 },
+  	{ p[2].x - ATK_W, -ATK_Y - 5, 5.0 }
+	};
+
+	GLdouble sup2_vertex[][3] = {
+  	{ p[3].x - SUP_W, -SUP_Y, 0.0 },
+ 	{ p[3].x + SUP_W, -SUP_Y, 0.0 },
+ 	{ p[3].x + SUP_W, -SUP_Y - 5, 0.0 },
+ 	{ p[3].x - SUP_W, -SUP_Y - 5, 0.0 },
+  	{ p[3].x - SUP_W, -SUP_Y, 5.0 },
+  	{ p[3].x + SUP_W, -SUP_Y, 5.0 },
+  	{ p[3].x + SUP_W, -SUP_Y - 5, 5.0 },
+  	{ p[3].x - SUP_W, -SUP_Y - 5, 5.0 }
+	};
+
+	GLdouble def2_vertex[][3] = {
+  	{ p[5].x - DEF_W, -DEF_Y, 0.0 },
+ 	{ p[5].x + DEF_W, -DEF_Y, 0.0 },
+ 	{ p[5].x + DEF_W, -DEF_Y - 5, 0.0 },
+ 	{ p[5].x - DEF_W, -DEF_Y - 5, 0.0 },
+  	{ p[5].x - DEF_W, -DEF_Y, 5.0 },
+  	{ p[5].x + DEF_W, -DEF_Y, 5.0 },
+  	{ p[5].x + DEF_W, -DEF_Y - 5, 5.0 },
+  	{ p[5].x - DEF_W, -DEF_Y - 5, 5.0 }
 	};
 
 	int edge[][2] = {
@@ -328,7 +409,47 @@ void draw() {
 	  glBegin(GL_QUADS);
 	  for (j = 0; j < 6; ++j) {
     		for (i = 0; i < 4; ++i) {
-		      glVertex3dv(atk_vertex[face[j][i]]);
+		      glVertex3dv(atk1_vertex[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(sup1_vertex[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(def1_vertex[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(atk2_vertex[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(sup2_vertex[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(def2_vertex[face[j][i]]);
     		}
 	  }	  
   	  glEnd();
