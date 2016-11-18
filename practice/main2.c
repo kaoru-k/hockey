@@ -1,3 +1,4 @@
+//gcc -o main2 main2.c -lGLU -lSDL
 #include <stdio.h>
 #include <stdlib.h>
 #include <SDL/SDL.h>
@@ -27,7 +28,12 @@ typedef struct{
     float x;       // プレイヤーのX座標
 }PLAYER;
 
-PLAYER p[6] = {{  },{ },{ },{ },{ },{ }};
+PLAYER p[6] = {{0,10,0,0},
+               {1,10,0,20},
+               {0,10,0,-10},
+               {1,10,0,-10},
+               {2,10,0,30},
+               {2,10,0,-20}};
 
 /* パッドの構造体 */
 typedef struct{
@@ -38,7 +44,7 @@ typedef struct{
 }PAD;
 PAD pad={2,2,1,1};
 SDL_Rect pack = {0.0, 0.0};
-SDL_Rect camera = {0.0, 100.0};
+SDL_Rect camera = {0.0, 210.0};
 
 static void field_set(void);
 //キャラの幅を返す関数
@@ -84,12 +90,49 @@ void field_set(void){
  	pad.x = (-2) * FIELD_W - pad.x + 2 * PAD_R;
         pad.speed_x = pad.speed_x * (-1);
     }
- /*   //プレイヤーにぶつかった時
+    //プレイヤーにぶつかった時
+    if(pad.speed_y > 0){
+        if(pad.y + PAD_R > ATK_Y ){
+            for(i = 0;i < 2;i++){
+                if(p[i].type == 0)
+                    break;
+            }
+            if(pad.x > p[i].x - ATK_W && pad.x < p[i].x + ATK_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                if( (p[i].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    i = i;//HPが0以下になった時の処理
+                }
+            }
+        }else if(pad.y + PAD_R > SUP_Y){
+        for(i = 0;i < 2;i++){
+            if(p[i].type == 1)
+                break;
+        }
+        if(pad.x > p[i].x - SUP_W && pad.x < p[i].x + SUP_W){
+            pad.speed_y = pad.speed_y * (-1);
+            if( (p[i].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                i = i;//HPが0以下になった時の処理
+            }
+            if(i == 0){                   //ｈｐ回復
+                p[1].hp += 10;
+            }else{
+                p[0].hp += 10;
+            }
+            p[2].hp += 10;
+        }
+        }else if(pad.y + PAD_R > DEF_Y){
+            if(pad.x > p[2].x - DEF_W && pad.x < p[2].x + DEF_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                if( (p[2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    p[2].hp = 0;;//HPが0以下になった時の処理
+            }
+            }
+        }
+    }
+/*
     for(j = 0;j < 2;i++){
-        if(a == 1)//逆向き
-            i = j;
-        else
-            i = j + 2;
         if(pad.y + PAD_R <= zahyo(p[i].type) && pad.y + PAD_R <= zahyo(p[i].type) + 10 ){
             if(pad.x + PAD_R >= p[i].x && pad.x + PAD_R <= p[i].x + haba(p[i].type) ){
                 pad.speed_y = pad.speed_y * (-1) * bai(p[i].type);  //倍率をかけて返す
@@ -345,16 +388,16 @@ int Keyevent(void)
 								camera.y += 10;
 								break;
 						case SDLK_d:
-								pack.x -= 5;
+								pad.x -= 5;
 								break;
 						case SDLK_a:
-								pack.x += 5;
+								pad.x += 5;
 								break;
 						case SDLK_w:
-								pack.y -= 5;
+								pad.y -= 5;
 								break;
 						case SDLK_s:
-								pack.y += 5;
+								pad.y += 5;
 								break;
                 				default:
 								break;
