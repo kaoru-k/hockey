@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
+#include <SDL/SDL_mixer.h>
 #include <GL/glut.h>
 /* フィールド */
 #define FIELD_H  160   //フィールドの縦幅
@@ -17,6 +18,12 @@
 #define ATK_Y 50      //アタッカーのY座標
 #define ATK_W 20       //アタッカーの幅
 
+
+SDL_Joystick *joystick;	// ジョイスティックを特定・利用するための構造体
+
+
+
+
 /* パッド */
 #define PAD_R 5       //パッドの半径
 
@@ -27,6 +34,8 @@ typedef struct{
     int   ap;      // 必殺技ポイント
     float x;       // プレイヤーのX座標
 }PLAYER;
+
+float speedx[2] = {0.0, 0.0};	//自分の操作速度
 
 PLAYER p[6] = {{0,10,0,0},
                {1,10,0,20},
@@ -42,7 +51,7 @@ typedef struct{
     float x;         // パッドのX座標
     float y;         // パッドのY座標
 }PAD;
-PAD pad={2,2,1,1};
+PAD pad={3,3,1,1};
 SDL_Rect pack = {0.0, 0.0};
 SDL_Rect camera = {0.0, 210.0};
 
@@ -193,6 +202,26 @@ int initializeSDL(int flags) {
 		fprintf(stderr, "%s\n", SDL_GetError());
 		return 1;
 	}
+	
+	// ジョイスティックサブシステムを初期化する
+	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+
+	joystick = SDL_JoystickOpen(0);	// ジョイスティックを開いて構造体に割り当てる（有効にする）．ここではジョイスティックは1つとして引数に0を指定
+	SDL_JoystickEventState(SDL_ENABLE);	// ジョイスティック関連のイベントを取得可能にする
+
+	// ジョイスティックが開けなかったら
+	if(!joystick) {
+		printf("failed to open joystick.\n");
+		exit(-1);
+	}
+	else{
+		printf("The found joystick ID (index) is %d.\n", SDL_JoystickIndex(joystick));	// 接続されたジョイスティックのID番号（1つしか接続されていない場合は0
+   		printf("The found joystick has %d axses.\n",SDL_JoystickNumAxes(joystick));	// ジョイスティックの方向キー数を取得
+   		printf("The found joystick has %d Hat keys.\n",SDL_JoystickNumHats(joystick));	// ジョイスティックのHatキー数を取得（電算室のジョイスティックでは0?）
+   		printf("The found joystick has %d balls.\n",SDL_JoystickNumBalls(joystick));	// ジョイスティックのボール数を取得（電算室のジョイスティックでは0?） */
+   		printf("The found joystick has %d buttons.\n",SDL_JoystickNumButtons(joystick));	// ジョイスティックのボタン数を取得
+	}
+
 	atexit(SDL_Quit);
 
 	return 0;
@@ -527,10 +556,10 @@ int Keyevent(void)
 								camera.y += 10;
 								break;
 						case SDLK_d:
-								p[0].x -= 5;
+								speedx[0] -= 3;
 								break;
 						case SDLK_a:
-								p[0].x += 5;
+								speedx[0] += 3;
 								break;
 						case SDLK_w:
 								pad.y -= 5;
@@ -541,8 +570,88 @@ int Keyevent(void)
                 				default:
 								break;
 					   }
+			case SDL_JOYAXISMOTION:
+			printf("The axis ID of the operated key is %d.\n",event.jaxis.axis);	// 操作された方向キーの方向軸を表示（0：アナログキー，1：アナログキー，2：方向キー左右方向，3：方向キー上下方向）
+			if(event.jaxis.axis==0){
+				printf("--- Analog-Direction Key: ?? Axis\n");
+				if(event.jaxis.value < 0)
+					speedx[1] += 3;
+				else if(event.jaxis.value >  0)
+					speedx[1] -= 3;
+				else
+					speedx[1] = 0.0;
+			}
+			else if(event.jaxis.axis==1){
+				printf("--- Anolag-Direction Key: ?? Axis\n");
+				/*else
+					cursor_axis.y = 0;*/
+			}
+			else if(event.jaxis.axis==2){
+				printf("--- Four-Direction Key: Horizontal Axis\n");
+				
+			}
+			else if(event.jaxis.axis==3){
+				printf("--- Four-Direction Key: Vertical Axis\n");
+			}						
+			printf("--- The axis value of the operated key is %d.\n",event.jaxis.value);	// ジョイスティックの操作された方向キーの値を表示（-32767（真左，真上）～32767（真右，真下））
+			break;
+		// ジョイスティックのボタンが押された時
+		/*case SDL_JOYBUTTONDOWN:
+			switch(event.jbutton.button){
+				case 4:
+				case 6: if(cursormode == 1)
+						cursormode = 0;
+					break;
+				case 5:
+				case 7: if(cursormode == 0)
+						cursormode = 1;
+					break;
+				case 0 :
+				case 1 :
+				case 2 :
+				case 3 :	if(prog == 0){
+							prog = 1;
+							textmode = 1;
+						}
+
+						if(clear == 1){
+							prog++;
+							textmode = 1;
+							clear = 0;
+						}
+
+						if(chara_rect.y + 90 == GROUND){
+						if(chara_rect.x <= cursor_rect.x + 25 && cursor_rect.x + 25 <= chara_rect.x + 92 && chara_rect.y +  90 <= cursor_rect.y + 25 && cursor_rect.y + 25 <= chara_rect.y +  90 + 25 && cursormode == 0)
+							accely = 8.0;
+						if(chara_rect.x <= cursor_rect.x + 25 && cursor_rect.x + 25 <= chara_rect.x + 92 && chara_rect.y <= cursor_rect.y + 25 && cursor_rect.y + 25 <= chara_rect.y +  90  && cursormode == 0)
+							SDL_Delay(1000);
+					 }	 
+					 break;
+				case 10 :
+				case 11 : return 0;
+					  break;
+				default : break;
+			}
+			printf("The ID of the pressed button is %d.\n", event.jbutton.button);	// 押されたボタンのIDを表示（0から）
+			// ボタンIDに応じた処理
+			if(event.jbutton.button==0){
+				printf("--- You pressed a button on the joystick.\n");
+			}
+			break;
+			// ボタンが離された時
+		case SDL_JOYBUTTONUP:
+			printf("The ID of the released button is %d.\n", event.jbutton.button);	// 離されたボタンのIDを表示（0から）
+			// ボタンIDに応じた処理
+			if(event.jbutton.button==0){
+				printf("--- You released a button on the joystick.\n");
+			}
+			break;*/
 		}
 	}
+
+	p[0].x += speedx[0];
+	p[1].x += speedx[1];
+
 	return 1;
 }
 
