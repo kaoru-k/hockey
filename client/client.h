@@ -14,7 +14,7 @@ PAD pad;
 
 /***** 外部関数 *****/
 // client_net.c
-void client_server(char *server_name, u_short port);
+void setup_client(char *server_name, u_short port);
 void recv_data(void *data, int size);
 void send_data(void *data, int size);
 void terminate_client(void);
