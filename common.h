@@ -5,7 +5,14 @@
 *************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <netinet/in.h>
+
+/* ネットワーク */
+#define DEFAULT_PORT   51419
+#define MAX_LEN_BUFFER 256
+#define MAX_LEN_ADDR   32
+#define BROADCAST      -1
 
 /* フィールド */
 #define FIELD_H  400   //フィールドの縦幅
@@ -23,6 +30,13 @@
 /* パッド */
 #define PAD_R 10       //パッドの半径
 
+
+/* クライアント情報用の構造体 */
+typedef struct{
+    int cid;
+    int sock;
+    struct sockaddr_in addr;
+}CLIENT;
 
 /* プレイヤーを表す構造体 */
 typedef struct{

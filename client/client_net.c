@@ -6,6 +6,11 @@
 
 #include "client.h"
 
+static int myid;
+static int sock;
+static int num_sock;
+static fd_set mask;
+
 void setup_client(char *server_name, u_short port)
 {
     struct hostent *server;
@@ -25,15 +30,13 @@ void setup_client(char *server_name, u_short port)
     fprintf(stderr, "done.\n");
 
     fprintf(stderr, "Waiting for other clients... ");
-    recv_data(&num_client, sizeof(int));
-    fprintf(stderr, "done.\n");
     recv_data(&myid, sizeof(int));
-    fprintf(stderr, "You are %dP\n");
+    fprintf(stderr, "done\nYou are %dP\n", myid);
 
     FD_ZERO(&mask);
     FD_SET(0, &mask);
     FD_SET(sock, &mask);
-    fprintf(stderr, "Client setup is done.")
+    fprintf(stderr, "Client setup is done.");
 }
 
 void recv_data(void *data, int size)

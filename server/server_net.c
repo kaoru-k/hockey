@@ -5,6 +5,14 @@
 *************************************/
 
 #include "server.h"
+#include <string.h>
+#include <sys/socket.h>
+
+void setup_server(u_short port);
+void error_message(char *message);
+
+static int num_socks;
+static fd_set mask;
 
 void setup_server(u_short port)
 {
@@ -15,7 +23,7 @@ void setup_server(u_short port)
 
     /* リクエスト用ソケットを生成 */
     fprintf(stderr, "Generating request socket ...");
-    rsock = socket(AF_INET, SOCK_STERAM, 0);
+    rsock = socket(AF_INET, SOCK_STREAM, 0);
     if (rsock < 0) error_message("failed!\n");
     fprintf(stderr, "done.\n");
 
@@ -79,7 +87,7 @@ void send_data(int cid, void *data, int size)
 
 }
 
-void terminate_server(void);
+void terminate_server(void)
 {
 
 }
