@@ -78,6 +78,21 @@ int bai(int type){
     return 1;
 
 }
+
+void ugoki()
+{
+	if(p[4].x > pad.x )
+		p[4].x -= 2;
+	else if(pad.x  > p[4].x)
+		p[4].x += 2;
+
+	if(p[5].x > pad.x )
+		p[5].x -= 2;
+	else if(pad.x > p[5].x)
+		p[5].x += 2;
+}
+
+
 /* パッドの動きを計算する */
 void field_set(void){
     int i,j;
@@ -269,6 +284,7 @@ int initializeOpenGL(int width, int height) {
 }
 
 void draw() {
+	ugoki();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// 視点を設定する
@@ -391,6 +407,13 @@ void draw() {
   	{ p[5].x - DEF_W, -DEF_Y - 5, 5.0 }
 	};
 
+	GLdouble score[][3] = {
+		{100, 100, 50},
+		{100, 100, 100},
+		{-100, 100, 100},
+		{-100, 100, 50}
+	};
+
 	int edge[][2] = {
 	  { 0, 1 },
 	  { 1, 2 },
@@ -483,6 +506,12 @@ void draw() {
 	  }	  
   	  glEnd();
 
+	  glBegin(GL_QUADS);
+		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(score[face[0][i]]);
+    		}
+	  glEnd();
+
   	  glFlush();
 }
        //大地創造
@@ -556,45 +585,43 @@ int Keyevent(void)
 								camera.y += 10;
 								break;
 						case SDLK_d:
-								speedx[0] -= 3;
+								speedx[0] = -3;
 								break;
 						case SDLK_a:
-								speedx[0] += 3;
+								speedx[0] = 3;
 								break;
 						case SDLK_w:
-								pad.y -= 5;
-								break;
 						case SDLK_s:
-								pad.y += 5;
+								speedx[0] = 0;
 								break;
                 				default:
 								break;
 					   }
 			case SDL_JOYAXISMOTION:
-			printf("The axis ID of the operated key is %d.\n",event.jaxis.axis);	// 操作された方向キーの方向軸を表示（0：アナログキー，1：アナログキー，2：方向キー左右方向，3：方向キー上下方向）
-			if(event.jaxis.axis==0){
-				printf("--- Analog-Direction Key: ?? Axis\n");
-				if(event.jaxis.value < 0)
-					speedx[1] += 3;
-				else if(event.jaxis.value >  0)
-					speedx[1] -= 3;
-				else
-					speedx[1] = 0.0;
-			}
-			else if(event.jaxis.axis==1){
-				printf("--- Anolag-Direction Key: ?? Axis\n");
-				/*else
-					cursor_axis.y = 0;*/
-			}
-			else if(event.jaxis.axis==2){
-				printf("--- Four-Direction Key: Horizontal Axis\n");
-				
-			}
-			else if(event.jaxis.axis==3){
-				printf("--- Four-Direction Key: Vertical Axis\n");
-			}						
-			printf("--- The axis value of the operated key is %d.\n",event.jaxis.value);	// ジョイスティックの操作された方向キーの値を表示（-32767（真左，真上）～32767（真右，真下））
-			break;
+				printf("The axis ID of the operated key is %d.\n",event.jaxis.axis);	// 操作された方向キーの方向軸を表示（0：アナログキー，1：アナログキー，2：方向キー左右方向，3：方向キー上下方向）
+				if(event.jaxis.axis==0){
+					printf("--- Analog-Direction Key: ?? Axis\n");
+					if(event.jaxis.value < 0)
+						speedx[1] += 3;
+					else if(event.jaxis.value >  0)
+						speedx[1] -= 3;
+					else
+						speedx[1] = 0.0;
+				}
+				else if(event.jaxis.axis==1){
+					printf("--- Anolag-Direction Key: ?? Axis\n");
+					/*else
+						cursor_axis.y = 0;*/
+				}
+				else if(event.jaxis.axis==2){
+					printf("--- Four-Direction Key: Horizontal Axis\n");
+					
+				}
+				else if(event.jaxis.axis==3){
+					printf("--- Four-Direction Key: Vertical Axis\n");
+				}						
+				printf("--- The axis value of the operated key is %d.\n",event.jaxis.value);	// ジョイスティックの操作された方向キーの値を表示（-32767（真左，真上）～32767（真右，真下））
+				break;
 		// ジョイスティックのボタンが押された時
 		/*case SDL_JOYBUTTONDOWN:
 			switch(event.jbutton.button){
@@ -647,10 +674,13 @@ int Keyevent(void)
 			}
 			break;*/
 		}
+		
 	}
 
-	p[0].x += speedx[0];
-	p[1].x += speedx[1];
+	if(FIELD_W > p[0].x + speedx[0] + ATK_W && p[0].x + speedx[0] - ATK_W > -FIELD_W)
+		p[0].x += speedx[0];
+	if(FIELD_W > p[1].x + speedx[1] + ATK_W && p[1].x + speedx[1] - ATK_W > -FIELD_W)
+		p[1].x += speedx[1];
 
 	return 1;
 }
