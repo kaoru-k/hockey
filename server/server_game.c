@@ -6,8 +6,6 @@
 
 #include "server.h"
 
-static void field_set(void);
-
 /* パッドの動きを計算する */
 void field_set(void){
     int i,j;

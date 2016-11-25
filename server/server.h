@@ -6,6 +6,7 @@
 #include "../common.h"
 
 /***** グローバル変数 *****/
+CLIENT clients[4];
 PLAYER p[6]; //0,1,2,3->human 4,5->cpu
 PAD pad;
 
