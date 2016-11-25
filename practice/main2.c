@@ -25,7 +25,7 @@ SDL_Joystick *joystick;	// ジョイスティックを特定・利用するた�
 
 
 /* パッド */
-#define PAD_R 5       //パッドの半径
+#define PAD_R 10       //パッドの半径
 
 /* プレイヤーを表す構造体 */
 typedef struct{
@@ -99,7 +99,7 @@ int def_ugoki(int i){
 }
 void ugoki()
 {
-	if(p[4].x > pad.x )
+	/*if(p[4].x > pad.x )
 		p[4].x -= 2;
 	else if(pad.x  > p[4].x)
 		p[4].x += 2;
@@ -108,6 +108,7 @@ void ugoki()
 		p[5].x -= 2;
 	else if(pad.x > p[5].x)
 		p[5].x += 2;
+*/
 }
 
 
@@ -184,7 +185,7 @@ void field_set(void){
             if(pad.x > p[i+2].x - ATK_W && pad.x < p[i+2].x + ATK_W){
                 pad.speed_y = pad.speed_y * (-1);
                 pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                p[5].x = def_ugoki(-1);
+                p[4].x = def_ugoki(-1);
                 if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
                     i = i;//HPが0以下になった時の処理
                 }
@@ -196,7 +197,7 @@ void field_set(void){
         }
         if(pad.x > p[i+2].x - SUP_W && pad.x < p[i+2].x + SUP_W){
             pad.speed_y = pad.speed_y * (-1);
-            p[5].x = def_ugoki(1);
+            p[4].x = def_ugoki(1);
             if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
                 i = i;//HPが0以下になった時の処理
             }
@@ -211,7 +212,7 @@ void field_set(void){
             if(pad.x > p[5].x - DEF_W && pad.x < p[5].x + DEF_W){
                 pad.speed_y = pad.speed_y * (-1);
                 pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                p[5].x = def_ugoki(1);
+                p[4].x = def_ugoki(1);
                 if( (p[5].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
                     p[5].hp = 0;;//HPが0以下になった時の処理
                 }
@@ -228,7 +229,7 @@ void field_set(void){
     }else if(pad.y - PAD_R <= (-1)*FIELD_H){
  	pad.y = (-2) * FIELD_H - pad.y + 2*PAD_R;
         pad.speed_y = pad.speed_y * (-1);
-        p[5].x = def_ugoki(1);
+        p[4].x = def_ugoki(1);
     }
 /*
     if(a == 1){
