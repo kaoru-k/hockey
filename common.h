@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 
 /* ネットワーク */
-#define DEFAULT_PORT   51419
+#define DEFAULT_PORT   51000
 #define MAX_LEN_BUFFER 256
 #define MAX_LEN_ADDR   32
 #define BROADCAST      -1

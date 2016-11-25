@@ -40,7 +40,7 @@ void setup_server(u_short port)
     fprintf(stderr, "done.\n");
 
     /* 接続ソケットの準備 */
-    fprint(stderr, "listen() ...");
+    fprintf(stderr, "listen() ...");
     if (listen(rsock, 4) != 0) error_message("failed!\n");
     fprintf(stderr, "started.\n");
 

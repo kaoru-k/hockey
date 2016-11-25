@@ -5,11 +5,15 @@
 *************************************/
 
 #include "client.h"
+#include <netdb.h>
 
 static int myid;
 static int sock;
 static int num_sock;
 static fd_set mask;
+
+
+static void error_message(char *message);
 
 void setup_client(char *server_name, u_short port)
 {
@@ -55,4 +59,10 @@ void terminate_client(void)
 {
     fprintf(stderr, "Connenction is closed.\n");
     close(sock);
+}
+
+void error_message(char *message)
+{
+    perror(message);
+    exit(1);
 }
