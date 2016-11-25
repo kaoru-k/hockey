@@ -408,10 +408,10 @@ void draw() {
 	};
 
 	GLdouble score[][3] = {
-		{100, 100, 50},
-		{100, 100, 100},
-		{-100, 100, 100},
-		{-100, 100, 50}
+		{90, 133.1, 98},//lu
+		{90, 122, 125.2},//ld
+		{-90, 122, 125.2},//rd
+		{-90, 133.1, 98}//ru
 	};
 
 	int edge[][2] = {
@@ -573,16 +573,16 @@ int Keyevent(void)
 						case SDLK_ESCAPE: return 0;
 								  break;
 						case SDLK_RIGHT:
-								camera.x -= 10;
+								camera.x -= 1;
 								break;
 						case SDLK_LEFT:
-								camera.x += 10;
+								camera.x += 1;
 								break;
 						case SDLK_UP:
-								camera.y -= 10;
+								camera.y -= 1;
 								break;
 						case SDLK_DOWN:
-								camera.y += 10;
+								camera.y += 1;
 								break;
 						case SDLK_d:
 								speedx[0] = -3;
