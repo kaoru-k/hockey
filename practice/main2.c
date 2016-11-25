@@ -407,6 +407,13 @@ void draw() {
   	{ p[5].x - DEF_W, -DEF_Y - 5, 5.0 }
 	};
 
+	GLdouble score[][3] = {
+		{100, 100, 50},
+		{100, 100, 100},
+		{-100, 100, 100},
+		{-100, 100, 50}
+	};
+
 	int edge[][2] = {
 	  { 0, 1 },
 	  { 1, 2 },
@@ -499,6 +506,12 @@ void draw() {
 	  }	  
   	  glEnd();
 
+	  glBegin(GL_QUADS);
+		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(score[face[0][i]]);
+    		}
+	  glEnd();
+
   	  glFlush();
 }
        //大地創造
@@ -578,10 +591,8 @@ int Keyevent(void)
 								speedx[0] = 3;
 								break;
 						case SDLK_w:
-								pad.y -= 5;
-								break;
 						case SDLK_s:
-								pad.y += 5;
+								speedx[0] = 0;
 								break;
                 				default:
 								break;
@@ -666,8 +677,9 @@ int Keyevent(void)
 		
 	}
 
-
+	if(FIELD_W > p[0].x + speedx[0] + ATK_W && p[0].x + speedx[0] - ATK_W > -FIELD_W)
 		p[0].x += speedx[0];
+	if(FIELD_W > p[1].x + speedx[1] + ATK_W && p[1].x + speedx[1] - ATK_W > -FIELD_W)
 		p[1].x += speedx[1];
 
 	return 1;
