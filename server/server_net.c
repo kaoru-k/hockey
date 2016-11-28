@@ -10,12 +10,16 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
-void setup_server(u_short port);
-void error_message(char *message);
+#include <errno.h>
 
 static int num_socks;
 static fd_set mask;
+
+void setup_server(u_short port);
+void terminate_server(void);
+static void error_message(char *message);
+static int  recv_data(int cid, void *data, int size);
+static void send_data(int cid, void *data, int size);
 
 void setup_server(u_short port)
 {
@@ -64,6 +68,9 @@ void setup_server(u_short port)
     }
     
     close(rsock);
+
+    for (i = 0; i < 4; i++)
+        send_data(i, &i, sizeof(int));
     
     num_socks = max_sock + 1;
     FD_ZERO(&mask);
@@ -75,25 +82,48 @@ void setup_server(u_short port)
     fprintf(stderr, "Server setup is done.\n");
 }
 
-void recv_data(int cid, void *data, int size)
+static int recv_data(int cid, void *data, int size)
+{
+    if ((cid != BROADCAST) && (0 > cid || cid >= 4)) {
+        fprintf(stderr,"recv_data(): Client ID is illeagal!\n");
+        exit(1);
+    }
+    if ((data == NULL) || (size <= 0)) {
+        fprintf(stderr, "receive_data(); data is illeagal!\n");
+        exit(1);
+    }
+    return read(clients[cid].sock, data, size);
+}
+
+static void send_data(int cid, void *data, int size)
 {
     if ((cid != BROADCAST) && (0 > cid || cid >= 4))
-        error_message("recv_data(): Client ID is wrong!\n");
-    
+        ("send_data() failed!\n");
+    if ((data == NULL) || (size <= 0))
+        error_message("send_data() failed!\n");
+
+    if (cid == BROADCAST) {
+        int i;
+        for (i = 0; i < 4; i++) {
+            if (write(clients[i].sock, data, size) < 0) error_message("write()");
+        }
+    }
+    else {
+        if (write(clients[cid].sock, data, size) < 0) error_message("write()");
+    }
 }
-
-void send_data(int cid, void *data, int size)
-{
-
-}
-
 void terminate_server(void)
 {
-
+    int i;
+    for (i = 0; i < 4; i++) {
+        close(clients[i].sock);
+    }
+    fprintf(stderr, "All connections are closed.\n");
 }
 
-void error_message(char *message)
+static void error_message(char *message)
 {
     perror(message);
+    fprintf(stderr, "%d\n", errno);
     exit(1);
 }
