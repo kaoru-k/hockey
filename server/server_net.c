@@ -7,6 +7,8 @@
 #include "server.h"
 #include <string.h>
 #include <sys/socket.h>
+#include <sys/types.h>
+#include <arpa/inet.h>
 
 void setup_server(u_short port);
 void error_message(char *message);

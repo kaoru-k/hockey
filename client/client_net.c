@@ -5,7 +5,11 @@
 *************************************/
 
 #include "client.h"
+#include <unistd.h>
+#include <sys/socket.h>
+#include <sys/types.h>
 #include <netdb.h>
+
 
 static int myid;
 static int sock;
@@ -35,7 +39,7 @@ void setup_client(char *server_name, u_short port)
 
     fprintf(stderr, "Waiting for other clients... ");
     recv_data(&myid, sizeof(int));
-    fprintf(stderr, "done\nYou are %dP\n", myid);
+    fprintf(stderr, "done.\nYou are %dP\n", myid);
 
     FD_ZERO(&mask);
     FD_SET(0, &mask);
