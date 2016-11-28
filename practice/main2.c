@@ -86,7 +86,7 @@ int def_ugoki(int i){
     a = 0;
     if(pad.speed_x < 0)
         b = -1;
-    a = (DEF_Y - pad.y - PAD_R)/pad.speed_y * pad.speed_x + b*pad.x;
+    a = (DEF_Y - pad.y - PAD_R)/pad.speed_y * pad.speed_x + pad.x;
     if(a - PAD_R <= FIELD_W && PAD_R + a >= FIELD_W){
         return a;
     }else{
@@ -97,6 +97,7 @@ int def_ugoki(int i){
             return b*(-FIELD_W + PAD_R) + a % (2*(FIELD_W -PAD_R));   
     }
 }
+
 void ugoki()
 {
 	/*if(p[4].x > pad.x )
