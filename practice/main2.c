@@ -198,7 +198,7 @@ void field_set(void){
         }
         if(pad.x > p[i+2].x - SUP_W && pad.x < p[i+2].x + SUP_W){
             pad.speed_y = pad.speed_y * (-1);
-            p[4].x = def_ugoki(1);
+            p[4].x = def_ugoki(-1);
             if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
                 i = i;//HPが0以下になった時の処理
             }
@@ -213,7 +213,7 @@ void field_set(void){
             if(pad.x > p[5].x - DEF_W && pad.x < p[5].x + DEF_W){
                 pad.speed_y = pad.speed_y * (-1);
                 pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                p[4].x = def_ugoki(1);
+                p[4].x = def_ugoki(-1);
                 if( (p[5].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
                     p[5].hp = 0;;//HPが0以下になった時の処理
                 }
@@ -226,11 +226,11 @@ void field_set(void){
     if(pad.y + PAD_R > FIELD_H){
         pad.y = 2 * FIELD_H - pad.y - 2*PAD_R;
         pad.speed_y = pad.speed_y * (-1);
-        p[5].x = def_ugoki(-1);
+        p[5].x = def_ugoki(1);
     }else if(pad.y - PAD_R <= (-1)*FIELD_H){
  	pad.y = (-2) * FIELD_H - pad.y + 2*PAD_R;
         pad.speed_y = pad.speed_y * (-1);
-        p[4].x = def_ugoki(1);
+        p[4].x = def_ugoki(-1);
     }
 /*
     if(a == 1){
