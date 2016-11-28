@@ -23,4 +23,4 @@ $(TARGET2): $(OBJS2)
 
 # clean
 .PHONY: clean
-clean : @rm -f core *~
+clean : 
