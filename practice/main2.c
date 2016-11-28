@@ -334,7 +334,8 @@ void draw() {
 	glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
 
 
-
+	GLfloat white[] = { 1.0, 1.0, 0.49, 1.0 };
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
 	// 円球を描画する
 	GLUquadric* quadric = gluNewQuadric();
 	GLUquadric* quadric2= gluNewQuadric();
@@ -467,6 +468,8 @@ void draw() {
 
 	int i,j;
 
+	GLfloat grey[] = { 0.0, 1.0, 0.69, 1.0 };
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, grey);
   	/* 図形の描画 */
 	  glColor3d(0.0, 0.0, 0.0);
 	  glBegin(GL_QUADS);
@@ -485,6 +488,8 @@ void draw() {
 	  }	  
   	  glEnd();
 
+	GLfloat g[] = { 0.0, 1.0, 0.32, 1.0 };
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, g);
 	  glBegin(GL_QUADS);
 	  for (j = 0; j < 6; ++j) {
     		for (i = 0; i < 4; ++i) {
@@ -533,11 +538,11 @@ void draw() {
 	  }	  
   	  glEnd();
 
-	  glBegin(GL_QUADS);
+	  /*glBegin(GL_QUADS);
 		for (i = 0; i < 4; ++i) {
 		      glVertex3dv(score[face[0][i]]);
     		}
-	  glEnd();
+	  glEnd();*/
 
   	  glFlush();
 }
@@ -573,6 +578,9 @@ void drawPlane(void)
     GLdouble x;
     GLdouble y;
 
+
+    GLfloat black[] = { 0.0, 0.0, 0.0, 1.0 };
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, black);
     glBegin(GL_LINES);
     glColor3d(0.5, 0.5, 0.5);
     for( x = -xsize; x <= xsize; x += xsize/xnum)
