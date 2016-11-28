@@ -9,7 +9,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
-
+#include <errno.h>
 
 static int myid;
 static int sock;
@@ -17,6 +17,10 @@ static int num_sock;
 static fd_set mask;
 CLIENT clients[4];
 
+void setup_client(char *server_name, u_short port);
+void terminate_client(void);
+static int  recv_data(void *data, int size);
+static void send_data(void *data, int size);
 static void error_message(char *message);
 
 void setup_client(char *server_name, u_short port)
@@ -48,10 +52,10 @@ void setup_client(char *server_name, u_short port)
     }
 }
 
-void recv_data(void *data, int size)
+static int recv_data(void *data, int size)
 {
     if ((data == NULL) || (size <= 0)) error_message("recv_data()");
-    read(sock, data, size);
+    return(read(sock, data, size));
 }
 
 void send_data(void *data, int size)
@@ -66,8 +70,9 @@ void terminate_client(void)
     close(sock);
 }
 
-void error_message(char *message)
+static void error_message(char *message)
 {
     perror(message);
+    fprintf(stderr, "%d\n", errno);
     exit(1);
 }
