@@ -185,3 +185,7 @@ $RECYCLE.BIN/
 *.fot
 *.cb
 *.cb2
+
+# 実行ファイル
+client/client
+server/server
