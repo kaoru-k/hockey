@@ -14,9 +14,9 @@ PAD pad;
 
 /***** 外部関数 *****/
 // client_net.c
-void setup_client(char *server_name, u_short port);
-void terminate_client(void);
+extern void setup_client(char *server_name, u_short port);
+extern void terminate_client(void);
 
 // client_game.c
 
-// client_ui.c
+// client_graphic.c

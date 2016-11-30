@@ -6,62 +6,14 @@
 
 #include "server.h"
 
-/* パッドの動きを計算する */
-void field_set(void){
-    int i,j;
-    pad.x += pad.speed_x;
-    pad.y += pad.speed_y;
-    
-    int a = 0;
-    if(pad.speed_y < 0){
-        pad.speed_y = pad.speed_y * (-1);
-        pad.y = pad.y * (-1);
-        a =1;
-    }
-    
-    //横の壁にぶつかった時
-    if(pad.x + PAD_R >= FIELD_W){
-        pad.x = 2 * FIELD_W - pad.x;
-        pad.speed_x = pad.speed_x * (-1);
-    }
 
-    //プレイヤーにぶつかった時
-    for(j = 0;j < 2;i++){
-        if(a == 1)//逆向き
-            i = j;
-        else
-            i = j + 2;
-        if(pad.y + PAD_R <= zahyo(p[i].type) && pad.y + PAD_R <= zahyo(p[i].type) + 10 ){
-            if(pad.x + PAD_R >= p[i].x && pad.x + PAD_R <= p[i].x + haba(p[i].type) ){
-                pad.speed_y = pad.speed_y * (-1) * bai(p[i].type);  //倍率をかけて返す
-                p[i].hp -= pad.speed_y;      //HP減少
-                if(p[i].type == 0)           //アタッカーの返す向き
-                    pad.speed_x = 0;
-                else if(p[i].type == 1){
-                    i = i;                   //HP回復
-                }
-            }
-        }
-    }
-
-    //縦の壁にぶつかった時
-    if(pad.y + PAD_R >= FIELD_H){
-        if(pad.x <= GOAL_W && pad.x >= GOAL_W * (-1) )  //ゴールした時
-            pad.x = pad.x * 1;
-        else{
-        pad.y = 2 * FIELD_H - pad.y;
-        pad.speed_y = pad.speed_y * (-1);
-        }
-    }
-
-    if(a == 1){
-        pad.speed_y = pad.speed_y * (-1);
-        pad.y = pad.y * (-1);
-    }
-}
+static int  haba (int type);
+static int  zahyo(int type);
+static int  bai  (int type);  
+static int  def_ugoki(int i);
 
 //キャラの幅を返す関数
-int haba(int type){
+static int haba(int type){
     switch(type){
     case 0:return ATK_W;
     case 1:return SUP_W;
@@ -81,4 +33,150 @@ int zahyo(int type){
 int bai(int type){
     return 1;
 
+}
+//ディフェンダーの目指す場所
+int def_ugoki(int i){
+    int a = 0;
+    int b = 1;
+    b = 1;
+    a = 0;
+    if(pad.speed_x < 0)
+        b = -1;
+    a = (-i*DEF_Y - pad.y + i*PAD_R)/pad.speed_y * pad.speed_x + pad.x;
+    if(a - PAD_R <= FIELD_W && PAD_R + a >= FIELD_W){
+        return a;
+    }else{
+        a = a - b * (FIELD_W - PAD_R);
+        if( (a / (b* (2*FIELD_W - 2*PAD_R))) % 2 == 0)
+            return  b*(FIELD_W - PAD_R) - a % (2*(FIELD_W - PAD_R));
+        else
+            return b*(-FIELD_W + PAD_R) + a % (2*(FIELD_W -PAD_R));   
+    }
+}
+
+/* パッドの動きを計算する */
+void field_set(void){
+    int i,j;
+    pad.x += pad.speed_x;
+    pad.y += pad.speed_y;
+    
+    int a = 1;
+    if(pad.speed_y < 0){
+        /*pad.speed_y = pad.speed_y * (-1);
+        pad.y = pad.y * (-1);*/
+        a =-1;
+    }
+    
+    //横の壁にぶつかった時
+    if(pad.x + PAD_R > FIELD_W){
+        pad.x = 2 * FIELD_W - pad.x - 2 * PAD_R;
+        pad.speed_x = pad.speed_x * (-1);
+    }else if(pad.x - PAD_R < (-1)*FIELD_W){
+ 	pad.x = (-2) * FIELD_W - pad.x + 2 * PAD_R;
+        pad.speed_x = pad.speed_x * (-1);
+    }
+    //プレイヤーにぶつかった時
+    if(pad.speed_y > 0){
+        if(pad.y + PAD_R >= ATK_Y && pad.y + PAD_R <= ATK_Y + pad.speed_y){
+            for(i = 0;i < 2;i++){
+                if(p[i].type == 0)
+                    break;
+            }
+            if(pad.x > p[i].x - ATK_W && pad.x < p[i].x + ATK_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                p[5].x = def_ugoki(1);
+                if( (p[i].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    i = i;//HPが0以下になった時の処理
+                }
+            }
+        }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + pad.speed_y){
+        for(i = 0;i < 2;i++){
+            if(p[i].type == 1)
+                break;
+        }
+        if(pad.x > p[i].x - SUP_W && pad.x < p[i].x + SUP_W){
+            pad.speed_y = pad.speed_y * (-1);
+            p[5].x = def_ugoki(1);
+            if( (p[i].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                i = i;//HPが0以下になった時の処理
+            }
+            if(i == 0){                   //ｈｐ回復
+                p[1].hp += 10;
+            }else{
+                p[0].hp += 10;
+            }
+            p[2].hp += 10;
+        }
+        }else if(pad.y + PAD_R >= DEF_Y && pad.y + PAD_R <= DEF_Y + pad.speed_y){
+            if(pad.x > p[4].x - DEF_W && pad.x < p[4].x + DEF_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                p[5].x = def_ugoki(1);
+                if( (p[4].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    p[4].hp = 0;;//HPが0以下になった時の処理
+            }
+            }
+        }
+    }else{
+	if(pad.y - PAD_R <= -ATK_Y && pad.y - PAD_R >= -ATK_Y + pad.speed_y){
+            for(i = 0;i < 2;i++){
+                if(p[i+2].type == 0)
+                    break;
+            }
+            if(pad.x > p[i+2].x - ATK_W && pad.x < p[i+2].x + ATK_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                p[4].x = def_ugoki(-1);
+                if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    i = i;//HPが0以下になった時の処理
+                }
+            }
+        }else if(-pad.y + PAD_R >= SUP_Y && -pad.y + PAD_R <= SUP_Y - pad.speed_y){
+        for(i = 0;i < 2;i++){
+            if(p[i+2].type == 1)
+                break;
+        }
+        if(pad.x > p[i+2].x - SUP_W && pad.x < p[i+2].x + SUP_W){
+            pad.speed_y = pad.speed_y * (-1);
+            p[4].x = def_ugoki(-1);
+            if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                i = i;//HPが0以下になった時の処理
+            }
+            if(i+2 == 0){                   //ｈｐ回復
+                p[1].hp += 10;
+            }else{
+                p[0].hp += 10;
+            }
+            p[2].hp += 10;
+        }
+        }else if(-pad.y + PAD_R >= DEF_Y && -pad.y + PAD_R <= DEF_Y - pad.speed_y){
+            if(pad.x > p[5].x - DEF_W && pad.x < p[5].x + DEF_W){
+                pad.speed_y = pad.speed_y * (-1);
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+                p[4].x = def_ugoki(-1);
+                if( (p[5].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+                    p[5].hp = 0;;//HPが0以下になった時の処理
+                }
+            }
+        }
+    }
+
+
+    //縦の壁にぶつかった時
+    if(pad.y + PAD_R > FIELD_H){
+        pad.y = 2 * FIELD_H - pad.y - 2*PAD_R;
+        pad.speed_y = pad.speed_y * (-1);
+        p[5].x = def_ugoki(1);
+    }else if(pad.y - PAD_R <= (-1)*FIELD_H){
+ 	pad.y = (-2) * FIELD_H - pad.y + 2*PAD_R;
+        pad.speed_y = pad.speed_y * (-1);
+        p[4].x = def_ugoki(-1);
+    }
+/*
+    if(a == 1){
+        pad.speed_y = pad.speed_y * (-1);
+        pad.y = pad.y * (-1);
+    }
+*/
 }
