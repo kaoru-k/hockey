@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     setup_client(server_name, port);
 
     while(flag) {
+        
     }
 
     terminate_client();
