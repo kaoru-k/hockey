@@ -9,8 +9,9 @@
 
 static int  haba (int type);
 static int  zahyo(int type);
-static int  bai  (int type);  
-static int  def_ugoki(int i);
+static int  bai  (int type);
+int  def_ugoki(int i);
+void field_set(void);
 
 //キャラの幅を返す関数
 static int haba(int type){
@@ -34,6 +35,7 @@ int bai(int type){
     return 1;
 
 }
+
 //ディフェンダーの目指す場所
 int def_ugoki(int i){
     int a = 0;
