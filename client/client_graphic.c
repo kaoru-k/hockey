@@ -1,5 +1,5 @@
 /*************************************
-  client_window.c
+  client_graphic.c
   クライアントのグラフィック処理
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
@@ -9,36 +9,39 @@
 #include <SDL/SDL_opengl.h>
 #include <GL/glut.h>
 
-/* フィールド */
-#define FIELD_H  160   //フィールドの縦幅
-#define FIELD_W  100   //フィールドの横幅
-#define GOAL_W   0     //ゴールの幅
-
-/* プレイヤー */
-#define DEF_Y    150      //ディフェンダーのY座標
-#define DEF_W    30       //ディフェンダーの幅
-#define SUP_Y    100      //サポーターのY座標
-#define SUP_W    10       //サポーターの幅
-#define ATK_Y    50       //アタッカーのY座標
-#define ATK_W    20       //アタッカーの幅
-
-/* パッド */
-#define PAD_R    10       //パッドの半径
-
 PAD pad={3,3,1,1};
 SDL_Rect pack = {0.0, 0.0};
 SDL_Rect camera = {0.0, 210.0};
 
+extern int  init_sdl(void);
+extern int  draw_field(void);
 static int  initializeSDL(int flags);
 static int  initializeVideo(int width, int height, int flags);
 static int  initializeOpenGL(int width, int height);
 static void draw(void);
 static void drawAxis(void);
 static void drawPlane(void);
-int draw_field(void);
+
+int init_sdl(void)
+{
+    if (initializeSDL(SDL_INIT_VIDEO)) {
+        return 1;
+    }
+    if (initializeOpenGL(1024, 768)) {
+        return 1;
+    }
+}
+
+int draw_field(void)
+{
+    draw();
+    drawPlane();
+    drawAxis();
+    SDL_GL_SwapBuffers();
+}
 
 static int initializeSDL(int flags) {
-	// SDLを初期化する
+    // SDLを初期化する
 	if (SDL_Init(flags) < 0) {
 		fprintf(stderr, "%s\n", SDL_GetError());
 		return 1;
@@ -108,10 +111,9 @@ static int initializeOpenGL(int width, int height) {
 
 	return 0;
 }
-
+ 
 static void draw(void)
 {
-    ugoki();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // 視点を設定する
@@ -346,7 +348,8 @@ static void draw(void)
 
   	  glFlush();
 }
-       //大地創造
+
+//大地創造
 static void drawAxis(void)
 {
     GLdouble axis[][3] =
@@ -395,26 +398,4 @@ static void drawPlane(void)
     }
     glEnd();
 }
-}
 
-int draw_field(void) {
-	if (initializeSDL(SDL_INIT_VIDEO)) {
-		return 1;
-	}
-
-	if (initializeOpenGL(1024, 768)) {
-		return 1;
-	}
-
-	int flag = 1;
-
-	while (flag) {
-		// イベントを処理する
-		field_set();
-		flag = Keyevent();
-                draw();
-                drawPlane();
-                drawAxis();
-		SDL_GL_SwapBuffers();
-	}
-}

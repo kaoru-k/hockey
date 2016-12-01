@@ -3,15 +3,13 @@
   サーバのゲームモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
+#include "../client/client.h"
 
-#include "server.h"
-
-
+extern int  def_ugoki(int i);
+extern void field_set(void);
 static int  haba (int type);
 static int  zahyo(int type);
 static int  bai  (int type);
-int  def_ugoki(int i);
-void field_set(void);
 
 //キャラの幅を返す関数
 static int haba(int type){
@@ -22,7 +20,7 @@ static int haba(int type){
     }
 }
 
-int zahyo(int type){
+static int zahyo(int type){
     switch(type){
     case 0:return ATK_Y;
     case 1:return SUP_Y;
@@ -31,13 +29,13 @@ int zahyo(int type){
 }
 
 //倍率を返す関数
-int bai(int type){
+static int bai(int type){
     return 1;
 
 }
 
 //ディフェンダーの目指す場所
-int def_ugoki(int i){
+extern int def_ugoki(int i){
     int a = 0;
     int b = 1;
     b = 1;

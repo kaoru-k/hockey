@@ -5,12 +5,17 @@
 *************************************/
 
 #include "../common.h"
+#include <SDL/SDL.h>
 
 /***** 定数 *****/
 
+
 /***** グローバル変数 *****/
-PLAYER p[6]; //0,1,2,3->human 4,5->cpu
-PAD pad;
+extern PLAYER p[6]; //0,1,2,3->human 4,5->cpu
+extern PAD pad;
+extern SDL_Rect pack;
+extern SDL_Rect camera;
+extern SDL_Joystick *joystick;
 
 /***** 外部関数 *****/
 // client_net.c
@@ -18,5 +23,12 @@ extern void setup_client(char *server_name, u_short port);
 extern void terminate_client(void);
 
 // client_game.c
+extern int  Keyevent(void);
 
 // client_graphic.c
+extern int  init_sdl(void);
+extern int  draw_field(void);
+
+// server_game.c (テスト用)
+extern void field_set(void);
+extern int def_ugoki(int i);

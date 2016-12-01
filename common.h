@@ -15,17 +15,17 @@
 #define BROADCAST      -1
 
 /* フィールド */
-#define FIELD_H  400   //フィールドの縦幅
-#define FIELD_W  300   //フィールドの横幅
-#define GOAL_W   100   //ゴールの幅
+#define FIELD_H  160   //フィールドの縦幅
+#define FIELD_W  100   //フィールドの横幅
+#define GOAL_W   0   //ゴールの幅
 
 /* プレイヤー */
-#define DEF_Y 300      //ディフェンダーのY座標
+#define DEF_Y 150      //ディフェンダーのY座標
 #define DEF_W 30       //ディフェンダーの幅
-#define SUP_Y 200      //サポーターのY座標
-#define SUP_W 20       //サポーターの幅
-#define ATK_Y 100      //アタッカーのY座標
-#define ATK_W 10       //アタッカーの幅
+#define SUP_Y 100      //サポーターのY座標
+#define SUP_W 10       //サポーターの幅
+#define ATK_Y 50      //アタッカーのY座標
+#define ATK_W 20       //アタッカーの幅
 
 /* パッド */
 #define PAD_R 10       //パッドの半径

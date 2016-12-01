@@ -188,4 +188,5 @@ $RECYCLE.BIN/
 
 # 実行ファイル
 client/client
+client/client_test
 server/server

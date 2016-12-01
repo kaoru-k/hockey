@@ -7,10 +7,20 @@
 
 int main(int argc, char *argv[])
 {
+    int flag = 1;
+
+    init_sdl();
+    
+    while (flag) {
+        field_set();
+        def_ugoki();
+        flag = Keyevent();
+        draw_field();
+    }
+    /*
     u_short port = DEFAULT_PORT;
     char server_name[50];
     int flag = 1;
-
     sprintf(server_name, "localhost");
 
     switch(argc) {
@@ -29,12 +39,10 @@ int main(int argc, char *argv[])
     
     setup_client(server_name, port);
 
-    while(flag) {
-        
+    while(flag) {      
     }
-
     terminate_client();
-
+    */       
     return 0;
 }
     
