@@ -29,6 +29,8 @@ extern int  Keyevent(void);
 extern int  init_sdl(void);
 extern int  draw_field(void);
 
+#ifdef TEST
 // server_game.c (テスト用)
 extern void field_set(void);
-extern int def_ugoki(int i);
+extern int  def_ugoki(int i);
+#endif

@@ -7,17 +7,17 @@
 
 int main(int argc, char *argv[])
 {
+#ifdef TEST    
     int flag = 1;
 
     init_sdl();
     
     while (flag) {
         field_set();
-        def_ugoki();
         flag = Keyevent();
         draw_field();
     }
-    /*
+#else    
     u_short port = DEFAULT_PORT;
     char server_name[50];
     int flag = 1;
@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     while(flag) {      
     }
     terminate_client();
-    */       
+#endif           
     return 0;
 }
     

@@ -7,7 +7,7 @@ LDLIBS  = -lSDL -lGL -lGLU -lnsl
 TARGET1 = server
 TARGET2 = client
 OBJS1   = server/server.o server/server_game.o server/server_net.o
-OBJS2   = client/client.o client/client_game.o client/client_graphic.c client/client_net.o client/client_sound.o
+OBJS2   = client/client.o client/client_game.o client/client_graphic.o client/client_net.o client/client_sound.o
 HEADS1  = server/server.h
 HEADS2  = client/client.h
 
@@ -26,8 +26,9 @@ $(TARGET2): $(OBJS2)
 # test
 .PHONY: test
 test: $(OBJS2) server/server_game.o
-	gcc -DTEST -o client/$(TARGET2)_test $(OBJS2) server/server_game.o $(LDLIBS)
+	gcc $(CFLAGS) -o client/$(TARGET2)_test $(OBJS2) server/server_game.o $(LDLIBS)
 
 # clean
 .PHONY: clean
 clean : 
+	rm -f server/$(TARGET1) client/$(TARGET2) client/$(TARGET2)_test $(OBJS1) $(OBJS2)

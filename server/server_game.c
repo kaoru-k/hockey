@@ -3,7 +3,11 @@
   サーバのゲームモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
+#ifdef TEST
+#include "server.h"
+#else
 #include "../client/client.h"
+#endif
 
 extern int  def_ugoki(int i);
 extern void field_set(void);
