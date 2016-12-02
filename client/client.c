@@ -4,23 +4,19 @@
 *************************************/
 
 #include "client.h"
+#include <SDL/SDL.h>
+
+int flag = 1;
+
+static Uint32 network_thread(void* args);
 
 int main(int argc, char *argv[])
 {
-#ifdef TEST    
-    int flag = 1;
-
-    init_sdl();
-    
-    while (flag) {
-        field_set();
-        flag = Keyevent();
-        draw_field();
-    }
-#else    
+#ifndef TEST   
     u_short port = DEFAULT_PORT;
     char server_name[50];
-    int flag = 1;
+    SDL_Thread *thr1;
+
     sprintf(server_name, "localhost");
 
     switch(argc) {
@@ -38,11 +34,34 @@ int main(int argc, char *argv[])
     }
     
     setup_client(server_name, port);
+    init_sdl();
+    thr1 = SDL_CreateThread(network_thread, NULL);
 
-    while(flag) {      
+    while (flag) {
+        flag = Keyevent();
+        draw_field();
     }
+
     terminate_client();
-#endif           
     return 0;
+
+#else
+    init_sdl();
+    
+    while (flag) {
+        field_set();
+        flag = Keyevent();
+        draw_field();
+    }
+
+    return 0;
+#endif
 }
     
+static Uint32 network_thread(void* args)
+{
+    while (flag) {
+        network_test();
+    }
+    return 0;
+}

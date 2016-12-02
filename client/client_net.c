@@ -52,13 +52,19 @@ void setup_client(char *server_name, u_short port)
     }
 }
 
+void network_test(void)
+{
+    send_data();
+    recv_data();
+}
+
 static int recv_data(void *data, int size)
 {
     if ((data == NULL) || (size <= 0)) error_message("recv_data()");
     return(read(sock, data, size));
 }
 
-void send_data(void *data, int size)
+static void send_data(void *data, int size)
 {
     if ((data == NULL) || (size <= 0)) error_message("send_data()");
     if (write(sock, data, size) == -1) error_message("send_data()");

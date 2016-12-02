@@ -5,11 +5,15 @@
 *************************************/
 
 #include "server.h"
+#include <SDL/SDL.h>
+
+static Uint32 network_thread(void* args);
 
 int main(int argc, char *argv[])
 {
     u_short port = DEFAULT_PORT;
     int flag = 1;
+    SDL_Thread *thr1;
 
     switch(argc) {
     case 1:
@@ -25,11 +29,18 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Port number = %d\n", port);
 
     setup_server(port);
+    thr1 = SDL_CreateThread(network_thread, NULL);
 
     while(flag) {
+	field_set();
     }
 
     terminate_server();
 
     return 0;
+}
+
+static Uint32 network_thread(void* args)
+{
+    
 }
