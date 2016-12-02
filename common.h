@@ -17,7 +17,7 @@
 /* フィールド */
 #define FIELD_H  160   //フィールドの縦幅
 #define FIELD_W  100   //フィールドの横幅
-#define GOAL_W   0   //ゴールの幅
+#define GOAL_W   30   //ゴールの幅
 
 /* プレイヤー */
 #define DEF_Y 150      //ディフェンダーのY座標
