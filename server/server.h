@@ -14,6 +14,7 @@ PAD pad;
 // server_net.c
 void setup_server(u_short port);
 void terminate_server(void);
+void network_test(void);
 
 // server_game.c
 void field_set(void);

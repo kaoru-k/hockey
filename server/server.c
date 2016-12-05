@@ -1,5 +1,5 @@
 /*************************************
-  server_main.c
+  server.c
   サーバのメインモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
@@ -7,12 +7,13 @@
 #include "server.h"
 #include <SDL/SDL.h>
 
+int flag = 1;
+
 static Uint32 network_thread(void* args);
 
 int main(int argc, char *argv[])
 {
     u_short port = DEFAULT_PORT;
-    int flag = 1;
     SDL_Thread *thr1;
 
     switch(argc) {
@@ -42,5 +43,9 @@ int main(int argc, char *argv[])
 
 static Uint32 network_thread(void* args)
 {
-    
+    fprintf(stderr, "network_thread started.\n");
+    while (flag) {
+        network_test();
+    }
+    return 0;
 }

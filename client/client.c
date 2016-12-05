@@ -60,6 +60,7 @@ int main(int argc, char *argv[])
     
 static Uint32 network_thread(void* args)
 {
+    fprintf(stderr, "network_thread() started.\n");
     while (flag) {
         network_test();
     }

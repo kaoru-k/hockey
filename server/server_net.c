@@ -15,9 +15,9 @@
 static int num_socks;
 static fd_set mask;
 
-void setup_server(u_short port);
-void terminate_server(void);
 static void error_message(char *message);
+static void recv_pos(void);
+static void send_pos(void);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
 
@@ -82,6 +82,23 @@ void setup_server(u_short port)
     fprintf(stderr, "Server setup is done.\n");
 }
 
+void network_test(void)
+{
+    fd_set read_flag = mask;
+
+    if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
+        error_message("select()");
+    
+    int i, j;
+    for (i = 0; i < 4; i++) {
+        if (FD_ISSET(clients[i].sock, &read_flag)) {
+            recv_data(i, &p[i], sizeof(PLAYER));
+            for (j = 0; j < 6; j++) {
+                send_data(j, &p[j], sizeof(PLAYER));
+            }
+        }
+    }
+}
 static int recv_data(int cid, void *data, int size)
 {
     if ((cid != BROADCAST) && (0 > cid || cid >= 4)) {
