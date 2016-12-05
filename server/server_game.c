@@ -47,7 +47,7 @@ extern int def_ugoki(int i){
     if(pad.speed_x < 0)
         b = -1;
     a = (-i*DEF_Y - pad.y + i*PAD_R)/pad.speed_y * pad.speed_x + pad.x;
-    if(a - PAD_R <= FIELD_W && PAD_R + a >= FIELD_W){
+    if(a - PAD_R <= FIELD_W && PAD_R + a >= -FIELD_W){
         return a;
     }else{
         a = a - b * (FIELD_W - PAD_R);
