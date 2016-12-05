@@ -180,4 +180,8 @@ void field_set(void){
 	    pad.speed_y = 0;
  	}
     }
+
+    fprintf(stderr, "p[0]:%f p[1]:%f p[2]:%f \n", p[0].x, p[1].x, p[2].x);
+    fprintf(stderr, "p[3]:%f p[4]:%f p[5]:%f \n", p[3].x, p[4].x, p[5].x);
+
 }
