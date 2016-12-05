@@ -9,7 +9,7 @@
 
 int flag = 1;
 
-static Uint32 network_thread(void* args);
+static int network_thread(void* args);
 
 int main(int argc, char *argv[])
 {
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-static Uint32 network_thread(void* args)
+static int network_thread(void* args)
 {
     fprintf(stderr, "network_thread started.\n");
     while (flag) {

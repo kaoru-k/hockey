@@ -86,7 +86,7 @@ void network_test(void)
 {
     fd_set read_flag = mask;
 
-    if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
+    if (select(4, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
     
     int i, j;

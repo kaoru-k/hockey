@@ -56,14 +56,13 @@ void network_test(void)
     timeout.tv_sec = 0;
     timeout.tv_usec = 30;
 
-    if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
+    if (select(4, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
     
     int i;
-    if (FD_ISSET(0, &read_flag)) {
-        send_data(&p[myid], sizeof(PLAYER));
-    }
-    else if (FD_ISSET(sock, &read_flag)) {
+    send_data(&p[myid], sizeof(PLAYER));
+    
+    if (FD_ISSET(sock, &read_flag)) {
         for (i = 0; i < 6; i++) {
             recv_data(&p[i], sizeof(PLAYER));
         }
