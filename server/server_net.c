@@ -12,8 +12,8 @@
 #include <arpa/inet.h>
 #include <errno.h>
 
-static int num_socks;
 static fd_set mask;
+static int num_socks;
 
 static void error_message(char *message);
 static void recv_pos(void);
@@ -90,11 +90,13 @@ void network_test(void)
         error_message("select()");
     
     int i, j;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < num_socks; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &p[i], sizeof(PLAYER));
+            fprintf(stderr, "recv_data()\n");
             for (j = 0; j < 6; j++) {
                 send_data(j, &p[j], sizeof(PLAYER));
+                fprintf(stderr, "send_data()\n");
             }
         }
     }

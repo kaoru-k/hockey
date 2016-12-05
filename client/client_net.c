@@ -11,9 +11,11 @@
 #include <netdb.h>
 #include <errno.h>
 
+
 static int sock;
 static int num_sock;
 static fd_set mask;
+
 int myid;
 CLIENT clients[4];
 
@@ -44,7 +46,10 @@ void setup_client(char *server_name, u_short port)
     fprintf(stderr, "Waiting for other clients... ");
     recv_data(&myid, sizeof(int));
     fprintf(stderr, "done.\nYour ID = %d.\n", myid);
-    
+    num_sock = sock + 1;
+    FD_ZERO(&mask);
+    FD_SET(0, &mask);
+    FD_SET(sock, &mask);
     fprintf(stderr, "Client setup is done.\n");
 }
 
@@ -60,11 +65,14 @@ void network_test(void)
         error_message("select()");
     
     int i;
-    send_data(&p[myid], sizeof(PLAYER));
-    
-    if (FD_ISSET(sock, &read_flag)) {
+    if (FD_ISSET(0, &read_flag)) {
+        send_data(&p[myid], sizeof(PLAYER));
+        fprintf(stderr, "send_data()\n");
+    }
+    else if (FD_ISSET(sock, &read_flag)) {
         for (i = 0; i < 6; i++) {
             recv_data(&p[i], sizeof(PLAYER));
+            fprintf(stderr, "recv_data()\n");
         }
     }
 }
