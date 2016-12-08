@@ -94,8 +94,8 @@ if(game_scene != 1){
                 }
 		k = M_PI * (10 + rand()%80)/100;
 		l = sqrt(pad.speed_x*pad.speed_x + pad.speed_y*pad.speed_y);
-		pad.speed_y = -l * sin(k) * 1.2;
-		pad.speed_x = l * cos(k) * 1.2;
+		pad.speed_y = -l * sin(k) * 1.1;
+		pad.speed_x = l * cos(k) * 1.1;
 		if(p[5].hp > 0)
                 p[5].x = def_ugoki(1);
                 
@@ -106,8 +106,8 @@ if(game_scene != 1){
                     break;
             }
             if(pad.x + PAD_R > p[i].x - SUP_W && pad.x - PAD_R < p[i].x + SUP_W){
-                if( (p[i].hp -= pad.speed_y) <= 0 ){      //ｈｐ減少
-                    i = i;//HPが0以下になった時の処理
+                if( (p[i].hp -= pad.speed_y*5) <= 0 ){      //ｈｐ減少
+                    p[i].x = 1000;//HPが0以下になった時の処理
                 }
                 if( (pad.speed_y = pad.speed_y * (-0.8)) > -1)
 		    pad.speed_y = -1;
@@ -139,13 +139,13 @@ if(game_scene != 1){
                     break;
             }
             if(pad.x+PAD_R > p[i+2].x - ATK_W && pad.x-PAD_R < p[i+2].x + ATK_W){
-                if( (p[i+2].hp += pad.speed_y*10) <= 0 ){      //ｈｐ減少
+                if( (p[i+2].hp += pad.speed_y) <= 0 ){      //ｈｐ減少
                     p[i+2].x = 1000;//HPが0以下になった時の処理
                 }
 		k = M_PI * (10 + rand()%80)/100;
 		l = sqrt(pad.speed_x*pad.speed_x + pad.speed_y*pad.speed_y);
-		pad.speed_y = l * sin(k) * 1.2;
-		pad.speed_x = l * cos(k) * 1.2;
+		pad.speed_y = l * sin(k) * 1.1;
+		pad.speed_x = l * cos(k) * 1.1;
 		if(p[4].hp > 0)
                 p[4].x = def_ugoki(-1);
             }
@@ -155,19 +155,22 @@ if(game_scene != 1){
                     break;
             }
             if(pad.x+PAD_R > p[i+2].x - SUP_W && pad.x-PAD_R < p[i+2].x + SUP_W){
-                if( (p[i+2].hp += pad.speed_y*1) <= 0 ){      //ｈｐ減少
-                    i = i;//HPが0以下になった時の処理
+                if( (p[i+2].hp += pad.speed_y*5) <= 0 ){      //ｈｐ減少
+                    p[i+2].x = 1000;//HPが0以下になった時の処理
                 }
                 if( (pad.speed_y = pad.speed_y * (-0.8)) < 1)
 		    pad.speed_y = 1;
 		if(p[4].hp > 0)
                 p[4].x = def_ugoki(-1);
-                if(i+2 == 0){                   //ｈｐ回復
-                    p[1].hp += 10;
+                if(i == 0){                   //ｈｐ回復
+                    if(p[3].hp > 0)
+		    p[3].hp += 10;
                 }else{
-                    p[0].hp += 10;
+		    if(p[2].hp > 0)
+                    p[2].hp += 10;
                 }
-                p[2].hp += 10;
+		 if(p[5].hp > 0)
+                p[5].hp += 10;
             }
         }else if(-pad.y + PAD_R >= DEF_Y && -pad.y + PAD_R <= DEF_Y - pad.speed_y){
             if(pad.x+PAD_R > p[5].x - DEF_W && pad.x-PAD_R < p[5].x + DEF_W){
