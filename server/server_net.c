@@ -85,22 +85,25 @@ void setup_server(u_short port)
 void network_test(void)
 {
     fd_set read_flag = mask;
+	int i, j;
+
+    if (FD_ISSET(clients[i].sock, &read_flag)) {
+        memset(&p[i], 0, sizeof(PLAYER));
+        fprintf(stderr, "recv_data() from:%d\n", i);
+        recv_data(i, &p[i], sizeof(PLAYER));
+    }
 
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
-    
-    int i, j;
-    for (i = 0; i < 4; i++) {
-        if (FD_ISSET(clients[i].sock, &read_flag)) {
-            fprintf(stderr, "recv_data() from:%d\n", i);
-            recv_data(i, &p[i], sizeof(PLAYER));
 
-            fprintf(stderr, "send_data()\n");
-            for (j = 0; j < 6; j++) {
+    
+    for (i = 0; i < 4; i++) {
+        fprintf(stderr, "send_data()\n");
+        for (j = 0; j < 6; j++) {
+            if (j != i)
                 send_data(i, &p[j], sizeof(PLAYER));
-            }
-            send_data(i, &pad, sizeof(PAD));
         }
+        //send_data(i, &pad, sizeof(PAD));
     }
 }
 static int recv_data(int cid, void *data, int size)
