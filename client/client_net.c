@@ -71,7 +71,6 @@ void network_test(void)
     if (FD_ISSET(sock, &read_flag)) {
         for (i = 0; i < 6; i++) {
             if (i != myid) {
-                memset(&p[i], 0, sizeof(PLAYER));
                 recv_data(&p[i], sizeof(PLAYER));
             }
             fprintf(stderr, "recv_data() %d\n", i);
