@@ -48,8 +48,6 @@ typedef struct{
 
 /* パッドの構造体 */
 typedef struct{
-    float speed_x;   // パッドのX軸方向速度
-    float speed_y;   // パッドのY軸方向速度
     float x;         // パッドのX座標
     float y;         // パッドのY座標
 }PAD;

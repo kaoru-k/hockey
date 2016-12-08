@@ -11,7 +11,6 @@
 #include <netdb.h>
 #include <errno.h>
 
-
 static int sock;
 static int num_sock;
 static fd_set mask;
@@ -19,6 +18,8 @@ static fd_set mask;
 int myid;
 CLIENT clients[4];
 
+static void send_pos(void);
+static void recv_pos(void);
 static int  recv_data(void *data, int size);
 static void send_data(void *data, int size);
 static void error_message(char *message);
@@ -53,29 +54,38 @@ void setup_client(char *server_name, u_short port)
     fprintf(stderr, "Client setup is done.\n");
 }
 
-void network_test(void)
+int network(void)
+{
+    send_pos();
+    recv_pos();
+}
+
+static void send_pos(void)
+{
+    send_data(&p[myid], sizeof(PLAYER));
+    fprintf(stderr, "send_data() %d\n", myid);
+}
+
+static void recv_pos(void)
 {
     fd_set read_flag = mask;
-
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 20;
+    int i;
 
-    send_data(&p[myid], sizeof(PLAYER));
-    fprintf(stderr, "send_data() %d\n", myid);
-
-    if (select(4, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
+    if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
     
-    int i;
     if (FD_ISSET(sock, &read_flag)) {
         for (i = 0; i < 6; i++) {
             if (i != myid) {
                 recv_data(&p[i], sizeof(PLAYER));
+                fprintf(stderr, "recv_data() %d\n", i);
             }
-            fprintf(stderr, "recv_data() %d\n", i);
         }
-        recv_data(&pad, sizeof(PAD));
+        //recv_data(&pad, sizeof(PAD));
+        //fprintf(stderr, "recv_data()\n%f %f\n", pad.x, pad.y);
     }
 }
 

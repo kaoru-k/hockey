@@ -45,7 +45,7 @@ static int network_thread(void* args)
 {
     fprintf(stderr, "network_thread started.\n");
     while (1) {
-        network_test();
+        network();
     }
     return 0;
 }

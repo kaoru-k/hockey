@@ -22,7 +22,7 @@ extern SDL_Joystick *joystick;
 // client_net.c
 extern void setup_client(char *server_name, u_short port);
 extern void terminate_client(void);
-extern void network_test(void);
+extern int  network(void);
 
 // client_game.c
 extern int  Keyevent(void);

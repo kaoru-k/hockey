@@ -9,8 +9,7 @@
 #include <SDL/SDL_opengl.h>
 #include <GL/glut.h>
 
-PAD pad={3,3,1,1};
-SDL_Rect pack = {0.0, 0.0};
+PAD pad = {0,0};
 SDL_Rect camera = {0.0, 210.0};
 
 extern int  init_sdl(void);

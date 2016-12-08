@@ -6,11 +6,16 @@
 
 #include "server.h"
 #include <string.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
+
+CLIENT clients[4];
+PLAYER p[6];
+PAD pad={1,1};
 
 static fd_set mask;
 static int num_socks;
@@ -82,11 +87,11 @@ void setup_server(u_short port)
     fprintf(stderr, "Server setup is done.\n");
 }
 
-void network_test(void)
+void network(void)
 {
     fd_set read_flag = mask;
     int i, j;
-
+    PAD send_pad = {pad.x, pad.y};
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
 
@@ -101,7 +106,8 @@ void network_test(void)
             if (j != i)
                 send_data(i, &p[j], sizeof(PLAYER));
         }
-        send_data(i, &pad, sizeof(PAD));
+        //fprintf(stderr, "send_data() pad:%f %f\n", send_pad.x, send_pad.y);
+        //send_data(i, &send_pad, sizeof(PAD));
     }
 }
 static int recv_data(int cid, void *data, int size)
