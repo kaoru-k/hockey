@@ -3,11 +3,16 @@
   サーバのゲームモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
+#include <time.h>
+#include <math.h>
+
 #ifdef TEST
 #include "server.h"
 #else
 #include "../client/client.h"
 #endif
+
+static int game_scene;
 
 extern int  def_ugoki(int i);
 extern void field_set(void);
@@ -61,9 +66,13 @@ extern int def_ugoki(int i){
 /* パッドの動きを計算する */
 void field_set(void){
     int i,j;
+    float k,l;
     pad.x += pad.speed_x;
     pad.y += pad.speed_y;
-    
+
+    /* 乱数初期化 */
+    srand(time(NULL));
+if(game_scene != 1){
     //横の壁にぶつかった時
     if(pad.x + PAD_R > FIELD_W){
         pad.x = 2 * FIELD_W - pad.x - 2 * PAD_R;
@@ -79,25 +88,31 @@ void field_set(void){
                 if(p[i].type == 0)
                     break;
             }
-            if(pad.x > p[i].x - ATK_W && pad.x < p[i].x + ATK_W){
-                pad.speed_y = pad.speed_y * (-1);
-                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                p[5].x = def_ugoki(1);
-                if( (p[i].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+            if(pad.x + PAD_R > p[i].x - ATK_W && pad.x - PAD_R< p[i].x + ATK_W){
+		if( (p[i].hp -= pad.speed_y) <= 0 ){      //ｈｐ減少
                     p[i].x = 1000;//HPが0以下になった時の処理
                 }
+		k = M_PI * (10 + rand()%80)/100;
+		l = sqrt(pad.speed_x*pad.speed_x + pad.speed_y*pad.speed_y);
+		pad.speed_y = -l * sin(k) * 1.2;
+		pad.speed_x = l * cos(k) * 1.2;
+		if(p[5].hp > 0)
+                p[5].x = def_ugoki(1);
+                
             }
         }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + pad.speed_y){
             for(i = 0;i < 2;i++){
                 if(p[i].type == 1)
                     break;
             }
-            if(pad.x > p[i].x - SUP_W && pad.x < p[i].x + SUP_W){
-                pad.speed_y = pad.speed_y * (-1);
-                p[5].x = def_ugoki(1);
-                if( (p[i].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+            if(pad.x + PAD_R > p[i].x - SUP_W && pad.x - PAD_R < p[i].x + SUP_W){
+                if( (p[i].hp -= pad.speed_y) <= 0 ){      //ｈｐ減少
                     i = i;//HPが0以下になった時の処理
                 }
+                if( (pad.speed_y = pad.speed_y * (-0.8)) > -1)
+		    pad.speed_y = -1;
+		if(p[5].hp > 0)
+                p[5].x = def_ugoki(1);
                 if(i == 0){                   //ｈｐ回復
                     p[1].hp += 10;
                 }else{
@@ -106,13 +121,15 @@ void field_set(void){
                 p[2].hp += 10;
             }
         }else if(pad.y + PAD_R >= DEF_Y && pad.y + PAD_R <= DEF_Y + pad.speed_y){
-            if(pad.x > p[4].x - DEF_W && pad.x < p[4].x + DEF_W){
-                pad.speed_y = pad.speed_y * (-1);
-                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                p[5].x = def_ugoki(1);
-                if( (p[4].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+            if(pad.x + PAD_R> p[4].x - DEF_W && pad.x-PAD_R < p[4].x + DEF_W){
+	        if( (p[4].hp -= pad.speed_y) <= 0 ){      //ｈｐ減少
                     p[4].x = 1000;//HPが0以下になった時の処理
                 }
+                if( (pad.speed_y = pad.speed_y * (-0.9)) > -1)
+		    pad.speed_y = -1;
+                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
+		if(p[5].hp > 0)
+                p[5].x = def_ugoki(1);
             }
         }
     }else{
@@ -121,25 +138,30 @@ void field_set(void){
                 if(p[i+2].type == 0)
                     break;
             }
-            if(pad.x > p[i+2].x - ATK_W && pad.x < p[i+2].x + ATK_W){
-                pad.speed_y = pad.speed_y * (-1);
-                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                p[4].x = def_ugoki(-1);
-                if( (p[i+2].hp -= pad.speed_y*10) <= 0 ){      //ｈｐ減少
+            if(pad.x+PAD_R > p[i+2].x - ATK_W && pad.x-PAD_R < p[i+2].x + ATK_W){
+                if( (p[i+2].hp += pad.speed_y*10) <= 0 ){      //ｈｐ減少
                     p[i+2].x = 1000;//HPが0以下になった時の処理
                 }
+		k = M_PI * (10 + rand()%80)/100;
+		l = sqrt(pad.speed_x*pad.speed_x + pad.speed_y*pad.speed_y);
+		pad.speed_y = l * sin(k) * 1.2;
+		pad.speed_x = l * cos(k) * 1.2;
+		if(p[4].hp > 0)
+                p[4].x = def_ugoki(-1);
             }
         }else if(-pad.y + PAD_R >= SUP_Y && -pad.y + PAD_R <= SUP_Y - pad.speed_y){
             for(i = 0;i < 2;i++){
                 if(p[i+2].type == 1)
                     break;
             }
-            if(pad.x > p[i+2].x - SUP_W && pad.x < p[i+2].x + SUP_W){
-                pad.speed_y = pad.speed_y * (-1);
-                p[4].x = def_ugoki(-1);
-                if( (p[i+2].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+            if(pad.x+PAD_R > p[i+2].x - SUP_W && pad.x-PAD_R < p[i+2].x + SUP_W){
+                if( (p[i+2].hp += pad.speed_y*1) <= 0 ){      //ｈｐ減少
                     i = i;//HPが0以下になった時の処理
                 }
+                if( (pad.speed_y = pad.speed_y * (-0.8)) < 1)
+		    pad.speed_y = 1;
+		if(p[4].hp > 0)
+                p[4].x = def_ugoki(-1);
                 if(i+2 == 0){                   //ｈｐ回復
                     p[1].hp += 10;
                 }else{
@@ -148,14 +170,17 @@ void field_set(void){
                 p[2].hp += 10;
             }
         }else if(-pad.y + PAD_R >= DEF_Y && -pad.y + PAD_R <= DEF_Y - pad.speed_y){
-            if(pad.x > p[5].x - DEF_W && pad.x < p[5].x + DEF_W){
-                pad.speed_y = pad.speed_y * (-1);
-                pad.speed_x = pad.speed_x * 1;  //跳ね返りの計算
-                p[4].x = def_ugoki(-1);
-                if( (p[5].hp -= pad.speed_y*1) <= 0 ){      //ｈｐ減少
+            if(pad.x+PAD_R > p[5].x - DEF_W && pad.x-PAD_R < p[5].x + DEF_W){
+                if( (p[5].hp += pad.speed_y) <= 0 ){      //ｈｐ減少
                     p[5].x = 1000;//HPが0以下になった時の処理
                 }
-            }
+                if( (pad.speed_y = pad.speed_y * (-0.9)) < 1){
+		    pad.speed_y = 1;
+ 		}
+                pad.speed_x = pad.speed_x * 0.9;  //跳ね返りの計算
+		if(p[4].hp > 0)
+                p[4].x = def_ugoki(-1);
+           }
         }
     }
 
@@ -165,23 +190,23 @@ void field_set(void){
 	if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
             pad.y = 2 * FIELD_H - pad.y - 2*PAD_R;
             pad.speed_y = pad.speed_y * (-1);
+	    if(p[5].hp > 0)
             p[5].x = def_ugoki(1);
 	}else{
-	    pad.speed_x = 0;
-	    pad.speed_y = 0;
+	    game_scene = 1;
  	}
     }else if(pad.y - PAD_R <= (-1)*FIELD_H){
 	if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
  	    pad.y = (-2) * FIELD_H - pad.y + 2*PAD_R;
             pad.speed_y = pad.speed_y * (-1);
+	    if(p[4].hp > 0)
             p[4].x = def_ugoki(-1);
 	}else{
-	    pad.speed_x = 0;
-	    pad.speed_y = 0;
+	    game_scene = 1;
  	}
     }
-
-    fprintf(stderr, "p[0]:%f p[1]:%f p[2]:%f \n", p[0].x, p[1].x, p[2].x);
+}
+    /*fprintf(stderr, "p[0]:%f p[1]:%f p[2]:%f \n", p[0].x, p[1].x, p[2].x);
     fprintf(stderr, "p[3]:%f p[4]:%f p[5]:%f \n", p[3].x, p[4].x, p[5].x);
-
+    */
 }
