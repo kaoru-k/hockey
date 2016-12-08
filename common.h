@@ -14,17 +14,22 @@
 #define MAX_LEN_ADDR   32
 #define BROADCAST      -1
 
+/* コマンド */
+#define N         0    //None      何もなし（座標をやり取りする）
+#define C         1    //Continue  コンティニュー
+#define X        -1    //eXit      終了
+
 /* フィールド */
 #define FIELD_H  160   //フィールドの縦幅
 #define FIELD_W  100   //フィールドの横幅
-#define GOAL_W   30   //ゴールの幅
+#define GOAL_W   30    //ゴールの幅
 
 /* プレイヤー */
 #define DEF_Y 150      //ディフェンダーのY座標
 #define DEF_W 30       //ディフェンダーの幅
 #define SUP_Y 100      //サポーターのY座標
 #define SUP_W 10       //サポーターの幅
-#define ATK_Y 50      //アタッカーのY座標
+#define ATK_Y 50       //アタッカーのY座標
 #define ATK_W 20       //アタッカーの幅
 
 /* パッド */

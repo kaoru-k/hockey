@@ -14,7 +14,7 @@ extern PAD pad;
 // server_net.c
 void setup_server(u_short port);
 void terminate_server(void);
-void network(void);
+int  network(void);
 
 // server_game.c
 void field_set(void);

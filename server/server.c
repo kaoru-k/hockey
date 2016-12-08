@@ -44,8 +44,8 @@ int main(int argc, char *argv[])
 static int network_thread(void* args)
 {
     fprintf(stderr, "network_thread started.\n");
-    while (1) {
-        network();
+    while (flag) {
+        flag = network();
     }
     return 0;
 }

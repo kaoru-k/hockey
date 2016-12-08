@@ -20,11 +20,13 @@ PAD pad={1,1};
 static fd_set mask;
 static int num_socks;
 
-static void error_message(char *message);
-static void recv_pos(void);
-static void send_pos(void);
+static int  recv_command(int cid);
+static void send_command(int cid, int command);
+static void recv_pos(int cid);
+static void send_pos(int cid);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
+static void error_message(char *message);
 
 void setup_server(u_short port)
 {
@@ -87,29 +89,70 @@ void setup_server(u_short port)
     fprintf(stderr, "Server setup is done.\n");
 }
 
-void network(void)
-{
+int network(void)
+{   
     fd_set read_flag = mask;
-    int i, j;
-    PAD send_pad = {pad.x, pad.y};
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 20;
+    
+    int i;
+
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
-
     
     for (i = 0; i < 4; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
-            fprintf(stderr, "recv_data() from:%d\n", i);
-            recv_data(i, &p[i], sizeof(PLAYER));
+/*            
+            if (recv_command(i) == N) {
+*/
+                recv_pos(i);
+/*                
+            }
+            else {
+                send_command(BROADCAST, X);
+                return 0;
+            }
+*/
         }
-        fprintf(stderr, "send_data()\n");
-        for (j = 0; j < 6; j++) {
-            if (j != i)
-                send_data(i, &p[j], sizeof(PLAYER));
-        }
-        //fprintf(stderr, "send_data() pad:%f %f\n", send_pad.x, send_pad.y);
-        //send_data(i, &send_pad, sizeof(PAD));
+/*        
+        send_command(i, N);
+*/        
+        send_pos(i);
     }
+    return 1;
 }
+
+static int recv_command(int cid)
+{
+    int data;
+    recv_data(cid, &data, sizeof(int));
+    return data;
+}
+
+static void send_command(int cid, int command)
+{
+    send_data(cid, &command, sizeof(int));
+}
+
+static void recv_pos(int cid)
+{       
+    fprintf(stderr, "recv_pos() from:%d\n", cid);
+    recv_data(cid, &p[cid], sizeof(PLAYER));
+}
+
+static void send_pos(int cid)
+{
+    int j;
+    fprintf(stderr, "send_pos()\n");
+    for (j = 0; j < 6; j++) {
+        if (j != cid)
+            send_data(cid, &p[j], sizeof(PLAYER));
+    }
+    //fprintf(stderr, "send_data() pad:%f %f\n", send_pad.x, send_pad.y);
+    //send_data(i, &send_pad, sizeof(PAD));
+}
+
 static int recv_data(int cid, void *data, int size)
 {
     if ((cid != BROADCAST) && (0 > cid || cid >= 4)) {

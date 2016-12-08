@@ -18,10 +18,12 @@ static fd_set mask;
 int myid;
 CLIENT clients[4];
 
+static void send_command(int command);
+static int  recv_command(void);
 static void send_pos(void);
 static void recv_pos(void);
-static int  recv_data(void *data, int size);
 static void send_data(void *data, int size);
+static int  recv_data(void *data, int size);
 static void error_message(char *message);
 
 void setup_client(char *server_name, u_short port)
@@ -56,8 +58,50 @@ void setup_client(char *server_name, u_short port)
 
 int network(void)
 {
-    send_pos();
-    recv_pos();
+    
+    fd_set read_flag = mask;
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 20;
+/*
+    if (endflag == 1) {
+        send_command(X);
+        return 0;
+    }
+    else {
+        send_command(N);
+*/
+        send_pos();
+        
+        if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
+            error_message("select()");
+    
+        if (FD_ISSET(sock, &read_flag)) {
+/*            
+            if (recv_command() == N) {
+*/
+                recv_pos();
+/*                
+                return 1;
+            }
+            else
+                return 0;
+        }
+*/
+        }
+        return 1;
+}
+
+static void send_command(int command)
+{
+    send_data(&command, sizeof(int));
+}
+
+static int recv_command(void)
+{
+    int data;
+    recv_data(&data, sizeof(int));
+    return data;
 }
 
 static void send_pos(void)
@@ -68,37 +112,29 @@ static void send_pos(void)
 
 static void recv_pos(void)
 {
-    fd_set read_flag = mask;
-    struct timeval timeout;
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 20;
     int i;
 
-    if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
-        error_message("select()");
-    
-    if (FD_ISSET(sock, &read_flag)) {
-        for (i = 0; i < 6; i++) {
-            if (i != myid) {
-                recv_data(&p[i], sizeof(PLAYER));
-                fprintf(stderr, "recv_data() %d\n", i);
-            }
+    for (i = 0; i < 6; i++) {
+        if (i != myid) {
+            recv_data(&p[i], sizeof(PLAYER));
+            fprintf(stderr, "recv_data() %d\n", i);
         }
-        //recv_data(&pad, sizeof(PAD));
-        //fprintf(stderr, "recv_data()\n%f %f\n", pad.x, pad.y);
     }
+    //recv_data(&pad, sizeof(PAD));
+    //fprintf(stderr, "recv_data()\n%f %f\n", pad.x, pad.y);
+}
+
+
+static void send_data(void *data, int size)
+{
+    if ((data == NULL) || (size <= 0)) error_message("send_data()");
+    if (write(sock, data, size) == -1) error_message("send_data()");
 }
 
 static int recv_data(void *data, int size)
 {
     if ((data == NULL) || (size <= 0)) error_message("recv_data()");
     return(read(sock, data, size));
-}
-
-static void send_data(void *data, int size)
-{
-    if ((data == NULL) || (size <= 0)) error_message("send_data()");
-    if (write(sock, data, size) == -1) error_message("send_data()");
 }
 
 void terminate_client(void)

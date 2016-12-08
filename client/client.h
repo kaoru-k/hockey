@@ -17,6 +17,7 @@ extern int myid;
 extern SDL_Rect pack;
 extern SDL_Rect camera;
 extern SDL_Joystick *joystick;
+extern int endflag;
 
 /***** 外部関数 *****/
 // client_net.c
