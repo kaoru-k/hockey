@@ -59,21 +59,22 @@ void network_test(void)
 
     struct timeval timeout;
     timeout.tv_sec = 0;
-    timeout.tv_usec = 30;
+    timeout.tv_usec = 20;
 
     if (select(4, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
     
+    
+    send_data(&p[myid], sizeof(PLAYER));
+    fprintf(stderr, "send_data() %d\n", myid);
+    
     int i;
-    if (FD_ISSET(0, &read_flag)) {
-        send_data(&p[myid], sizeof(PLAYER));
-        fprintf(stderr, "send_data()\n");
-    }
-    else if (FD_ISSET(sock, &read_flag)) {
+    if (FD_ISSET(sock, &read_flag)) {
         for (i = 0; i < 6; i++) {
             recv_data(&p[i], sizeof(PLAYER));
-            fprintf(stderr, "recv_data()\n");
+            fprintf(stderr, "recv_data() %d\n", i);
         }
+        recv_data(&pad, sizeof(PAD));
     }
 }
 

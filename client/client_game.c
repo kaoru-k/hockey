@@ -133,10 +133,10 @@ int Keyevent(void)
 	
     }
 
-    if(FIELD_W > p[0].x + speedx[0] + ATK_W && p[0].x + speedx[0] - ATK_W > -FIELD_W)
-        p[0].x += speedx[0];
-    if(FIELD_W > p[1].x + speedx[1] + ATK_W && p[1].x + speedx[1] - ATK_W > -FIELD_W)
-        p[1].x += speedx[1];
+    if(FIELD_W > p[myid].x + speedx[0] + ATK_W && p[myid].x + speedx[0] - ATK_W > -FIELD_W)
+        p[myid].x += speedx[0];
+//    if(FIELD_W > p[1].x + speedx[1] + ATK_W && p[1].x + speedx[1] - ATK_W > -FIELD_W)
+//        p[1].x += speedx[1];
     
     return 1;   
 }

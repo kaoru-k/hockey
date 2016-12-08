@@ -86,18 +86,20 @@ void network_test(void)
 {
     fd_set read_flag = mask;
 
-    if (select(4, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
+    if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
     
     int i, j;
-    for (i = 0; i < num_socks; i++) {
+    for (i = 0; i < 4; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
+            fprintf(stderr, "recv_data() from:%d\n", i);
             recv_data(i, &p[i], sizeof(PLAYER));
-            fprintf(stderr, "recv_data()\n");
+
+            fprintf(stderr, "send_data()\n");
             for (j = 0; j < 6; j++) {
-                send_data(j, &p[j], sizeof(PLAYER));
-                fprintf(stderr, "send_data()\n");
+                send_data(i, &p[j], sizeof(PLAYER));
             }
+            send_data(i, &pad, sizeof(PAD));
         }
     }
 }
