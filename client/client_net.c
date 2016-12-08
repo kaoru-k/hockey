@@ -75,7 +75,7 @@ void network_test(void)
             }
             fprintf(stderr, "recv_data() %d\n", i);
         }
-        //recv_data(&pad, sizeof(PAD));
+        recv_data(&pad, sizeof(PAD));
     }
 }
 

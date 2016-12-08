@@ -101,7 +101,7 @@ void network_test(void)
             if (j != i)
                 send_data(i, &p[j], sizeof(PLAYER));
         }
-        //send_data(i, &pad, sizeof(PAD));
+        send_data(i, &pad, sizeof(PAD));
     }
 }
 static int recv_data(int cid, void *data, int size)
