@@ -135,7 +135,7 @@ static void draw(void)
     glMaterialfv(GL_FRONT, GL_SHININESS, shininess);
     
 
-    GLfloat white[] = { 1.0, 1.0, 0.49, 1.0 };
+    GLfloat white[] = { 0.654, 0.243, 1.0, 1.0 };
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
     // 円球を描画する
     GLUquadric* quadric = gluNewQuadric();
@@ -397,4 +397,50 @@ static void drawPlane(void)
     }
     glEnd();
 }
+
+/*必殺技（致命傷）*/
+int onoff(void){
+	int i = 0;
+	static GLfloat positionh[4];
+	static GLfloat ambient [] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	static GLfloat diffuse [] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
+	GLfloat yellow[] = { 1.0, 1.0, 0.0, 1.0 };
+
+		
+	positionh[0] = pad.x;
+	positionh[1] = pad.y;
+	positionh[2] = 0.0f;
+	positionh[3] = 1.0f;
+	
+	i++;
+	if(i == 5){
+	glLightfv(GL_LIGHT1, GL_POSITION, positionh);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, yellow);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, specular);
+	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT1);
+	
+	printf("a\n");
+	}
+	
+	if(i == 10){
+	glLightfv(GL_LIGHT1, GL_POSITION, positionh);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, yellow);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, specular);
+	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	glEnable(GL_LIGHTING);
+	glDisable(GL_LIGHT1);
+ 	i = 0;
+	printf("b\n");
+	}
+ 	
+	
+
+	return 0;
+}
+
 
