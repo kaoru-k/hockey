@@ -41,8 +41,7 @@ int main(int argc, char *argv[])
         flag = Keyevent();
         draw_field();
     }
-
-    terminate_client();
+    
     return 0;
 
 #else
@@ -64,5 +63,6 @@ static int network_thread(void* args)
     while (flag) {
         flag = network();
     }
+    terminate_client();
     return 0;
 }

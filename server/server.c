@@ -36,8 +36,6 @@ int main(int argc, char *argv[])
 	field_set();
     }
 
-    terminate_server();
-
     return 0;
 }
 
@@ -47,5 +45,6 @@ static int network_thread(void* args)
     while (flag) {
         flag = network();
     }
+    terminate_server();
     return 0;
 }

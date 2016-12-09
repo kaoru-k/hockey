@@ -103,21 +103,21 @@ int network(void)
     
     for (i = 0; i < 4; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
-/*            
+            
             if (recv_command(i) == N) {
-*/
+
                 recv_pos(i);
-/*                
+                
             }
             else {
                 send_command(BROADCAST, X);
                 return 0;
             }
-*/
+
         }
-/*        
+        
         send_command(i, N);
-*/        
+        
         send_pos(i);
     }
     return 1;
@@ -144,7 +144,7 @@ static void recv_pos(int cid)
 static void send_pos(int cid)
 {
     int j;
-    fprintf(stderr, "send_pos()\n");
+    fprintf(stderr, "send_pos()   to:%d\n", cid);
     for (j = 0; j < 6; j++) {
         if (j != cid)
             send_data(cid, &p[j], sizeof(PLAYER));

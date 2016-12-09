@@ -63,31 +63,31 @@ int network(void)
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 4;
-/*
+
     if (endflag == 1) {
         send_command(X);
-        return 0;
+        return 1;
     }
     else {
         send_command(N);
-*/
+
         send_pos();
         
         if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
             error_message("select()");
     
         if (FD_ISSET(sock, &read_flag)) {
-/*            
+            
             if (recv_command() == N) {
-*/
+
                 recv_pos();
-/*                
+                
                 return 1;
             }
             else
                 return 0;
         }
-*/
+
         }
         return 1;
 }
@@ -107,7 +107,7 @@ static int recv_command(void)
 static void send_pos(void)
 {
     send_data(&p[myid], sizeof(PLAYER));
-    fprintf(stderr, "send_data() %d\n", myid);
+    fprintf(stderr, "send_data()\n");
 }
 
 static void recv_pos(void)
