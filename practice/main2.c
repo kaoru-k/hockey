@@ -53,7 +53,7 @@ typedef struct{
 }PAD;
 PAD pad={3,3,1,1};
 SDL_Rect pack = {0.0, 0.0};
-SDL_Rect camera = {0.0, 210.0};
+SDL_Rect camera = {0.0, 0.0};
 
 static void field_set(void);
 //キャラの幅を返す関数
@@ -293,7 +293,7 @@ int initializeOpenGL(int width, int height) {
 	// 射影行列を設定する
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 2.0, 460.0);
+	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 1.0, 460.0);
 
 	// 照明を設定する
 	static GLfloat position[] = {-10.0f, 10.0f, 10.0f, 1.0f};
@@ -310,17 +310,65 @@ int initializeOpenGL(int width, int height) {
 
 	return 0;
 }
+//2D描画用
+void view2D() {
+	glMatrixMode(GL_PROJECTION);// 射影変換行列設定
+	//glDisable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
+	glPopMatrix();// 現在の射影変換行列を保存
+	//glOrtho(0, 1024, 768, 0, -1, 1);// 正射影変換設定
+	glMatrixMode(GL_MODELVIEW);// モデルビュー変換行列設定
+	glPopMatrix();// 現在のモデルビュー行列を保存
+	glLoadIdentity();// 単位行列を設定
+}
 
-void draw() {
+//3D描画用
+void view3D() {
+	
+	glMatrixMode(GL_PROJECTION);// 射影変換行列設定
+	
+	//glEnable(GL_LIGHT0);
+	glPushMatrix();// 射影変換行列を復元
+	glMatrixMode(GL_MODELVIEW);// モデルビュー変換行列設定
+	glPushMatrix();// モデルビュー行列を復元
+	glLoadIdentity();// 単位行列を設定
+}
+
+void draw2D() {
+	view2D();
+
+
+
+	GLfloat black[] = { 1.0, 0.0, 0.0, 1.0 };
+  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, black);
+	GLdouble vertex[][2] ={
+		{50, 0},
+		{50, 120},
+		{100, 120},
+		{100, 0}
+
+
+
+/*		{514, -384},
+		{514, -278},
+		{-514, -278},
+		{-514, -384}
+*/
+	};
+
+	int i;
+	glBegin(GL_QUADS);
+    	for (i = 0; i < 4; ++i) {
+		      glVertex2dv(vertex[i]);
+	  }	  
+  	glEnd();
+}
+
+void draw3D() {
 	ugoki();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// 視点を設定する
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt( camera.x, camera.y, 90.0f,
-	           0.0,  0.0f, 0.0f,
-	           0.0f,  0.0f, 1.0f);
+	view3D;
 
 	// マテリアルを設定する
 	GLfloat position  [] = { 0.0f, 0.0f, 200.0f, 1.0f};
@@ -609,16 +657,16 @@ int Keyevent(void)
 						case SDLK_ESCAPE: return 0;
 								  break;
 						case SDLK_RIGHT:
-								camera.x -= 1;
+								camera.x -= 5;
 								break;
 						case SDLK_LEFT:
-								camera.x += 1;
+								camera.x += 5;
 								break;
 						case SDLK_UP:
-								camera.y -= 1;
+								camera.y -= 5;
 								break;
 						case SDLK_DOWN:
-								camera.y += 1;
+								camera.y += 5;
 								break;
 						case SDLK_d:
 								speedx[0] = -3;
@@ -733,12 +781,17 @@ int main(int argc, char** args) {
 	int flag = 1;
 
 	while (flag) {
+		gluLookAt( camera.x, camera.y, 80.0f,
+			    0.0,  0.0f, 0.0f,
+			    1.0f,  0.0f, 0.0f);
 		// イベントを処理する
 		field_set();
 		flag = Keyevent();
-                draw();
+
+                draw3D();
                 drawPlane();
                 drawAxis();
+		draw2D();
 		SDL_GL_SwapBuffers();
 	}
 }
