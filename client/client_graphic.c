@@ -10,14 +10,17 @@
 #include <GL/glut.h>
 
 PAD pad = {0,0};
-SDL_Rect camera = {0.0, 210.0};
+SDL_Rect camera = {0.0, 0.0};
 
 extern int  init_sdl(void);
 extern int  draw_field(void);
 static int  initializeSDL(int flags);
 static int  initializeVideo(int width, int height, int flags);
 static int  initializeOpenGL(int width, int height);
-static void draw(void);
+static void draw3D(void);
+static void draw2D(void);
+static void view3D(void);
+static void view2D(void);
 static void drawAxis(void);
 static void drawPlane(void);
 
@@ -33,10 +36,15 @@ int init_sdl(void)
 
 int draw_field(void)
 {
-    draw();
+    gluLookAt( camera.x, camera.y, 70.0f,
+		0.0, 0.0f, 0.0f,
+		1.0f,  0.0f, 0.0f);
+    draw3D();
     drawPlane();
     drawAxis();
+    draw2D();
     SDL_GL_SwapBuffers();
+	
 }
 
 static int initializeSDL(int flags) {
@@ -93,7 +101,7 @@ static int initializeOpenGL(int width, int height) {
 	// 射影行列を設定する
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 2.0, 460.0);
+	gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 1.0, 460.0);
 
 	// 照明を設定する
 	static GLfloat position[] = {-10.0f, 10.0f, 10.0f, 1.0f};
@@ -110,17 +118,137 @@ static int initializeOpenGL(int width, int height) {
 
 	return 0;
 }
- 
-static void draw(void)
+
+//2D描画用
+void view2D() {
+	glMatrixMode(GL_PROJECTION);// 射影変換行列設定
+	//glDisable(GL_LIGHT0);
+	//glEnable(GL_LIGHT1);
+	glPopMatrix();// 現在の射影変換行列を保存
+	//glOrtho(0, 1024, 768, 0, -1, 1);// 正射影変換設定
+	glMatrixMode(GL_MODELVIEW);// モデルビュー変換行列設定
+	glPopMatrix();// 現在のモデルビュー行列を保存
+	glLoadIdentity();// 単位行列を設定
+}
+
+//3D描画用
+void view3D() {
+	
+	glMatrixMode(GL_PROJECTION);// 射影変換行列設定
+	
+	//glEnable(GL_LIGHT0);
+	glPushMatrix();// 射影変換行列を復元
+	glMatrixMode(GL_MODELVIEW);// モデルビュー変換行列設定
+	glPushMatrix();// モデルビュー行列を復元
+	glLoadIdentity();// 単位行列を設定
+}
+
+void draw2D() {
+	view2D();
+
+	GLfloat AP_color[] = { 0.0, 0.0, 1.0, 1.0 };
+
+	GLfloat ATK_HP_color[] = { 1.0, 0.0, 0.0, 1.0 };
+  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
+	GLdouble ATK_HP[][2] ={
+		{60, 72.5 - (((double)40 / 65) * p[0].hp)},
+		{60, 72.5},
+		{65, 72.5},
+		{65, 72.5 - (((double)40 / 65) * p[0].hp)}
+
+	};
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
+	GLdouble ATK_AP[][2] ={
+		{50, 32.5},
+		{50, 72.5},
+		{55, 72.5},
+		{55, 32.5}
+
+	};
+
+	GLfloat SUP_HP_color[] = { 0.0, 1.0, 0.0, 1.0 };
+  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
+	GLdouble SUP_HP[][2] ={
+		{60, 12.5 - ((42.5 / 30) * p[1].hp)},
+		{60, 12.5},
+		{65, 12.5},
+		{65, 12.5 - ((42.5 / 30) * p[1].hp)}
+
+	};
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
+	GLdouble SUP_AP[][2] ={
+		{50, -30},
+		{50, 12.5},
+		{55, 12.5},
+		{55, -30}
+
+	};
+
+	GLfloat DEF_HP_color[] = { 0.0, 0.0, 1.0, 1.0 };
+  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, DEF_HP_color);
+	GLdouble DEF_HP[][2] ={
+		{60, -50 - (((double)40 / 80) * p[4].hp)},
+		{60, -50},
+		{65, -50},
+		{65, -50 - (((double)40 / 80) * p[4].hp)}
+
+	};
+
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
+	GLdouble DEF_AP[][2] ={
+		{50, -50},
+		{50, -90},
+		{55, -90},
+		{55, -50}
+
+	};
+
+	int i;
+	glBegin(GL_QUADS);
+    	for (i = 0; i < 4; ++i) {
+		      glVertex2dv(ATK_HP[i]);
+	  }	  
+  	glEnd();
+
+	glBegin(GL_QUADS);
+    	for (i = 0; i < 4; ++i) {
+		      glVertex2dv(ATK_AP[i]);
+	  }	  
+  	glEnd();
+
+	glBegin(GL_QUADS);
+    	for (i = 0; i < 4; ++i) {
+		      glVertex2dv(SUP_HP[i]);
+	  }	  
+  	glEnd();
+
+	glBegin(GL_QUADS);
+    	for (i = 0; i < 4; ++i) {
+		      glVertex2dv(SUP_AP[i]);
+	  }	  
+  	glEnd();
+
+	glBegin(GL_QUADS);
+    	for (i = 0; i < 4; ++i) {
+		      glVertex2dv(DEF_HP[i]);
+	  }	  
+  	glEnd();
+
+	glBegin(GL_QUADS);
+    	for (i = 0; i < 4; ++i) {
+		      glVertex2dv(DEF_AP[i]);
+	  }	  
+  	glEnd();
+	
+}
+
+
+static void draw3D(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    // 視点を設定する
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    gluLookAt( camera.x, camera.y, 90.0f,
-               0.0,  0.0f, 0.0f,
-               0.0f,  0.0f, 1.0f);
+    view3D;
 
     // マテリアルを設定する
     GLfloat position  [] = { 0.0f, 0.0f, 200.0f, 1.0f};

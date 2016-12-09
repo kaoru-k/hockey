@@ -678,6 +678,8 @@ int Keyevent(void)
 						case SDLK_s:
 								speedx[0] = 0;
 								break;
+						case SDLK_n:
+								camera.y = 140;
                 				default:
 								break;
 					   }
@@ -781,7 +783,7 @@ int main(int argc, char** args) {
 	int flag = 1;
 
 	while (flag) {
-		gluLookAt( camera.x, camera.y, 80.0f,
+		gluLookAt( camera.x, camera.y, 70.0f,
 			    0.0,  0.0f, 0.0f,
 			    1.0f,  0.0f, 0.0f);
 		// イベントを処理する
@@ -793,5 +795,6 @@ int main(int argc, char** args) {
                 drawAxis();
 		draw2D();
 		SDL_GL_SwapBuffers();
+		printf("x = %d\ny = %d\n", camera.x, camera.y);
 	}
 }

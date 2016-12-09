@@ -41,16 +41,16 @@ int Keyevent(void)
                 return 1;
 #endif              
             case SDLK_RIGHT:
-                camera.x -= 1;
+                camera.x -= 5;
                 break;
             case SDLK_LEFT:
-                camera.x += 1;
+                camera.x += 5;
                 break;
             case SDLK_UP:
-                camera.y -= 1;
+                camera.y -= 5;
                 break;
             case SDLK_DOWN:
-                camera.y += 1;
+                camera.y += 5;
                 break;
             case SDLK_d:
                 speedx[0] = -3;
@@ -62,6 +62,9 @@ int Keyevent(void)
             case SDLK_s:
                 speedx[0] = 0;
                 break;
+	    case SDLK_n:
+		camera.x = 0;
+		camera.y = 140;
             default:
                 break;
             }
