@@ -41,7 +41,10 @@ int main(int argc, char *argv[])
         flag = Keyevent();
         draw_field();
     }
-    
+
+    SDL_WaitThread(thr1, NULL);
+    terminate_client();    
+
     return 0;
 
 #else
@@ -59,12 +62,9 @@ int main(int argc, char *argv[])
     
 static int network_thread(void* args)
 {
-    int *flag;
     fprintf(stderr, "network_thread() started.\n");
-    flag = (int*)flag;
-    while (*flag) {
+    while (flag) {
         flag = network();
     }
-    terminate_client();
     return 0;
 }
