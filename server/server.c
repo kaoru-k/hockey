@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
     while(flag) {
 	field_set();
     }
+    SDL_WaitThread(thr1, NULL);
+    terminate_server();
 
     return 0;
 }
@@ -45,6 +47,5 @@ static int network_thread(void* args)
     while (flag) {
         flag = network();
     }
-    terminate_server();
     return 0;
 }

@@ -186,6 +186,9 @@ $RECYCLE.BIN/
 *.cb
 *.cb2
 
+# coreファイル
+core
+
 # 実行ファイル
 client/client
 client/client_test

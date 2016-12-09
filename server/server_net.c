@@ -19,6 +19,7 @@ PAD pad={1,1};
 
 static fd_set mask;
 static int num_socks;
+static int endflag = 0;
 
 static int  recv_command(int cid);
 static void send_command(int cid, int command);
@@ -110,15 +111,16 @@ int network(void)
                 
             }
             else {
-                send_command(BROADCAST, X);
-                return 0;
+                endflag = 1;
             }
 
         }
-        
-        send_command(i, N);
-        
-        send_pos(i);
+        if (endflag = 1) 
+            send_command(i, X);
+        else {
+            send_command(i, N);
+            send_pos(i);
+        }
     }
     return 1;
 }

@@ -26,12 +26,20 @@ int Keyevent(void)
         switch (event.type){
         case SDL_QUIT :
             endflag = 1;
+#ifdef TEST            
             return 0;
+#else
+            return 1;
+#endif
         case SDL_KEYDOWN :
             switch(event.key.keysym.sym){
             case SDLK_ESCAPE:
                 endflag = 1;
+#ifdef TEST            
                 return 0;
+#else
+                return 1;
+#endif              
             case SDLK_RIGHT:
                 camera.x -= 1;
                 break;
