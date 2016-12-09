@@ -152,7 +152,7 @@ static void send_pos(int cid)
             send_data(cid, &p[j], sizeof(PLAYER));
     }
     fprintf(stderr, "send_data() pad:%f %f\n", pad.x, pad.y);
-    //send_data(i, &send_pad, sizeof(PAD));
+    send_data(i, &send_pad, sizeof(PAD));
 }
 
 static int recv_data(int cid, void *data, int size)

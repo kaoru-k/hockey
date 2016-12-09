@@ -88,7 +88,7 @@ int network(void)
                 return 0;
         }
 
-        }
+    }
         return 1;
 }
 
@@ -120,8 +120,8 @@ static void recv_pos(void)
             fprintf(stderr, "recv_data() %d\n", i);
         }
     }
-    //recv_data(&pad, sizeof(PAD));
-    //fprintf(stderr, "recv_data()\n%f %f\n", pad.x, pad.y);
+    recv_data(&pad, sizeof(PAD));
+    fprintf(stderr, "recv_data()\n%f %f\n", pad.x, pad.y);
 }
 
 
