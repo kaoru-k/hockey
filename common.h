@@ -27,9 +27,9 @@
 /* プレイヤー */
 #define DEF_Y 150      //ディフェンダーのY座標
 #define DEF_W 30       //ディフェンダーの幅
-#define SUP_Y 100      //サポーターのY座標
+#define SUP_Y 115      //サポーターのY座標
 #define SUP_W 10       //サポーターの幅
-#define ATK_Y 50       //アタッカーのY座標
+#define ATK_Y 75       //アタッカーのY座標
 #define ATK_W 20       //アタッカーの幅
 
 /* パッド */
@@ -45,7 +45,7 @@ typedef struct{
 
 /* プレイヤーを表す構造体 */
 typedef struct{
-    int   type;    // プレイヤーの種類(0:アタッカー,1:サポーター,2:ディフェンダー)
+    int   type;    // プレイヤーの種類(0,1:アタッカー  2,3:サポーター  4:ディフェンダー）0マクリー,1リーパー　2ゼニヤッタ,3マーシー
     int   hp;      // プレイヤーの体力
     int   ap;      // 必殺技ポイント
     float x;       // プレイヤーのX座標
