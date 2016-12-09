@@ -94,7 +94,7 @@ int network(void)
     fd_set read_flag = mask;
     struct timeval timeout;
     timeout.tv_sec = 0;
-    timeout.tv_usec = 20;
+    timeout.tv_usec = 4;
     
     int i;
 
