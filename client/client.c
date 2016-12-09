@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
     
     setup_client(server_name, port);
     init_sdl();
-    thr1 = SDL_CreateThread(network_thread, NULL);
+    thr1 = SDL_CreateThread(network_thread, &flag);
 
     while (flag) {
         flag = Keyevent();
@@ -59,8 +59,10 @@ int main(int argc, char *argv[])
     
 static int network_thread(void* args)
 {
+    int *flag;
     fprintf(stderr, "network_thread() started.\n");
-    while (flag) {
+    flag = (int*)flag;
+    while (*flag) {
         flag = network();
     }
     terminate_client();

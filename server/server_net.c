@@ -149,7 +149,7 @@ static void send_pos(int cid)
         if (j != cid)
             send_data(cid, &p[j], sizeof(PLAYER));
     }
-    //fprintf(stderr, "send_data() pad:%f %f\n", send_pad.x, send_pad.y);
+    fprintf(stderr, "send_data() pad:%f %f\n", pad.x, pad.y);
     //send_data(i, &send_pad, sizeof(PAD));
 }
 
