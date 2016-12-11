@@ -45,10 +45,10 @@ typedef struct{
 
 /* プレイヤーを表す構造体 */
 typedef struct{
-    int   type;    // プレイヤーの種類(0,1:アタッカー  2,3:サポーター  4:ディフェンダー）0マクリー,1リーパー　2ゼニヤッタ,3マーシー
-    int   hp;      // プレイヤーの体力
-    int   ap;      // 必殺技ポイント
-    float x;       // プレイヤーのX座標
+    int   type;      // プレイヤーの種類(0,1:アタッカー  2,3:サポーター  4:ディフェンダー）0マクリー,1リーパー　2ゼニヤッタ,3マーシー
+    int   hp;        // プレイヤーの体力
+    int   ap;        // 必殺技ポイント
+    float x;         // プレイヤーのX座標
 }PLAYER;
 
 /* パッドの構造体 */
@@ -56,3 +56,14 @@ typedef struct{
     float x;         // パッドのX座標
     float y;         // パッドのY座標
 }PAD;
+
+typedef struct{
+    int    com;      // コマンド 
+    PAD    pad;      // パックの座標
+    PLAYER p0;       // プレイヤー情報
+    PLAYER p1;
+    PLAYER p2;
+    PLAYER p3;
+    PLAYER p4;
+    PLAYER p5;
+}CONTAINER;

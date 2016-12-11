@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
     while (flag) {
         flag = Keyevent();
         draw_field();
+        SDL_Delay(5);
     }
 
     SDL_WaitThread(thr1, NULL);
@@ -54,6 +55,7 @@ int main(int argc, char *argv[])
         field_set();
         flag = Keyevent();
         draw_field();
+        SDL_Delay(5);
     }
 
     return 0;

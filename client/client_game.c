@@ -10,6 +10,7 @@
 float speedx[2] = {0.0, 0.0};	// 自分の操作速度
 SDL_Joystick *joystick;         // ジョイスティックを特定・利用するための構造体
 int endflag = 0;
+int reset = 0;
 
 PLAYER p[6] = {{0,65,0,0},
                {2,30,0,0},
@@ -19,7 +20,7 @@ PLAYER p[6] = {{0,65,0,0},
                {4,80,0,0}};
 
 int Keyevent(void)
-{
+{   
     // イベントを処理する
     SDL_Event event;
     if(SDL_PollEvent(&event)) {
@@ -65,6 +66,11 @@ int Keyevent(void)
 	    case SDLK_n:
 		camera.x = 0;
 		camera.y = 140;
+                break;
+            case SDLK_m:
+                camera.x = 0;
+                camera.y = -140;
+                break;
             default:
                 break;
             }

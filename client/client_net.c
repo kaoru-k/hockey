@@ -17,11 +17,19 @@ static fd_set mask;
 
 int myid;
 CLIENT clients[4];
+CONTAINER send_con;
+CONTAINER recv_con;
 
+/*旧
 static void send_command(int command);
 static int  recv_command(void);
 static void send_pos(void);
 static void recv_pos(void);
+*/
+static void set_con(int command);
+static int  out_con(void);
+static void copy_pad(PAD *a, const PAD *b);
+static void copy_player(PLAYER *a, const PLAYER *b);
 static void send_data(void *data, int size);
 static int  recv_data(void *data, int size);
 static void error_message(char *message);
@@ -58,72 +66,66 @@ void setup_client(char *server_name, u_short port)
 
 int network(void)
 {
-    
     fd_set read_flag = mask;
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 4;
 
-    if (endflag == 1) {
-        send_command(X);
-        return 1;
-    }
-    else {
-        send_command(N);
+    if (endflag == 0)
+        set_con(N);
+    else
+        set_con(X);
 
-        send_pos();
-        
-        if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
+    fprintf(stderr, "send_data()\n");
+    send_data(&send_con, sizeof(CONTAINER));
+    
+    if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
             error_message("select()");
     
-        if (FD_ISSET(sock, &read_flag)) {
-            
-            if (recv_command() == N) {
-
-                recv_pos();
-                
-                return 1;
-            }
-            else
-                return 0;
-        }
-
-    }
-        return 1;
-}
-
-static void send_command(int command)
-{
-    send_data(&command, sizeof(int));
-}
-
-static int recv_command(void)
-{
-    int data;
-    recv_data(&data, sizeof(int));
-    return data;
-}
-
-static void send_pos(void)
-{
-    send_data(&p[myid], sizeof(PLAYER));
-    fprintf(stderr, "send_data()\n");
-}
-
-static void recv_pos(void)
-{
-    int i;
-
-    for (i = 0; i < 6; i++) {
-        if (i != myid) {
-            recv_data(&p[i], sizeof(PLAYER));
-            fprintf(stderr, "recv_data() %d\n", i);
+    if (FD_ISSET(sock, &read_flag)) {
+        fprintf(stderr, "recv_data() :");
+        recv_data(&recv_con, sizeof(CONTAINER));
+        if (out_con() == X) {
+            endflag = 1;
+            return 0;
         }
     }
-    recv_data(&pad, sizeof(PAD));
-    fprintf(stderr, "recv_data()\n%f %f\n", pad.x, pad.y);
+    return 1;
 }
 
+static void set_con(int command)
+{
+    send_con.com = command;
+    copy_player(&send_con.p0, &p[myid]);
+}
+
+static int out_con(void)
+{
+    copy_pad(&pad, &recv_con.pad);
+    if (0 != myid) copy_player(&p[0], &recv_con.p0);
+    if (1 != myid) copy_player(&p[1], &recv_con.p1);
+    if (2 != myid) copy_player(&p[2], &recv_con.p2);
+    if (3 != myid) copy_player(&p[3], &recv_con.p3);
+    if (4 != myid) copy_player(&p[4], &recv_con.p4);
+    if (5 != myid) copy_player(&p[5], &recv_con.p5);
+
+    fprintf(stderr, "com=%d\n", recv_con.com);
+    return recv_con.com;
+}
+
+static void copy_pad(PAD *a, const PAD *b)
+{
+    a->x = b->x;
+    a->y = b->y;
+}
+
+static void copy_player(PLAYER *a, const PLAYER *b)
+{
+    a->type = b->type;
+    a->hp   = b->hp;
+    a->ap   = b->ap;
+    a->x    = b->x;
+}
 
 static void send_data(void *data, int size)
 {

@@ -6,7 +6,7 @@
 #include <time.h>
 #include <math.h>
 
-#ifdef TEST
+#ifndef TEST
 #include "server.h"
 #else
 #include "../client/client.h"
@@ -247,4 +247,5 @@ void field_set(void){
 	    speed.x = 3;speed.y = 3;
 	}
     }
+    fprintf(stderr, "x:%f y:%f\n", pad.x, pad.y);
 }

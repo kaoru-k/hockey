@@ -8,6 +8,7 @@
 #include <SDL/SDL.h>
 
 int flag = 1;
+PAD pad = {1,1};
 
 static int network_thread(void* args);
 
