@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
     while(flag) {
 	field_set();
-        SDL_Delay(10);
+        //SDL_Delay(10);
     }
     SDL_WaitThread(thr1, NULL);
     terminate_server();
