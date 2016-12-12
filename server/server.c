@@ -48,8 +48,10 @@ int main(int argc, char *argv[])
     gt = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
 
     while(flag) {
+	time(&timer);
+    	now = localtime(&timer);
 	ti = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
-	if(10*(ti - gt) > 1){
+	if(30*(ti - gt) > 1){
 	    field_set();
 	    gt = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
 	}
