@@ -5,11 +5,6 @@
 
 #include "client.h"
 #include <SDL/SDL.h>
-#include <time.h>
-#include <sys/time.h>
-
-float gt;
-float ti;
 
 int flag = 1;
 
@@ -55,24 +50,9 @@ int main(int argc, char *argv[])
 
 #else
     init_sdl();
-    //時間	
-    time_t timer;
-    struct tm *now;
-    struct timeval mt;	
-
-/* 現在時刻の取得 */
-    time(&timer);
-    now = localtime(&timer);
-    gt = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
-
+    
     while (flag) {
-	time(&timer);
-   	now = localtime(&timer);
-	ti = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
-	if(10*(ti-gt)>1){        
-	    field_set();
-	    gt = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
-	}
+        field_set();
         flag = Keyevent();
         draw_field();
         SDL_Delay(5);

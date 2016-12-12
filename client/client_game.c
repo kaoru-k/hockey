@@ -64,10 +64,12 @@ int Keyevent(void)
                 speedx[0] = 0;
                 break;
 	    case SDLK_n:
+		cameramode = 0;
 		camera.x = 0;
 		camera.y = 140;
                 break;
             case SDLK_m:
+		cameramode = 1;
                 camera.x = 0;
                 camera.y = -140;
                 break;

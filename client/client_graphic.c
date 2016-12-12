@@ -11,6 +11,7 @@
 
 PAD pad = {0,0};
 SDL_Rect camera = {0.0, 0.0};
+int cameramode = 0; //0の時：初期or1p2p / 1の時:3p4p *削除予定
 
 extern int  init_sdl(void);
 extern int  draw_field(void);
@@ -36,9 +37,15 @@ int init_sdl(void)
 
 int draw_field(void)
 {
-    gluLookAt( camera.x, camera.y, 70.0f,
-		0.0, 0.0f, 0.0f,
-		1.0f,  0.0f, 0.0f);
+    if(cameramode == 0){
+	gluLookAt( camera.x, camera.y, 70.0f,
+		   0.0, 0.0f, 0.0f,
+	           1.0f,  0.0f, 0.0f);
+    }else if(cameramode == 1){
+	gluLookAt( camera.x, camera.y, 70.0f,
+		   0.0, 0.0f, 0.0f,
+	           -1.0f,  0.0f, 0.0f);
+    }
     draw3D();
     drawPlane();
     drawAxis();
@@ -276,7 +283,7 @@ static void draw3D(void)
     gluDeleteQuadric(quadric);
     gluDeleteQuadric(quadric2);
     
-    GLdouble vertex[][3] = {
+    GLdouble sidevertex[][3] = {
       { 100.0, -160.0, 0.0 },
       { 100.1, -160.0, 0.0 },
       { 100.1, 160.0, 0.0 },
@@ -287,7 +294,7 @@ static void draw3D(void)
       { 100.0, 160.0, 20.0 }
     };
     
-    GLdouble vertex2[][3] = {
+    GLdouble sidevertex2[][3] = {
       { -100.0, -160.0, 0.0 },
       { -100.1, -160.0, 0.0 },
       { -100.1, 160.0, 0.0 },
@@ -296,6 +303,50 @@ static void draw3D(void)
       { -100.1, -160.0, 20.0 },
       { -100.1, 160.0, 20.0 },
       { -100.0, 160.0, 20.0 }
+    };
+
+    GLdouble Goalpost[][3] = {
+      { GOAL_W, 160.0, 0.0 },
+      { 100.0, 160.0, 0.0 },
+      { 100.0, 160.1, 0.0 },
+      { GOAL_W, 160.1, 0.0 },
+      { GOAL_W, 160.0, 10.0 },
+      { 100.0, 160.0, 10.0 },
+      { 100.0, 160.1, 10.0 },
+      { GOAL_W, 160.1, 10.0 }
+    };
+
+    GLdouble Goalpost2[][3] = {
+      { -GOAL_W, 160.0, 0.0 },
+      { -100.0, 160.0, 0.0 },
+      { -100.0, 160.1, 0.0 },
+      { -GOAL_W, 160.1, 0.0 },
+      { -GOAL_W, 160.0, 10.0 },
+      { -100.0, 160.0, 10.0 },
+      { -100.0, 160.1, 10.0 },
+      { -GOAL_W, 160.1, 10.0 }
+    };
+
+    GLdouble Goalpost3[][3] = {
+      { GOAL_W, -160.0, 0.0 },
+      { 100.0, -160.0, 0.0 },
+      { 100.0, -160.1, 0.0 },
+      { GOAL_W, -160.1, 0.0 },
+      { GOAL_W, -160.0, 10.0 },
+      { 100.0, -160.0, 10.0 },
+      { 100.0, -160.1, 10.0 },
+      { GOAL_W, -160.1, 10.0 }
+    };
+
+    GLdouble Goalpost4[][3] = {
+      { -GOAL_W, -160.0, 0.0 },
+      { -100.0, -160.0, 0.0 },
+      { -100.0, -160.1, 0.0 },
+      { -GOAL_W, -160.1, 0.0 },
+      { -GOAL_W, -160.0, 10.0 },
+      { -100.0, -160.0, 10.0 },
+      { -100.0, -160.1, 10.0 },
+      { -GOAL_W, -160.1, 10.0 }
     };
     
     GLdouble atk1_vertex[][3] = {
@@ -404,7 +455,7 @@ static void draw3D(void)
 	  glBegin(GL_QUADS);
 	  for (j = 0; j < 6; ++j) {
     		for (i = 0; i < 4; ++i) {
-		      glVertex3dv(vertex[face[j][i]]);
+		      glVertex3dv(sidevertex[face[j][i]]);
     		}
 	  }	  
   	  glEnd();
@@ -412,7 +463,39 @@ static void draw3D(void)
 	  glBegin(GL_QUADS);
 	  for (j = 0; j < 6; ++j) {
     		for (i = 0; i < 4; ++i) {
-		      glVertex3dv(vertex2[face[j][i]]);
+		      glVertex3dv(sidevertex2[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+          glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(Goalpost[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(Goalpost2[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(Goalpost3[face[j][i]]);
+    		}
+	  }	  
+  	  glEnd();
+
+	  glBegin(GL_QUADS);
+	  for (j = 0; j < 6; ++j) {
+    		for (i = 0; i < 4; ++i) {
+		      glVertex3dv(Goalpost4[face[j][i]]);
     		}
 	  }	  
   	  glEnd();
