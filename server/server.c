@@ -49,8 +49,10 @@ int main(int argc, char *argv[])
 
     while(flag) {
 	ti = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
-	if(10*(ti - gt) > 1)
-	field_set();
+	if(10*(ti - gt) > 1){
+	    field_set();
+	    gt = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 + mt.tv_usec * 0.1;
+	}
         //SDL_Delay(10);
     }
     SDL_WaitThread(thr1, NULL);
