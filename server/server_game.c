@@ -13,9 +13,9 @@
 #endif
 
 PAD speed={3,3};
-
-static int game_scene;
-static int ti;
+int game_scene = 0;
+float gt;
+float ti;
 
 extern int  def_ugoki(int i);
 extern void field_set(void);
@@ -62,6 +62,11 @@ void field_set(void){
     time_t timer;
     struct tm *now;
 
+/* 現在時刻の取得 */
+    time(&timer);
+    now = localtime(&timer);
+    int tim = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 ;
+    
     int i,j;
     float k,l;
     pad.x += speed.x;
@@ -99,8 +104,9 @@ void field_set(void){
                 }
             }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + speed.y){
                 for(i = 0;i < 2;i++){
-                    if(p[i].type == 2 || p[i].type == 3)
+                    if(p[i].type == 2 || p[i].type == 3){
                         break;
+		    }
                 }
                 if(pad.x + PAD_R > p[i].x - SUP_W && pad.x - PAD_R < p[i].x + SUP_W){
                     if( (p[i].hp -= speed.y) <= 0 ){      //ｈｐ減少
@@ -212,10 +218,6 @@ void field_set(void){
             }
         }
     }else{
-/* 現在時刻の取得 */
-        time(&timer);
-        now = localtime(&timer);
-        int tim = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 ;
 	if(tim - ti > 5){
 	    game_scene = 0;
 	    p[0].type = 0;

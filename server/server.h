@@ -6,9 +6,13 @@
 #include "../common.h"
 
 /***** グローバル変数 *****/
+
 extern CLIENT clients[4];
 extern PLAYER p[6]; //0,1,2,3->human 4,5->cpu
 extern PAD pad;
+extern int game_scene;
+extern float gt;
+extern float ti;
 /***** 外部関数 *****/
 // server_net.c
 void setup_server(u_short port);
