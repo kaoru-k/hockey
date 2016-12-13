@@ -3,7 +3,7 @@
 # 徳島大学 工学部 知能情報工学科 27班
 #*************************************
 
-LDLIBS  = -lSDL -lGL -lGLU -lnsl -lm
+LDLIBS  = -lSDL -lGL -lGLU -lnsl -lm -lrt
 TARGET1 = server
 TARGET2 = client
 OBJS1   = server/server.o server/server_game.o server/server_net.o

@@ -16,18 +16,12 @@ static int num_sock;
 static fd_set mask;
 
 int myid;
-CLIENT clients[4];
-CONTAINER send_con;
-CONTAINER recv_con;
+// CLIENT clients[4];
+CONTAINER_C send_con;
+CONTAINER_S recv_con;
 
-/*旧
-static void send_command(int command);
-static int  recv_command(void);
-static void send_pos(void);
-static void recv_pos(void);
-*/
-static void set_con(int command);
-static int  out_con(void);
+static void set_con(char command);
+static char out_con(void);
 static void copy_pad(PAD *a, const PAD *b);
 static void copy_player(PLAYER *a, const PLAYER *b);
 static void send_data(void *data, int size);
@@ -72,20 +66,20 @@ int network(void)
     timeout.tv_usec = 4;
 
     if (endflag == 0)
-        set_con(N);
+        set_con(COM_NONE);
     else
-        set_con(X);
+        set_con(COM_EXIT);
 
     fprintf(stderr, "send_data()\n");
-    send_data(&send_con, sizeof(CONTAINER));
+    send_data(&send_con, sizeof(CONTAINER_C));
     
     if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
             error_message("select()");
     
     if (FD_ISSET(sock, &read_flag)) {
         fprintf(stderr, "recv_data() :");
-        recv_data(&recv_con, sizeof(CONTAINER));
-        if (out_con() == X) {
+        recv_data(&recv_con, sizeof(CONTAINER_S));
+        if (out_con() == COM_EXIT) {
             endflag = 1;
             return 0;
         }
@@ -93,21 +87,19 @@ int network(void)
     return 1;
 }
 
-static void set_con(int command)
+static void set_con(char command)
 {
     send_con.com = command;
-    copy_player(&send_con.p0, &p[myid]);
+    send_con.x = p[myid].x;
 }
 
-static int out_con(void)
+static char out_con(void)
 {
+    int i;
+
     copy_pad(&pad, &recv_con.pad);
-    if (0 != myid) copy_player(&p[0], &recv_con.p0);
-    if (1 != myid) copy_player(&p[1], &recv_con.p1);
-    if (2 != myid) copy_player(&p[2], &recv_con.p2);
-    if (3 != myid) copy_player(&p[3], &recv_con.p3);
-    if (4 != myid) copy_player(&p[4], &recv_con.p4);
-    if (5 != myid) copy_player(&p[5], &recv_con.p5);
+    for (i = 0; i < 6; i++)
+        if (i != myid) copy_player(&p[i], &recv_con.p[i]);
 
     fprintf(stderr, "com=%d\n", recv_con.com);
     return recv_con.com;

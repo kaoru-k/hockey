@@ -15,15 +15,16 @@
 
 CLIENT clients[4];
 PLAYER p[6];
-CONTAINER send_con;
-CONTAINER recv_con;
+
+CONTAINER_S send_con;
+CONTAINER_C recv_con;
 
 static fd_set mask;
 static int num_socks;
 static int endflag = 0;
 
-static void set_con(int command);
-static int  out_con(int cid);
+static void set_con(char command);
+static char out_con(int cid);
 static void copy_pad(PAD *a, const PAD *b);
 static void copy_player(PLAYER *a, const PLAYER *b);
 static int  recv_data(int cid, void *data, int size);
@@ -105,40 +106,37 @@ int network(void)
     
     for (i = 0; i < 4; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
-            recv_data(i, &recv_con, sizeof(CONTAINER));
+            recv_data(i, &recv_con, sizeof(CONTAINER_C));
             fprintf(stderr, "recv_data() from:%d\n", i);
-            if (out_con(i) == X) { 
+            if (out_con(i) == COM_EXIT) { 
                 endflag = 1;
             }
         }
         if (endflag == 0)
-            set_con(N);
+            set_con(COM_NONE);
         else
-            set_con(X);
+            set_con(COM_EXIT);
         
-        send_data(i, &send_con, sizeof(send_con));
+        send_data(i, &send_con, sizeof(CONTAINER_S));
         fprintf(stderr, "send_data()   to:%d\n", i);
     }
     return 1;
  
 }
 
-static void set_con(int command)
+static void set_con(char command)
 {
+    int i;
+
     send_con.com = command;
     copy_pad(&send_con.pad, &pad);
-    copy_player(&send_con.p0, &p[0]);
-    copy_player(&send_con.p1, &p[1]);
-    copy_player(&send_con.p2, &p[2]);
-    copy_player(&send_con.p3, &p[3]);
-    copy_player(&send_con.p4, &p[4]);
-    copy_player(&send_con.p5, &p[5]);
+    for (i = 0; i < 6; i++)
+        copy_player(&send_con.p[i], &p[i]);
 }
 
-static int out_con(int cid)
+static char out_con(int cid)
 {
-    copy_player(&p[cid], &recv_con.p0);
-    
+    p[cid].x = recv_con.x;
     return recv_con.com;
 }
 

@@ -15,9 +15,9 @@
 #define BROADCAST      -1
 
 /* コマンド */
-#define N         0    //None      何もなし（座標をやり取りする）
-#define C         1    //Continue  コンティニュー
-#define X        -1    //eXit      終了
+#define COM_NONE       'N'    //None      何もなし（座標をやり取りする）
+#define COM_CONTINUE   'C'    //Continue  コンティニュー
+#define COM_EXIT       'X'    //eXit      終了
 
 /* フィールド */
 #define FIELD_H  160   //フィールドの縦幅
@@ -58,12 +58,12 @@ typedef struct{
 }PAD;
 
 typedef struct{
-    int    com;      // コマンド 
+    char   com;      // コマンド 
     PAD    pad;      // パックの座標
-    PLAYER p0;       // プレイヤー情報
-    PLAYER p1;
-    PLAYER p2;
-    PLAYER p3;
-    PLAYER p4;
-    PLAYER p5;
-}CONTAINER;
+    PLAYER p[6];     // プレイヤー情報
+}CONTAINER_S;
+
+typedef struct{
+    char  com;
+    float x;
+}CONTAINER_C;
