@@ -2,7 +2,7 @@
 ## 練習中  
 いいいいいいいいいいい
 
-make CFLAGS=-DTEST test
+make CFLAGS=-DTEST test -lrt
 
 <https://www21.atwiki.jp/opengl/pages/28.html>
 
