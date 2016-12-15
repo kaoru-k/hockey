@@ -159,10 +159,10 @@ void draw2D() {
 	GLfloat ATK_HP_color[] = { 1.0, 0.0, 0.0, 1.0 };
   	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
 	GLdouble ATK_HP[][2] ={
-		{60, 72.5 - (((double)40 / 65) * p[0].hp)},
+		{60, 72.5 - (((double)40 / 650) * p[0].hp)},
 		{60, 72.5},
 		{65, 72.5},
-		{65, 72.5 - (((double)40 / 65) * p[0].hp)}
+		{65, 72.5 - (((double)40 / 650) * p[0].hp)}
 
 	};
 
@@ -178,10 +178,10 @@ void draw2D() {
 	GLfloat SUP_HP_color[] = { 0.0, 1.0, 0.0, 1.0 };
   	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	GLdouble SUP_HP[][2] ={
-		{60, 12.5 - ((42.5 / 30) * p[1].hp)},
+		{60, 12.5 - ((42.5 / 300) * p[1].hp)},
 		{60, 12.5},
 		{65, 12.5},
-		{65, 12.5 - ((42.5 / 30) * p[1].hp)}
+		{65, 12.5 - ((42.5 / 300) * p[1].hp)}
 
 	};
 
@@ -197,10 +197,10 @@ void draw2D() {
 	GLfloat DEF_HP_color[] = { 0.0, 0.0, 1.0, 1.0 };
   	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, DEF_HP_color);
 	GLdouble DEF_HP[][2] ={
-		{60, -50 - (((double)40 / 80) * p[4].hp)},
+		{60, -50 - (((double)40 / 800) * p[4].hp)},
 		{60, -50},
 		{65, -50},
-		{65, -50 - (((double)40 / 80) * p[4].hp)}
+		{65, -50 - (((double)40 / 800) * p[4].hp)}
 
 	};
 
@@ -253,10 +253,10 @@ void draw2D() {
 	GLfloat ATK_HP_color[] = { 1.0, 0.0, 0.0, 1.0 };
   	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
 	GLdouble ATK_HP2[][2] ={
-		{60, 72.5 - (((double)45 / 55) * p[2].hp)},
+		{60, 72.5 - (((double)45 / 550) * p[2].hp)},
 		{60, 72.5},
 		{65, 72.5},
-		{65, 72.5 - (((double)45 / 55) * p[2].hp)}
+		{65, 72.5 - (((double)45 / 550) * p[2].hp)}
 
 	};
 
@@ -272,10 +272,10 @@ void draw2D() {
 	GLfloat SUP_HP_color[] = { 0.0, 1.0, 0.0, 1.0 };
   	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	GLdouble SUP_HP2[][2] ={
-		{60, 12.5 - (((double)42.5 / 45) * p[3].hp)},
+		{60, 12.5 - (((double)42.5 / 450) * p[3].hp)},
 		{60, 12.5},
 		{65, 12.5},
-		{65, 12.5 - (((double)42.5 / 45) * p[3].hp)}
+		{65, 12.5 - (((double)42.5 / 450) * p[3].hp)}
 
 	};
 
@@ -291,10 +291,10 @@ void draw2D() {
 	GLfloat DEF_HP_color[] = { 0.0, 0.0, 1.0, 1.0 };
   	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, DEF_HP_color);
 	GLdouble DEF_HP2[][2] ={
-		{60, -50 - (((double)40 / 80) * p[5].hp)},
+		{60, -50 - (((double)40 / 800) * p[5].hp)},
 		{60, -50},
 		{65, -50},
-		{65, -50 - (((double)40 / 80) * p[5].hp)}
+		{65, -50 - (((double)40 / 800) * p[5].hp)}
 
 	};
 
