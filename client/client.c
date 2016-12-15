@@ -5,6 +5,10 @@
 
 #include "client.h"
 #include <SDL/SDL.h>
+#ifdef TEST
+#include <time.h>
+#include <sys/time.h>
+#endif
 
 int flag = 1;
 
@@ -49,10 +53,19 @@ int main(int argc, char *argv[])
     return 0;
 
 #else
+    
+    double time_now = 0;
+    double time_last = 0;
+    struct timespec time_tmp;
     init_sdl();
     
     while (flag) {
-        field_set();
+	clock_gettime(CLOCK_REALTIME, &time_tmp);
+        time_now = (int)time_tmp.tv_sec + (double)time_tmp.tv_nsec * 0.000000001;
+	if(time_now - time_last > 0.016){
+            field_set();
+            time_last = time_now;
+	}
         flag = Keyevent();
         draw_field();
         SDL_Delay(5);
