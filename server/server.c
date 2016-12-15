@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     while(flag) {
 	clock_gettime(CLOCK_REALTIME, &time_tmp);
         time_now = (int)time_tmp.tv_sec + (double)time_tmp.tv_nsec * 0.000000001;
-	if(time_now - time_last > (float)(1 / 60)){
+	if(time_now - time_last > 0.016){
 	    field_set();
 	    time_last = time_now;
 	}
