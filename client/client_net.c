@@ -17,8 +17,8 @@ static fd_set mask;
 
 int myid;
 // CLIENT clients[4];
-CONTAINER_C send_con;
-CONTAINER_S recv_con;
+CONTAINER send_con;
+CONTAINER recv_con;
 
 static void set_con(char command);
 static char out_con(void);
@@ -64,21 +64,20 @@ int network(void)
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 4;
-
+    
     if (endflag == 0)
         set_con(COM_NONE);
     else
         set_con(COM_EXIT);
-
     fprintf(stderr, "send_data()\n");
-    send_data(&send_con, sizeof(CONTAINER_C));
-    
+    send_data(&send_con, sizeof(CONTAINER));
+
     if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
-            error_message("select()");
-    
+        error_message("select()");
+
     if (FD_ISSET(sock, &read_flag)) {
-        fprintf(stderr, "recv_data() :");
-        recv_data(&recv_con, sizeof(CONTAINER_S));
+        fprintf(stderr, "recv_data()\n");
+        recv_data(&recv_con, sizeof(CONTAINER));
         if (out_con() == COM_EXIT) {
             endflag = 1;
             return 0;
@@ -90,7 +89,7 @@ int network(void)
 static void set_con(char command)
 {
     send_con.com = command;
-    send_con.x = p[myid].x;
+    send_con.p[myid].x = p[myid].x;
 }
 
 static char out_con(void)

@@ -16,8 +16,8 @@
 CLIENT clients[4];
 PLAYER p[6];
 
-CONTAINER_S send_con;
-CONTAINER_C recv_con;
+CONTAINER send_con;
+CONTAINER recv_con;
 
 static fd_set mask;
 static int num_socks;
@@ -101,23 +101,24 @@ int network(void)
     
     int i;
 
-    if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
-        error_message("select()");
-    
     for (i = 0; i < 4; i++) {
+        if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
+        error_message("select()");
+
         if (FD_ISSET(clients[i].sock, &read_flag)) {
-            recv_data(i, &recv_con, sizeof(CONTAINER_C));
+            recv_data(i, &recv_con, sizeof(CONTAINER));
             fprintf(stderr, "recv_data() from:%d\n", i);
             if (out_con(i) == COM_EXIT) { 
                 endflag = 1;
             }
         }
+
         if (endflag == 0)
             set_con(COM_NONE);
         else
             set_con(COM_EXIT);
-        
-        send_data(i, &send_con, sizeof(CONTAINER_S));
+    
+        send_data(i, &send_con, sizeof(CONTAINER));
         fprintf(stderr, "send_data()   to:%d\n", i);
     }
     return 1;
@@ -136,7 +137,7 @@ static void set_con(char command)
 
 static char out_con(int cid)
 {
-    p[cid].x = recv_con.x;
+    p[cid].x = recv_con.p[cid].x;
     return recv_con.com;
 }
 

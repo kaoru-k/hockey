@@ -46,8 +46,8 @@ int main(int argc, char *argv[])
 	    time_last = time_now;
 	}
     }
+
     SDL_WaitThread(thr1, NULL);
-    terminate_server();
 
     return 0;
 }
@@ -58,5 +58,6 @@ static int network_thread(void* args)
     while (flag) {
         flag = network();
     }
+    terminate_server();
     return 0;
 }
