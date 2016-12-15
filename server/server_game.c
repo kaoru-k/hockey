@@ -13,7 +13,7 @@
 #endif
 
 PAD speed={3,3};
-int game_scene = 0;
+int game_scene = 1;
 float gt;
 float ti;
 int heal = 0;
@@ -306,7 +306,7 @@ void field_set(void){
                 game_scene = 1;
             }
         }
-    }else{
+    }else{	
 	if(tim - ti > 2 && game_scene == 1){
 	    game_scene = 2;
 	    p[0].hp = 650;
