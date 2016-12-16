@@ -85,12 +85,12 @@ int Keyevent(void)
                 	speedx[0] = 3;
 		    else if(myid == 3 || myid == 4)
 			speedx[0] = -3;
-                }else if(event.jaxis.value >  0)
+                }else if(event.jaxis.value >  0){
                     if(myid == 1 || myid == 2)
                 	speedx[0] = -3;
 		    else if(myid == 3 || myid == 4)
 			speedx[0] = 3;
-                else
+                }else
                     speedx[0] = 0.0;
             }
             else if(event.jaxis.axis==1){
