@@ -61,6 +61,12 @@ typedef struct{
     char   com;      // コマンド 
     PAD    pad;      // パックの座標
     PLAYER p[6];     // プレイヤー情報
+}CONTAINER;
+
+typedef struct{
+    char   com;      // コマンド 
+    PAD    pad;      // パックの座標
+    PLAYER p[6];     // プレイヤー情報
 }CONTAINER_S;
 
 typedef struct{

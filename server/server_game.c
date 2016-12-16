@@ -13,7 +13,7 @@
 #endif
 
 PAD speed={3,3};
-int game_scene = 0;
+int game_scene = 1;
 float gt;
 float ti;
 int heal = 0;
@@ -30,7 +30,7 @@ static float bai(int type){
     case 2:return 1;
     case 3:return 0.85;
     case 4:return 40;   //回復
-    case 5:return 70;
+    case 5:return 60;
     case 6:return 650;  //maxhp
     case 7:return 550;
     case 8:return 300;
@@ -80,6 +80,8 @@ void field_set(void){
     
     if(heal++>120){
 	for(i = 0;i < 4;i++){
+	    if(++p[i].ap > 100)
+		p[i].ap = 100;
             if(p[i].type == 2 || p[i].type == 3)
 		p[i].hp += 3;
 		if(p[i].hp > bai(p[i].type + 6))
@@ -91,7 +93,7 @@ void field_set(void){
     /* 乱数初期化 */
     srand(time(NULL));
     
-    if(game_scene != 1){
+    if(game_scene == 0){
         //横の壁にぶつかった時
         if(pad.x + PAD_R > FIELD_W){
             pad.x = 2 * FIELD_W - pad.x - 2 * PAD_R;
@@ -108,6 +110,8 @@ void field_set(void){
                         break;
                 }
                 if(pad.x + PAD_R > p[i].x - ATK_W && pad.x - PAD_R< p[i].x + ATK_W){
+		    if( (p[i].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
+			p[i].ap = 100;
                     if( (p[i].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
 			if(p[4].hp > 0){
 			    p[i].hp = p[4].hp;
@@ -118,10 +122,15 @@ void field_set(void){
 			    p[i].hp = 0;
 			}
                     }
-                    k = M_PI * (10 + rand()%80)/100;
-                    l = sqrt(speed.x*speed.x + speed.y * speed.y);
-                    speed.y = -l * sin(k) * bai(p[i].type);
-                    speed.x = l * cos(k) * bai(p[i].type);
+                    if( (l = sqrt(speed.x*speed.x + speed.y * speed.y)) < 7){
+                    	k = M_PI * (10 + rand()%80)/100;
+                   	speed.y = -l * sin(k) * bai(p[i].type);
+                    	speed.x = l * cos(k) * bai(p[i].type);
+		    }else{
+                        k = M_PI * (10 + rand()%80)/100;
+                    	speed.y = -l * sin(k);
+                    	speed.x = l * cos(k);
+		    }
                     if(p[5].hp > 0)
                         p[5].x = def_ugoki(1);
                 }
@@ -132,6 +141,8 @@ void field_set(void){
 		    }
                 }
                 if(pad.x + PAD_R > p[i].x - SUP_W && pad.x - PAD_R < p[i].x + SUP_W){
+		    if( (p[i].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
+			p[i].ap = 100;
                     if( (p[i].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
 			if(p[4].hp > 0){
 			    p[i].hp = p[4].hp;
@@ -142,8 +153,11 @@ void field_set(void){
 			    p[i].hp = 0;
 			}
                     }
-                    if( (speed.y = -speed.y * bai(p[i].type)) > -1)
-                        speed.y = -1;
+                    if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                    	speed.y = -speed.y * bai(p[i].type);
+		        speed.x = speed.x * bai(p[i].type);
+		    }else
+			speed.y = -speed.y;
                     if(p[5].hp > 0)
                         p[5].x = def_ugoki(1);
                     if(i == 0){                   //ｈｐ回復
@@ -166,8 +180,11 @@ void field_set(void){
                         p[4].x = 1000;//HPが0以下になった時の処理
 			p[4].hp = 0;
                     }
-                    if( (speed.y = speed.y * (-0.9)) > -1)
-                        speed.y = -1;
+                    if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                    	speed.y = -speed.y * 0.9;
+		        speed.x = speed.x * 0.9;
+		    }else
+			speed.y = -speed.y;
                     if(p[5].hp > 0)
                         p[5].x = def_ugoki(1);
                 }
@@ -179,7 +196,9 @@ void field_set(void){
                         break;
                 }
                 if(pad.x+PAD_R > p[i+2].x - ATK_W && pad.x-PAD_R < p[i+2].x + ATK_W){
-                    if( (p[i+2].hp += sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+		    if( (p[i+2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
+			p[i+2].ap = 100;
+                    if( (p[i+2].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
 			if(p[5].hp > 0){
 			    p[i+2].hp = p[5].hp;
 			    p[5].hp = 0;
@@ -189,10 +208,15 @@ void field_set(void){
 			    p[i+2].hp = 0;
 			}
                     }
-                    k = M_PI * (10 + rand()%80)/100;
-                    l = sqrt(speed.x*speed.x + speed.y*speed.y);
-                    speed.y = l * sin(k) * bai(p[i+2].type);
-                    speed.x = l * cos(k) * bai(p[i+2].type);
+                    if( (l = sqrt(speed.x*speed.x + speed.y*speed.y)) < 7){
+                        k = M_PI * (10 + rand()%80)/100;
+                    	speed.y = l * sin(k) * bai(p[i+2].type);
+                    	speed.x = l * cos(k) * bai(p[i+2].type);
+		    }else{
+                        k = M_PI * (10 + rand()%80)/100;
+                    	speed.y = l * sin(k);
+                    	speed.x = l * cos(k);
+		    }
                     if(p[4].hp > 0)
                         p[4].x = def_ugoki(-1);
                 }
@@ -202,7 +226,9 @@ void field_set(void){
                         break;
                 }
                 if(pad.x+PAD_R > p[i+2].x - SUP_W && pad.x-PAD_R < p[i+2].x + SUP_W){
-                    if( (p[i+2].hp += sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+		    if( (p[i+2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
+			p[i+2].ap = 100;
+                    if( (p[i+2].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
 			if(p[5].hp > 0){
 			    p[i+2].hp = p[5].hp;
 			    p[5].hp = 0;
@@ -212,8 +238,11 @@ void field_set(void){
 			    p[i+2].hp = 0;
 			}
                     }
-                    if( (speed.y = speed.y * -bai(p[i+2].type)) < 1)
-                        speed.y = 1;
+                    if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                    	speed.y = -speed.y * bai(p[i+2].type);
+		        speed.x = speed.x * bai(p[i+2].type);
+		    }else
+			speed.y = -speed.y;
                     if(p[4].hp > 0)
                         p[4].x = def_ugoki(-1);
                     if(i == 0){                   //ｈｐ回復
@@ -234,14 +263,15 @@ void field_set(void){
                 }
             }else if(-pad.y + PAD_R >= DEF_Y && -pad.y + PAD_R <= DEF_Y - speed.y){
                 if(pad.x+PAD_R > p[5].x - DEF_W && pad.x-PAD_R < p[5].x + DEF_W){
-                    if( (p[5].hp += sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+                    if( (p[5].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
                         p[5].x = 1000;//HPが0以下になった時の処理
 			p[5].hp = 0;
                     }
-                    if( (speed.y = speed.y * (-0.9)) < 1){
-                        speed.y = 1;
-                    }
-                    speed.x = speed.x * 0.9;  //跳ね返りの計算
+                    if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                    	speed.y = -speed.y * 0.9;
+		        speed.x = speed.x * 0.9;
+		    }else
+			speed.y = -speed.y;
                     if(p[4].hp > 0)
                         p[4].x = def_ugoki(-1);
                 }
@@ -276,8 +306,9 @@ void field_set(void){
                 game_scene = 1;
             }
         }
-    }else{
+    }else{	
 	if(tim - ti > 2 && game_scene == 1){
+	    game_scene = 2;
 	    p[0].hp = 650;
 	    p[0].ap = 0;
 	    p[0].x = 0;
