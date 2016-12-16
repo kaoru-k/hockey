@@ -82,14 +82,14 @@ int Keyevent(void)
                 printf("--- Analog-Direction Key: ?? Axis\n");
                 if(event.jaxis.value < 0){
                     if(myid == 1 || myid == 2)
-                	speedx[0] += 3;
+                	speedx[0] = 3;
 		    else if(myid == 3 || myid == 4)
-			speedx[0] -= 3;
+			speedx[0] = -3;
                 }else if(event.jaxis.value >  0)
                     if(myid == 1 || myid == 2)
-                	speedx[0] -= 3;
+                	speedx[0] = -3;
 		    else if(myid == 3 || myid == 4)
-			speedx[0] += 3;
+			speedx[0] = 3;
                 else
                     speedx[0] = 0.0;
             }
