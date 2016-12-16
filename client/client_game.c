@@ -54,10 +54,10 @@ int Keyevent(void)
                 camera.y += 5;
                 break;
             case SDLK_d:
-                speedx[0] = -3;
+			speedx[0] = -3;
                 break;
             case SDLK_a:
-                speedx[0] = 3;
+			speedx[0] = 3;
                 break;
             case SDLK_w:
             case SDLK_s:
@@ -80,12 +80,18 @@ int Keyevent(void)
             printf("The axis ID of the operated key is %d.\n",event.jaxis.axis);	// 操作された方向キーの方向軸を表示（0：アナログキー，1：アナログキー，2：方向キー左右方向，3：方向キー上下方向）
             if(event.jaxis.axis==0){
                 printf("--- Analog-Direction Key: ?? Axis\n");
-                if(event.jaxis.value < 0)
-                    speedx[1] += 3;
-                else if(event.jaxis.value >  0)
-                    speedx[1] -= 3;
+                if(event.jaxis.value < 0){
+                    if(myid == 1 || myid == 2)
+                	speedx[0] += 3;
+		    else if(myid == 3 || myid == 4)
+			speedx[0] -= 3;
+                }else if(event.jaxis.value >  0)
+                    if(myid == 1 || myid == 2)
+                	speedx[0] -= 3;
+		    else if(myid == 3 || myid == 4)
+			speedx[0] += 3;
                 else
-                    speedx[1] = 0.0;
+                    speedx[0] = 0.0;
             }
             else if(event.jaxis.axis==1){
                 printf("--- Anolag-Direction Key: ?? Axis\n");
