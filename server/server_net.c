@@ -98,31 +98,25 @@ int network(void)
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 4;
-    
     int i;
 
-    for (i = 0; i < 4; i++) {
-        if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
+    if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
 
+    for (i = 0; i < 4; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &recv_con, sizeof(CONTAINER));
             fprintf(stderr, "recv_data() from:%d\n", i);
-            if (out_con(i) == COM_EXIT) { 
-                endflag = 1;
-            }
-        }
+            if (out_con(i) == COM_EXIT) endflag = 1;
 
-        if (endflag == 0)
-            set_con(COM_NONE);
-        else
-            set_con(COM_EXIT);
-    
-        send_data(i, &send_con, sizeof(CONTAINER));
-        fprintf(stderr, "send_data()   to:%d\n", i);
+            if (endflag == 0) set_con(COM_NONE);
+            else              set_con(COM_EXIT);
+
+            send_data(BROADCAST, &send_con, sizeof(CONTAINER));
+            fprintf(stderr, "send_data()   to:%d\n", i);
+        }
     }
     return 1;
- 
 }
 
 static void set_con(char command)

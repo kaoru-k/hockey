@@ -65,17 +65,18 @@ int network(void)
     timeout.tv_sec = 0;
     timeout.tv_usec = 4;
     
-    if (endflag == 0)
-        set_con(COM_NONE);
-    else
-        set_con(COM_EXIT);
-    fprintf(stderr, "send_data()\n");
-    send_data(&send_con, sizeof(CONTAINER));
-
     if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
 
-    if (FD_ISSET(sock, &read_flag)) {
+    if (FD_ISSET(0, &read_flag)) {
+        if (endflag == 0)
+            set_con(COM_NONE);
+        else
+            set_con(COM_EXIT);
+        fprintf(stderr, "send_data()\n");
+        send_data(&send_con, sizeof(CONTAINER));
+    }
+    else if (FD_ISSET(sock, &read_flag)) {
         fprintf(stderr, "recv_data()\n");
         recv_data(&recv_con, sizeof(CONTAINER));
         if (out_con() == COM_EXIT) {
