@@ -113,14 +113,15 @@ void field_set(void){
 		    if( (p[i].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i].ap = 100;
                     if( (p[i].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+			if(p[4].hp <= 0){
+                            p[i].x = 1000;//HPが0以下になった時の処理
+			    p[i].hp = 0;
+			}
 			if(p[4].hp > 0){
 			    p[i].hp = p[4].hp;
 			    p[4].hp = 0;
 			    p[4].x = 1000;
-			}else{
-                            p[i].x = 1000;//HPが0以下になった時の処理
-			    p[i].hp = 0;
-			}
+			}			
                     }
                     if( (l = sqrt(speed.x*speed.x + speed.y * speed.y)) < 7){
                     	k = M_PI * (10 + rand()%80)/100;
@@ -144,13 +145,14 @@ void field_set(void){
 		    if( (p[i].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i].ap = 100;
                     if( (p[i].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+			if(p[4].hp <= 0){
+                            p[i].x = 1000;//HPが0以下になった時の処理
+			    p[i].hp = 0;
+			}
 			if(p[4].hp > 0){
 			    p[i].hp = p[4].hp;
 			    p[4].hp = 0;
 			    p[4].x = 1000;
-			}else{
-                            p[i].x = 1000;//HPが0以下になった時の処理
-			    p[i].hp = 0;
 			}
                     }
                     if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
@@ -161,11 +163,13 @@ void field_set(void){
                     if(p[5].hp > 0)
                         p[5].x = def_ugoki(1);
                     if(i == 0){                   //ｈｐ回復
-                        p[1].hp += bai(p[i].type+2);
+			if(p[1].hp > 0)
+                            p[1].hp += bai(p[i].type+2);
 		        if(p[1].hp > bai(p[1].type + 6))
 		            p[1].hp = bai(p[1].type + 6);
                     }else{
-                        p[0].hp += bai(p[i].type+2);
+			if(p[0].hp > 0)
+                            p[0].hp += bai(p[i].type+2);
 		        if(p[0].hp > bai(p[0].type + 6))
 		            p[0].hp = bai(p[0].type + 6);
                     }
@@ -199,13 +203,14 @@ void field_set(void){
 		    if( (p[i+2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i+2].ap = 100;
                     if( (p[i+2].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+			if(p[5].hp <= 0){    
+                            p[i+2].x = 1000;//HPが0以下になった時の処理
+			    p[i+2].hp = 0;
+			}
 			if(p[5].hp > 0){
 			    p[i+2].hp = p[5].hp;
 			    p[5].hp = 0;
 			    p[5].x = 1000;
-			}else{    
-                            p[i+2].x = 1000;//HPが0以下になった時の処理
-			    p[i+2].hp = 0;
 			}
                     }
                     if( (l = sqrt(speed.x*speed.x + speed.y*speed.y)) < 7){
@@ -229,13 +234,14 @@ void field_set(void){
 		    if( (p[i+2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i+2].ap = 100;
                     if( (p[i+2].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+			if(p[5].hp <= 0){
+                            p[i+2].x = 1000;//HPが0以下になった時の処理
+			    p[i+2].hp = 0;
+			}
 			if(p[5].hp > 0){
 			    p[i+2].hp = p[5].hp;
 			    p[5].hp = 0;
 			    p[5].x = 1000;
-			}else{
-                            p[i+2].x = 1000;//HPが0以下になった時の処理
-			    p[i+2].hp = 0;
 			}
                     }
                     if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
