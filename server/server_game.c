@@ -11,12 +11,17 @@
 #else
 #include "../client/client.h"
 #endif
+typedef struct{
+    int time;
+    int now;
+    int heal;
+    int scene;
+    int point[2];
+    int defe[2];
+}GAME;
 
-PAD speed={3,3};
-int game_scene = 1;
-float gt;
-float ti;
-int heal = 0;
+PAD speed={0,0};
+GAME game = {0,0,0,1,{0,0}};
 
 extern int  def_ugoki(int i);
 extern void field_set(void);
@@ -42,8 +47,6 @@ static float bai(int type){
 
 //ディフェンダーの目指す場所
 extern int def_ugoki(int i){
-
-
     int a = 0;
     int b = 1;
     b = 1;
@@ -58,42 +61,38 @@ extern int def_ugoki(int i){
         if( (a / (b* (2*FIELD_W - 2*PAD_R))) % 2 == 0)
             return b*(FIELD_W - PAD_R) - a % (2*(FIELD_W - PAD_R));
         else
-            return b*(-FIELD_W + PAD_R) + a % (2*(FIELD_W -PAD_R));   
+            return b*(-FIELD_W + PAD_R) + a % (2*(FIELD_W -PAD_R));
     }
 }
 
 /* パッドの動きを計算する */
 void field_set(void){
-//時間	
-    time_t timer;
-    struct tm *now;
-
-/* 現在時刻の取得 */
-    time(&timer);
-    now = localtime(&timer);
-    int tim = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60 ;
-    
+    struct timespec time_tmp;
+    clock_gettime(CLOCK_REALTIME, &time_tmp);
+    game.now = time_tmp.tv_sec;
+    if(p[4].hp > 0)
+	p[4].x = game.defe[0];
+    if(p[5].hp > 0)
+	p[5].x = game.defe[1];
+    //game.now++;
     int i,j;
     float k,l;
     pad.x += speed.x;
     pad.y += speed.y;
-    
-    if(heal++>120){
-	for(i = 0;i < 4;i++){
-	    if(++p[i].ap > 100)
-		p[i].ap = 100;
-            if(p[i].type == 2 || p[i].type == 3)
-		p[i].hp += 3;
-		if(p[i].hp > bai(p[i].type + 6))
-		    p[i].hp = bai(p[i].type + 6);
-	}
-	heal = 0;
-    }
-
     /* 乱数初期化 */
     srand(time(NULL));
-    
-    if(game_scene == 0){
+    if(game.scene == 0){
+        if(game.heal++>120){
+            for(i = 0;i < 4;i++){
+                if(++p[i].ap > 100)
+                    p[i].ap = 100;
+                if(p[i].type == 2 || p[i].type == 3)
+                    p[i].hp += 3;
+		if(p[i].hp > bai(p[i].type + 6))
+		    p[i].hp = bai(p[i].type + 6);
+            }
+            game.heal = 0;
+        }
         //横の壁にぶつかった時
         if(pad.x + PAD_R > FIELD_W){
             pad.x = 2 * FIELD_W - pad.x - 2 * PAD_R;
@@ -132,8 +131,8 @@ void field_set(void){
                     	speed.y = -l * sin(k);
                     	speed.x = l * cos(k);
 		    }
-                    if(p[5].hp > 0)
-                        p[5].x = def_ugoki(1);
+                        game.defe[1] = def_ugoki(1);
+		  	game.defe[0] = 0;
                 }
             }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + speed.y){
                 for(i = 0;i < 2;i++){
@@ -160,8 +159,8 @@ void field_set(void){
 		        speed.x = speed.x * bai(p[i].type);
 		    }else
 			speed.y = -speed.y;
-                    if(p[5].hp > 0)
-                        p[5].x = def_ugoki(1);
+                        game.defe[1] = def_ugoki(1);
+		  	game.defe[0] = 0;
                     if(i == 0){                   //ｈｐ回復
 			if(p[1].hp > 0)
                             p[1].hp += bai(p[i].type+2);
@@ -189,10 +188,10 @@ void field_set(void){
 		        speed.x = speed.x * 0.9;
 		    }else
 			speed.y = -speed.y;
-                    if(p[5].hp > 0)
-                        p[5].x = def_ugoki(1);
+                        game.defe[1] = def_ugoki(1);
+		  	game.defe[0] = 0;
                 }
-            }
+                }
         }else{
             if(pad.y - PAD_R <= -ATK_Y && pad.y - PAD_R >= -ATK_Y + speed.y){
                 for(i = 0;i < 2;i++){
@@ -222,8 +221,8 @@ void field_set(void){
                     	speed.y = l * sin(k);
                     	speed.x = l * cos(k);
 		    }
-                    if(p[4].hp > 0)
-                        p[4].x = def_ugoki(-1);
+                        game.defe[0] = def_ugoki(-1);
+		  	game.defe[1] = 0;
                 }
             }else if(-pad.y + PAD_R >= SUP_Y && -pad.y + PAD_R <= SUP_Y - speed.y){
                 for(i = 0;i < 2;i++){
@@ -249,8 +248,8 @@ void field_set(void){
 		        speed.x = speed.x * bai(p[i+2].type);
 		    }else
 			speed.y = -speed.y;
-                    if(p[4].hp > 0)
-                        p[4].x = def_ugoki(-1);
+                        game.defe[0] = def_ugoki(-1);
+		  	game.defe[1] = 0;
                     if(i == 0){                   //ｈｐ回復
                         if(p[3].hp > 0)
                             p[3].hp += bai(p[i+2].type+2);
@@ -277,9 +276,9 @@ void field_set(void){
                     	speed.y = -speed.y * 0.9;
 		        speed.x = speed.x * 0.9;
 		    }else
-			speed.y = -speed.y;
-                    if(p[4].hp > 0)
-                        p[4].x = def_ugoki(-1);
+                    speed.y = -speed.y;
+                        game.defe[0] = def_ugoki(-1);
+		  	game.defe[1] = 0;
                 }
             }
         }
@@ -289,56 +288,68 @@ void field_set(void){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
                 pad.y = 2 * FIELD_H - pad.y - 2*PAD_R;
                 speed.y = speed.y * (-1);
-                if(p[5].hp > 0)
-                    p[5].x = def_ugoki(1);
+                    game.defe[1] = def_ugoki(1);
+		    game.defe[0] = 0;
             }else{
-/* 現在時刻の取得 */
-      		time(&timer);
-     		now = localtime(&timer);
-     		ti = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60;
-                game_scene = 1;
+                game.time = game.now;
+                game.scene = 1;
+                if(++game.point[0] == 2)
+                    fprintf(stderr,"lose");
             }
         }else if(pad.y - PAD_R <= (-1)*FIELD_H){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
                 pad.y = (-2) * FIELD_H - pad.y + 2*PAD_R;
                 speed.y = speed.y * (-1);
-                if(p[4].hp > 0)
-                    p[4].x = def_ugoki(-1);
+                    game.defe[0] = def_ugoki(-1);
+		    game.defe[1] = 0;
             }else{
-/* 現在時刻の取得 */
-      		time(&timer);
-     		now = localtime(&timer);
-     		ti = now->tm_sec + now->tm_hour * 3600 + now->tm_min * 60;
-                game_scene = 1;
+                game.time = game.now;
+                game.scene = 1;
+                if(++game.point[1] == 2)
+                    fprintf(stderr,"win");
             }
         }
     }else{	
-	if(tim - ti > 2 && game_scene == 1){
-	    game_scene = 2;
+	if(game.now - game.time > 2 && game.scene == 1){
+	    game.scene = 2;
 	    p[0].hp = 650;
-	    p[0].ap = 0;
 	    p[0].x = 0;
 	    p[1].hp = 300;
-	    p[1].ap = 0;
 	    p[1].x = 0;
  	    p[2].hp = 550;
-	    p[2].ap = 0;
 	    p[2].x = 0;
  	    p[3].hp = 450;
-	    p[3].ap = 0;
 	    p[3].x = 0;
 	    p[4].hp = 800;
-	    p[4].ap = 0;
 	    p[4].x = 0;
 	    p[5].hp = 800;
-	    p[5].ap = 0;
 	    p[5].x = 0;
    	    pad.x = 0;pad.y = 0;
 	    speed.x = 0;speed.y = 0;
+            if(game.point[0] == 2 || game.point[1] == 2){
+                game.point[0] = 0;
+                game.point[1] = 0;
+                for(i =0;i<4;i++)
+                    p[i].ap = 0;
+            }
 	}
-	if(tim - ti > 5){	
-	    game_scene = 0;
-	    speed.x = 3;speed.y = 3;
+	if(game.now - game.time > 5){
+            game.now = 0;
+	    game.scene = 0;
+            k = M_PI * (10 + rand()%180)/100;
+            while( k < 1.1 && k > 9){
+                k = M_PI * (10 + rand()%180)/100;
+            }
+            speed.y = 3 * sin(k);
+            speed.x = 3 * cos(k);
+	    if(speed.y > 0){
+                game.defe[0] = def_ugoki(-1);
+	        game.defe[1] = 0;
+	    }
+	    if(speed.y < 0){
+                game.defe[1] = def_ugoki(1);
+	        game.defe[0] = 0;
+	    }
 	}
     }
     fprintf(stderr, "x:%f y:%f\n", pad.x, pad.y);
