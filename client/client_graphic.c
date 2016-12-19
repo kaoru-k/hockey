@@ -151,13 +151,15 @@ void view3D() {
 }
 
 void draw2D() {
+	
 	view2D();
 
-	GLfloat AP_color[] = { 0.0, 0.0, 1.0, 1.0 };
+	GLfloat AP_color[] = { 0.0, 1.0, 1.0, 1.0 };
+	GLfloat ATK_HP_color[] = { 1.0, 0.0, 0.0, 1.0 };
+	GLfloat SUP_HP_color[] = { 0.0, 1.0, 0.0, 1.0 };
+	GLfloat DEF_HP_color[] = { 0.0, 0.0, 1.0, 1.0 };
 
 	if(cameramode == 0){
-	GLfloat ATK_HP_color[] = { 1.0, 0.0, 0.0, 1.0 };
-  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
 	GLdouble ATK_HP[][2] ={
 		{60, 72.5 - (((double)40 / 650) * p[0].hp)},
 		{60, 72.5},
@@ -166,7 +168,6 @@ void draw2D() {
 
 	};
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	GLdouble ATK_AP[][2] ={
 		{50, 72.5 - (((double)40 / 100) * p[0].ap)},
 		{50, 72.5},
@@ -175,8 +176,6 @@ void draw2D() {
 
 	};
 
-	GLfloat SUP_HP_color[] = { 0.0, 1.0, 0.0, 1.0 };
-  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	GLdouble SUP_HP[][2] ={
 		{60, 12.5 - (((double)42.5 / 300) * p[1].hp)},
 		{60, 12.5},
@@ -185,7 +184,6 @@ void draw2D() {
 
 	};
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	GLdouble SUP_AP[][2] ={
 		{50, 12.5 - (((double)42.5 / 100) * p[1].ap)},
 		{50, 12.5},
@@ -194,8 +192,6 @@ void draw2D() {
 
 	};
 
-	GLfloat DEF_HP_color[] = { 0.0, 0.0, 1.0, 1.0 };
-  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, DEF_HP_color);
 	GLdouble DEF_HP[][2] ={
 		{60, -50 - (((double)40 / 800) * p[4].hp)},
 		{60, -50},
@@ -214,30 +210,35 @@ void draw2D() {
 	};
 */
 	int i;
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(ATK_HP[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(ATK_AP[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(SUP_HP[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(SUP_AP[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, DEF_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(DEF_HP[i]);
@@ -250,8 +251,6 @@ void draw2D() {
 	  }	  
   	glEnd();*/
 	}else if(cameramode == 1){
-	GLfloat ATK_HP_color[] = { 1.0, 0.0, 0.0, 1.0 };
-  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
 	GLdouble ATK_HP2[][2] ={
 		{60, 72.5 - (((double)45 / 550) * p[2].hp)},
 		{60, 72.5},
@@ -260,7 +259,6 @@ void draw2D() {
 
 	};
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	GLdouble ATK_AP2[][2] ={
 		{50, 72.5 - (((double)45 / 100) * p[2].ap)},
 		{50, 72.5},
@@ -269,8 +267,6 @@ void draw2D() {
 
 	};
 
-	GLfloat SUP_HP_color[] = { 0.0, 1.0, 0.0, 1.0 };
-  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	GLdouble SUP_HP2[][2] ={
 		{60, 12.5 - (((double)42.5 / 450) * p[3].hp)},
 		{60, 12.5},
@@ -279,7 +275,6 @@ void draw2D() {
 
 	};
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	GLdouble SUP_AP2[][2] ={
 		{50, 12.5 - (((double)42.5 / 100) * p[3].ap)},
 		{50, 12.5},
@@ -288,8 +283,6 @@ void draw2D() {
 
 	};
 
-	GLfloat DEF_HP_color[] = { 0.0, 0.0, 1.0, 1.0 };
-  	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, DEF_HP_color);
 	GLdouble DEF_HP2[][2] ={
 		{60, -50 - (((double)40 / 800) * p[5].hp)},
 		{60, -50},
@@ -308,35 +301,41 @@ void draw2D() {
 	};
 */
 	int i;
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(ATK_HP2[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(ATK_AP2[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(SUP_HP2[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(SUP_AP2[i]);
 	  }	  
   	glEnd();
 
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, DEF_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 		      glVertex2dv(DEF_HP2[i]);
 	  }	  
   	glEnd();
+
 /*
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
