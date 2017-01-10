@@ -96,7 +96,6 @@ void setup_server(u_short port)
 
 int network(void)
 {   
-
     fd_set read_flag = mask;
     struct timeval timeout;
     timeout.tv_sec = 0;
@@ -110,12 +109,13 @@ int network(void)
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &recv_con, sizeof(CONTAINER));
             fprintf(stderr, "recv_data() from:%d\n", i);
+
             if (out_con(i) == COM_EXIT) endflag = 1;
 
             if (endflag == 0) set_con(COM_NONE);
             else              set_con(COM_EXIT);
 
-            send_data(BROADCAST, &send_con, sizeof(CONTAINER));
+            send_data(i, &send_con, sizeof(CONTAINER));
             fprintf(stderr, "send_data()   to:%d\n", i);
         }
     }
@@ -231,7 +231,6 @@ static int recv_thread(void* args)
             fprintf(stderr, "send_data()   to:%d\n", i);
             return 0;
         }
-        
     }
     return 0;
 }

@@ -3,7 +3,6 @@
   クライアントのネットワークモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
-
 #include "client.h"
 #include <unistd.h>
 #include <sys/socket.h>
@@ -16,7 +15,6 @@ static int num_sock;
 static fd_set mask;
 
 int myid;
-// CLIENT clients[4];
 CONTAINER send_con;
 CONTAINER recv_con;
 
@@ -65,6 +63,14 @@ int network(void)
     timeout.tv_sec = 0;
     timeout.tv_usec = 4;
     
+    if (endflag == 0)
+        set_con(COM_NONE);
+    else
+        set_con(COM_EXIT);
+    
+    fprintf(stderr, "send_data()\n");
+    send_data(&send_con, sizeof(CONTAINER));
+
     if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
 
@@ -76,14 +82,6 @@ int network(void)
             return 0;
         }
     }
-
-    if (endflag == 0)
-        set_con(COM_NONE);
-    else
-        set_con(COM_EXIT);
-    
-    fprintf(stderr, "send_data()\n");
-    send_data(&send_con, sizeof(CONTAINER));
 
     return 1;
 }
