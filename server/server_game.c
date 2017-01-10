@@ -352,5 +352,5 @@ void field_set(void){
 	    }
 	}
     }
-    fprintf(stderr, "x:%f y:%f\n", pad.x, pad.y);
+    fprintf(stderr, "***********************************\nx:%f y:%f\n***********************************\n", pad.x, pad.y);
 }

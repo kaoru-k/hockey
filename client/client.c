@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 	}
         flag = Keyevent();
         draw_field();
+        fprintf(stderr, "***********************************\nx:%f y:%f\n***********************************\n", pad.x, pad.y);
         SDL_Delay(5);
     }
 

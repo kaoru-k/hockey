@@ -96,7 +96,7 @@ void setup_server(u_short port)
 
 int network(void)
 {   
-/*
+
     fd_set read_flag = mask;
     struct timeval timeout;
     timeout.tv_sec = 0;
@@ -119,7 +119,7 @@ int network(void)
             fprintf(stderr, "send_data()   to:%d\n", i);
         }
     }
-*/
+/*
     SDL_Thread *thread1;
     SDL_Thread *thread2;
     SDL_Thread *thread3;
@@ -132,6 +132,7 @@ int network(void)
     thread4 = SDL_CreateThread(recv_thread, &arg[3]);
     while(1){
     }
+*/
 }
 
 static void set_con(char command)
