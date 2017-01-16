@@ -95,12 +95,13 @@ void setup_server(u_short port)
 }
 
 int network(void)
-{   
+{
     fd_set read_flag = mask;
     struct timeval timeout;
     timeout.tv_sec = 0;
     timeout.tv_usec = 4;
     int i;
+    int result = 1;
 
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
@@ -115,10 +116,11 @@ int network(void)
             if (endflag == 0) set_con(COM_NONE);
             else              set_con(COM_EXIT);
 
-            send_data(i, &send_con, sizeof(CONTAINER));
+            send_data(BROADCAST, &send_con, sizeof(CONTAINER));
             fprintf(stderr, "send_data()   to:%d\n", i);
         }
     }
+    return result;
 /*
     SDL_Thread *thread1;
     SDL_Thread *thread2;
