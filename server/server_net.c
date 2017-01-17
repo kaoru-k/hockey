@@ -31,7 +31,7 @@ static void copy_player(PLAYER *a, const PLAYER *b);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
 static void error_message(char *message);
-static int recv_thread(void* args);
+static int  recv_thread(void* args);
 
 void setup_server(u_short port)
 {
@@ -56,13 +56,13 @@ void setup_server(u_short port)
     fprintf(stderr, "done.\n");
 
     fprintf(stderr, "listen() ...");
-    if (listen(rsock, 4) != 0) error_message("failed!\nlisten()");
+    if (listen(rsock, num_clients) != 0) error_message("failed!\nlisten()");
     fprintf(stderr, "started.\n");
 
     int i, max_sock = 0;
     socklen_t len;
     char src[MAX_LEN_ADDR];
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < num_clients; i++) {
         len = sizeof(cl_addr);
         sock = accept(rsock, (struct sockaddr *)&cl_addr, &len);
 
@@ -81,9 +81,9 @@ void setup_server(u_short port)
     
     close(rsock);
 
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < num_clients; i++)
         send_data(i, &i, sizeof(int));
-    
+
     num_socks = max_sock + 1;
     FD_ZERO(&mask);
     FD_SET(0, &mask);
@@ -98,7 +98,7 @@ int network(void)
 {
     fd_set read_flag = mask;
     struct timeval timeout;
-    timeout.tv_sec = 0;
+    timeout.tv_sec  = 0;
     timeout.tv_usec = 4;
     int i;
     int result = 1;
@@ -106,7 +106,7 @@ int network(void)
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
         error_message("select()");
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < num_clients; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &recv_con, sizeof(CONTAINER));
             fprintf(stderr, "recv_data() from:%d\n", i);
