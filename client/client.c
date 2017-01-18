@@ -5,10 +5,8 @@
 
 #include "client.h"
 #include <SDL/SDL.h>
-#ifdef TEST
 #include <time.h>
 #include <sys/time.h>
-#endif
 
 int flag = 1;
 
@@ -87,7 +85,7 @@ static int network_thread(void* args)
 {
     fprintf(stderr, "network_thread() started.\n");
     while (flag) {
-        flag = network(); 
+        flag = network_recv(); 
     }
     terminate_client();
     return 0;

@@ -31,7 +31,6 @@ static void copy_player(PLAYER *a, const PLAYER *b);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
 static void error_message(char *message);
-static int  recv_thread(void* args);
 
 void setup_server(u_short port)
 {
@@ -88,7 +87,7 @@ void setup_server(u_short port)
     FD_ZERO(&mask);
     FD_SET(0, &mask);
     
-    for(i = 0; i < 4; i++) {
+    for(i = 0; i < num_clients; i++) {
         FD_SET(clients[i].sock, &mask);
     }
     fprintf(stderr, "Server setup is done.\n");
@@ -103,7 +102,7 @@ int network(void)
     int i;
     int result = 1;
 
-    if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, NULL) == -1)
+    if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
 
     for (i = 0; i < num_clients; i++) {
@@ -121,20 +120,6 @@ int network(void)
         }
     }
     return result;
-/*
-    SDL_Thread *thread1;
-    SDL_Thread *thread2;
-    SDL_Thread *thread3;
-    SDL_Thread *thread4;
-    int arg[4] = {0,1,2,3};
-
-    thread1 = SDL_CreateThread(recv_thread, &arg[0]);
-    thread2 = SDL_CreateThread(recv_thread, &arg[1]);
-    thread3 = SDL_CreateThread(recv_thread, &arg[2]);
-    thread4 = SDL_CreateThread(recv_thread, &arg[3]);
-    while(1){
-    }
-*/
 }
 
 static void set_con(char command)
@@ -169,7 +154,7 @@ static void copy_player(PLAYER *a, const PLAYER *b)
 
 static int recv_data(int cid, void *data, int size)
 {
-    if ((cid != BROADCAST) && (0 > cid || cid >= 4)) {
+    if ((cid != BROADCAST) && (0 > cid || cid >= num_clients)) {
         fprintf(stderr,"recv_data(): Client ID is illeagal!\n");
         exit(1);
     }
@@ -189,7 +174,7 @@ static void send_data(int cid, void *data, int size)
 
     if (cid == BROADCAST) {
         int i;
-        for (i = 0; i < 4; i++) {
+        for (i = 0; i < num_clients; i++) {
             if (write(clients[i].sock, data, size) < 0) error_message("write()");
         }
     }
@@ -201,7 +186,7 @@ static void send_data(int cid, void *data, int size)
 void terminate_server(void)
 {
     int i;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < num_clients; i++) {
         close(clients[i].sock);
     }
     fprintf(stderr, "All connections are closed.\n");
@@ -213,27 +198,3 @@ static void error_message(char *message)
     fprintf(stderr, "%d\n", errno);
     exit(1);
 }
-
-static int recv_thread(void* args)
-{
-    int i = (int)args;
-    while(1) {
-        recv_data(i, &recv_con, sizeof(CONTAINER));
-        fprintf(stderr, "recv_data() from:%d\n", i);
-        if (out_con(i) == COM_EXIT) endflag = 1;
-
-        if (endflag == 0){
-            set_con(COM_NONE);
-            send_data(i, &send_con, sizeof(CONTAINER));
-            fprintf(stderr, "send_data()   to:%d\n", i);
-        }
-        else {
-            set_con(COM_EXIT);
-            send_data(i, &send_con, sizeof(CONTAINER));
-            fprintf(stderr, "send_data()   to:%d\n", i);
-            return 0;
-        }
-    }
-    return 0;
-}
-
