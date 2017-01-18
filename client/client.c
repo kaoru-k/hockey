@@ -73,7 +73,6 @@ int main(int argc, char *argv[])
                 camera.y = -140;
 	}		
         draw_field();
-        fprintf(stderr, "***********************************\nx:%f y:%f\n***********************************\n", pad.x, pad.y);
         SDL_Delay(5);
     }
 
