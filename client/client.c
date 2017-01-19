@@ -5,10 +5,8 @@
 
 #include "client.h"
 #include <SDL/SDL.h>
-#ifdef TEST
 #include <time.h>
 #include <sys/time.h>
-#endif
 
 int flag = 1;
 
@@ -43,6 +41,15 @@ int main(int argc, char *argv[])
 
     while (flag) {
         flag = Keyevent();
+	if(myid == 0 || myid == 1){
+		cameramode = 0;
+		camera.x = 0;
+		camera.y = 140;
+        }else if(myid == 2 || myid == 3){
+		cameramode = 1;
+                camera.x = 0;
+                camera.y = -140;
+	}		
         draw_field();
     }
 
@@ -77,7 +84,7 @@ static int network_thread(void* args)
 {
     fprintf(stderr, "network_thread() started.\n");
     while (flag) {
-        flag = network(); 
+        flag = network_recv(); 
     }
     terminate_client();
     return 0;

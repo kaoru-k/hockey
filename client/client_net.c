@@ -3,7 +3,6 @@
   クライアントのネットワークモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
-
 #include "client.h"
 #include <unistd.h>
 #include <sys/socket.h>
@@ -16,7 +15,6 @@ static int num_sock;
 static fd_set mask;
 
 int myid;
-// CLIENT clients[4];
 CONTAINER send_con;
 CONTAINER recv_con;
 
@@ -58,25 +56,8 @@ void setup_client(char *server_name, u_short port)
     fprintf(stderr, "Client setup is done.\n");
 }
 
-int network(void)
+int network_send(void)
 {
-    fd_set read_flag = mask;
-    struct timeval timeout;
-    timeout.tv_sec = 0;
-    timeout.tv_usec = 4;
-    
-    if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
-        error_message("select()");
-
-    if (FD_ISSET(sock, &read_flag)) {
-        fprintf(stderr, "recv_data()\n");
-        recv_data(&recv_con, sizeof(CONTAINER));
-        if (out_con() == COM_EXIT) {
-            endflag = 1;
-            return 0;
-        }
-    }
-
     if (endflag == 0)
         set_con(COM_NONE);
     else
@@ -84,7 +65,35 @@ int network(void)
     
     fprintf(stderr, "send_data()\n");
     send_data(&send_con, sizeof(CONTAINER));
+}
 
+int network_recv(void)
+{
+    fd_set read_flag = mask;
+    struct timeval timeout;
+    timeout.tv_sec = 0;
+    timeout.tv_usec = 4;
+
+    if (select(num_sock, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
+        error_message("select()");
+
+    else if (FD_ISSET(sock, &read_flag)) {
+        fprintf(stderr, "recv_data()");
+        recv_data(&recv_con, sizeof(CONTAINER));
+        if (out_con() == COM_EXIT) {
+            endflag = 1;
+            return 0;
+        }
+    }
+/*
+    int i;
+    fprintf(stderr, "***********************************\n");
+    for (i = 0; i < 6; i++) {
+        fprintf(stderr, "    p%d  x:%f\n", i, p[i].x);
+    }
+    fprintf(stderr, "    PAD x:%f y:%f\n", pad.x, pad.y);
+    fprintf(stderr, "***********************************\n");
+*/
     return 1;
 }
 

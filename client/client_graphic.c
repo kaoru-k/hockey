@@ -13,8 +13,6 @@ PAD pad = {0,0};
 SDL_Rect camera = {0.0, 0.0};
 int cameramode = 0; //0の時：初期or1p2p / 1の時:3p4p *削除予定
 
-extern int  init_sdl(void);
-extern int  draw_field(void);
 static int  initializeSDL(int flags);
 static int  initializeVideo(int width, int height, int flags);
 static int  initializeOpenGL(int width, int height);
@@ -70,7 +68,6 @@ static int initializeSDL(int flags) {
 	// ジョイスティックが開けなかったら
 	if(!joystick) {
 		printf("failed to open joystick.\n");
-		exit(-1);
 	}
 	else{
 		printf("The found joystick ID (index) is %d.\n", SDL_JoystickIndex(joystick));	// 接続されたジョイスティックのID番号（1つしか接続されていない場合は0
