@@ -82,14 +82,14 @@ int network_recv(void)
         error_message("select()");
 
     else if (FD_ISSET(sock, &read_flag)) {
-        fprintf(stderr, "recv_data()");
+        fprintf(stderr, "recv_data() ");
         recv_data(&recv_con, sizeof(CONTAINER));
         if (out_con() == COM_EXIT) {
             endflag = 1;
             return 0;
         }
     }
-/*
+
     int i;
     fprintf(stderr, "***********************************\n");
     for (i = 0; i < 6; i++) {
@@ -97,13 +97,14 @@ int network_recv(void)
     }
     fprintf(stderr, "    PAD x:%f y:%f\n", pad.x, pad.y);
     fprintf(stderr, "***********************************\n");
-*/
+
     return 1;
 }
 
 static void set_con(char command)
 {
     send_con.com = command;
+    send_con.frame = current_frame;
     send_con.p[myid].x = p[myid].x;
 }
 
@@ -121,6 +122,7 @@ static char out_con(void)
     }
     else
         fprintf(stderr, "pass\n");
+    
     return recv_con.com;
 }
 

@@ -9,6 +9,7 @@
 #include <sys/time.h>
 
 int flag = 1;
+int current_frame = 0;
 
 static int network_thread(void* args);
 
@@ -41,7 +42,8 @@ int main(int argc, char *argv[])
 
     while (flag) {
         flag = Keyevent();
-	network_send();		
+        current_frame++;
+	network_send();	
         draw_field();
 /*
 	if(myid == 0 || myid == 1){

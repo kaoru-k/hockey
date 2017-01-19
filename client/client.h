@@ -19,6 +19,7 @@ extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;
 extern int    endflag;
 extern int    cameramode;     //削除予定
+extern int    current_frame;
 
 /***** 外部関数 *****/
 // client_net.c
