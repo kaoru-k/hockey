@@ -13,6 +13,8 @@ extern PAD    pad;
 extern int    game_scene;
 extern float  gt;
 extern float  ti;
+extern int    current_frame;
+extern int    client_frame[4];
 
 /***** 外部関数 *****/
 // server_net.c

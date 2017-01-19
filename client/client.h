@@ -11,14 +11,16 @@
 
 
 /***** グローバル変数 *****/
-extern PLAYER p[6]; //0,1,2,3->human 4,5->cpu
-extern PAD pad;
-extern int myid;
-extern SDL_Rect pack;
-extern SDL_Rect camera;
+extern PLAYER p[6];           //0,1,2,3->human 4,5->cpu
+extern PAD    pad;
+extern int    myid;
+extern SDL_Rect     pack;
+extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;
-extern int endflag;
-extern int cameramode; //削除予定
+extern int    endflag;
+extern int    cameramode;     //削除予定
+extern int    latest_frame;
+extern int    recv_frame;
 
 /***** 外部関数 *****/
 // client_net.c

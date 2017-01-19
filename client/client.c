@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
     while (flag) {
         flag = Keyevent();
+	network_send();
 	if(myid == 0 || myid == 1){
 		cameramode = 0;
 		camera.x = 0;

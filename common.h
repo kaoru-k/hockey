@@ -58,18 +58,20 @@ typedef struct{
 }PAD;
 
 typedef struct{
-    char   com;      // コマンド 
+    char   com;      // コマンド
     PAD    pad;      // パックの座標
     PLAYER p[6];     // プレイヤー情報
 }CONTAINER;
 
 typedef struct{
-    char   com;      // コマンド 
+    char   com;      // コマンド
+    int    frame;    // フレーム番号
     PAD    pad;      // パックの座標
     PLAYER p[6];     // プレイヤー情報
 }CONTAINER_S;
 
 typedef struct{
-    char  com;
-    float x;
+    char  com;       // コマンド
+    int   frame;     // フレーム番号
+    float x;         // プレイヤーのX座標
 }CONTAINER_C;
