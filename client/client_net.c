@@ -110,7 +110,6 @@ static char out_con(void)
 {
     int i;
 
-    recv_frame = recv_con.frame;
     copy_pad(&pad, &recv_con.pad);
     for (i = 0; i < 6; i++)
         if (i != myid) copy_player(&p[i], &recv_con.p[i]);
