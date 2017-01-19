@@ -16,14 +16,13 @@
 
 CLIENT clients[4];
 PLAYER p[6];
-
 CONTAINER send_con;
 CONTAINER recv_con;
+int client_frame[4] = {0};
 
 static fd_set mask;
 static int num_socks;
 static int endflag = 0;
-
 
 static void set_con(char command);
 static char out_con(int cid);
@@ -126,7 +125,7 @@ int network(void)
 static void set_con(char command)
 {
     int i;
-
+    send_con.frame = current_frame;
     send_con.com = command;
     copy_pad(&send_con.pad, &pad);
     for (i = 0; i < 6; i++)
@@ -135,7 +134,10 @@ static void set_con(char command)
 
 static char out_con(int cid)
 {
-    p[cid].x = recv_con.p[cid].x;
+    if (client_frame[cid] < recv_con.frame) {
+        client_frame[cid] = recv_con.frame;
+        p[cid].x = recv_con.p[cid].x;
+    }
     return recv_con.com;
 }
 

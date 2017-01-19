@@ -111,15 +111,15 @@ static char out_con(void)
 {
     int i;
     
-    //if (recv_con.frame  latest_frame) {
+    if (recv_con.frame > latest_frame) {
         recv_con.frame = latest_frame;
         copy_pad(&pad, &recv_con.pad);
         for (i = 0; i < 6; i++)
             if (i != myid) copy_player(&p[i], &recv_con.p[i]);
 
         fprintf(stderr, "com=%d\n", recv_con.com);
-    //}
-    //else
+    }
+    else
         fprintf(stderr, "pass\n");
     return recv_con.com;
 }
