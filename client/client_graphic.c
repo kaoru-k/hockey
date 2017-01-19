@@ -373,6 +373,12 @@ static void draw3D(void)
     glTranslatef(-pad.x, -pad.y, -5.0f);
     gluDeleteQuadric(quadric);
     gluDeleteQuadric(quadric2);
+
+
+// 円錐を描画する
+   glutWireCone(double radius, double height, int slices, int stacks);    
+	glutSolidCone(3,10,30,30)　
+
     
     GLdouble sidevertex[][3] = {
       { 100.0, -160.0, 0.0 },
@@ -740,7 +746,9 @@ int onoff(void){
 	printf("b\n");
 	}
  	
-	
+ // 円球を描画する
+   glutWireCone(double radius, double height, int slices, int stacks);    
+	glutSolidCone(3,10,30,30)　
 
 	return 0;
 }
