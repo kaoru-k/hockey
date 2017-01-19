@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
 
     while (flag) {
         flag = Keyevent();
+        network_send();
         draw_field();
     }
 

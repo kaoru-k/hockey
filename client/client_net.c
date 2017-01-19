@@ -25,6 +25,7 @@ static void copy_player(PLAYER *a, const PLAYER *b);
 static void send_data(void *data, int size);
 static int  recv_data(void *data, int size);
 static void error_message(char *message);
+static int  send_thread(void* args);
 
 void setup_client(char *server_name, u_short port)
 {
@@ -32,18 +33,19 @@ void setup_client(char *server_name, u_short port)
     struct sockaddr_in sv_addr;
 
     fprintf(stderr, "Connecting to server (name = %s, port = %d)...", server_name, port);
-    if ((server = gethostbyname(server_name)) == NULL) error_message("failed!\ngethostbyname()");
+    if ((server = gethostbyname(server_name)) == NULL)
+        error_message("failed!\ngethostbyname()");
     
     sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0) {
+    if (sock < 0)
         error_message("failed!\nsocket()");
-    }
     
     sv_addr.sin_family = AF_INET;
     sv_addr.sin_port = htons(port);
     sv_addr.sin_addr.s_addr = *(u_int *)server->h_addr_list[0];
 
-    if(connect(sock, (struct sockaddr *)&sv_addr, sizeof(sv_addr)) != 0) error_message("failed!\nconnect()");
+    if(connect(sock, (struct sockaddr *)&sv_addr, sizeof(sv_addr)) != 0)
+        error_message("failed!\nconnect()");
     fprintf(stderr, "done.\n");
 
     fprintf(stderr, "Waiting for other clients... ");
@@ -58,13 +60,14 @@ void setup_client(char *server_name, u_short port)
 
 int network_send(void)
 {
+    SDL_Thread *thr1;
     if (endflag == 0)
         set_con(COM_NONE);
     else
         set_con(COM_EXIT);
-    
     fprintf(stderr, "send_data()\n");
     send_data(&send_con, sizeof(CONTAINER));
+    //thr1 = SDL_CreateThread(send_thread, NULL);
 }
 
 int network_recv(void)
@@ -107,6 +110,7 @@ static char out_con(void)
 {
     int i;
 
+    recv_frame = recv_con.frame;
     copy_pad(&pad, &recv_con.pad);
     for (i = 0; i < 6; i++)
         if (i != myid) copy_player(&p[i], &recv_con.p[i]);
@@ -152,4 +156,11 @@ static void error_message(char *message)
     perror(message);
     fprintf(stderr, "%d\n", errno);
     exit(1);
+}
+
+static int send_thread(void* args)
+{
+    fprintf(stderr, "send_data()\n");
+    send_data(&send_con, sizeof(CONTAINER));
+    return 0;
 }

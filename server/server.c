@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    if (num_clients > 4) num_clients = 4;
     fprintf(stderr, "Number of clients = %d\n", num_clients);
     fprintf(stderr, "Port number = %d\n", port);
 
