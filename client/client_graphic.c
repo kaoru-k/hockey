@@ -366,13 +366,24 @@ static void draw3D(void)
     // 円球を描画する
     GLUquadric* quadric = gluNewQuadric();
     GLUquadric* quadric2= gluNewQuadric();
+    //     GLUquadric* quadric3= gluNewQuadric();
+
     glTranslatef(pad.x, pad.y, 0.0f);
     gluCylinder(quadric, 10, 10, 5, 30, 30);
+  
+
+   
     glTranslatef(0.0, 0.0, 5.0f);
     gluDisk(quadric2, 0, 10, 30, 30);
+    //    gluCylinder(quadric3, 0, 12, 10, 30, 30);
     glTranslatef(-pad.x, -pad.y, -5.0f);
+
+   
+
     gluDeleteQuadric(quadric);
     gluDeleteQuadric(quadric2);
+    //  gluDeleteQuadric(quadric3);
+
     
     GLdouble sidevertex[][3] = {
       { 100.0, -160.0, 0.0 },
