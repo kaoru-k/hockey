@@ -41,7 +41,9 @@ int main(int argc, char *argv[])
 
     while (flag) {
         flag = Keyevent();
-	network_send();
+	network_send();		
+        draw_field();
+/*
 	if(myid == 0 || myid == 1){
 		cameramode = 0;
 		camera.x = 0;
@@ -50,8 +52,8 @@ int main(int argc, char *argv[])
 		cameramode = 1;
                 camera.x = 0;
                 camera.y = -140;
-	}		
-        draw_field();
+	}
+*/
     }
 
     SDL_WaitThread(thr1, NULL);   

@@ -24,6 +24,7 @@ static fd_set mask;
 static int num_socks;
 static int endflag = 0;
 
+
 static void set_con(char command);
 static char out_con(int cid);
 static void copy_pad(PAD *a, const PAD *b);

@@ -15,6 +15,7 @@ static int num_sock;
 static fd_set mask;
 
 int myid;
+int latest_frame;
 CONTAINER send_con;
 CONTAINER recv_con;
 
@@ -109,12 +110,17 @@ static void set_con(char command)
 static char out_con(void)
 {
     int i;
+    
+    //if (recv_con.frame  latest_frame) {
+        recv_con.frame = latest_frame;
+        copy_pad(&pad, &recv_con.pad);
+        for (i = 0; i < 6; i++)
+            if (i != myid) copy_player(&p[i], &recv_con.p[i]);
 
-    copy_pad(&pad, &recv_con.pad);
-    for (i = 0; i < 6; i++)
-        if (i != myid) copy_player(&p[i], &recv_con.p[i]);
-
-    fprintf(stderr, "com=%d\n", recv_con.com);
+        fprintf(stderr, "com=%d\n", recv_con.com);
+    //}
+    //else
+        fprintf(stderr, "pass\n");
     return recv_con.com;
 }
 
