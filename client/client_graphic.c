@@ -68,7 +68,6 @@ static int initializeSDL(int flags) {
 	// ジョイスティックが開けなかったら
 	if(!joystick) {
 		printf("failed to open joystick.\n");
-		exit(-1);
 	}
 	else{
 		printf("The found joystick ID (index) is %d.\n", SDL_JoystickIndex(joystick));	// 接続されたジョイスティックのID番号（1つしか接続されていない場合は0
