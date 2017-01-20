@@ -49,10 +49,7 @@ int draw_field(void)
     drawAxis();
     draw2D();
     //glFinish();
-
-    fprintf(stderr, "***********************************\n");
-    fprintf(stderr, "  CAMERA x:%d y:%d\n", camera.x, camera.y);
-    fprintf(stderr, "***********************************\n");
+    SDL_Delay(10);
 
     SDL_GL_SwapBuffers();
 	
