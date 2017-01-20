@@ -77,10 +77,10 @@ int Keyevent(void)
                 break;
             }
         case SDL_JOYAXISMOTION:
-            printf("The axis ID of the operated key is %d.\n",event.jaxis.axis);
+            //printf("The axis ID of the operated key is %d.\n",event.jaxis.axis);
                 // 操作された方向キーの方向軸を表示（0：アナログキー，1：アナログキー，2：方向キー左右方向，3：方向キー上下方向）
             if(event.jaxis.axis==0){
-                printf("--- Analog-Direction Key: ?? Axis\n");
+                //printf("--- Analog-Direction Key: ?? Axis\n");
                 if(event.jaxis.value < 0){
                     if(myid == 0 || myid == 1)
                 	speedx[0] = 3;
