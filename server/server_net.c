@@ -90,6 +90,12 @@ void setup_server(u_short port)
     for(i = 0; i < num_clients; i++) {
         FD_SET(clients[i].sock, &mask);
     }
+
+    p[0].type = 0;
+    p[1].type = 2;
+    p[2].type = 1;
+    p[3].type = 3;
+
     fprintf(stderr, "Server setup is done.\n");
 }
 

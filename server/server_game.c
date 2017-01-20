@@ -32,7 +32,7 @@ static float  bai  (int type);
 //倍率を返す関数
 static float bai(int type){
     switch(type){
-    case 0:return 1.1;  //跳ね返り
+    case 0:return 1.13;  //跳ね返り
     case 1:return 1.17;
     case 2:return 1;
     case 3:return 0.85;
@@ -134,7 +134,8 @@ void field_set(void){
 			    p[i].hp = 0;
 			}
 			if(p[4].hp > 0){
-			    p[i].hp = p[4].hp;
+			    if( (p[i].hp = p[4].hp) > bai(p[i].type+6) )
+				p[i].hp = bai(p[i].type+6);
 			    p[4].hp = 0;
 			    p[4].x = 1000;
 			}			
@@ -154,10 +155,10 @@ void field_set(void){
                 }
             }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + speed.y){
                 for(i = 0;i < 2;i++){
-                    if(p[i].type == 2 || p[i].type == 3){
+                    if(p[i].type == 2 || p[i].type == 3)
                         break;
-		    }
                 }
+                    fprintf(stderr,"\n%d\n",i);
                 if(pad.x + PAD_R > p[i].x - SUP_W && pad.x - PAD_R < p[i].x + SUP_W){
 		    if( (p[i].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i].ap = 100;
@@ -167,7 +168,8 @@ void field_set(void){
 			    p[i].hp = 0;
 			}
 			if(p[4].hp > 0){
-			    p[i].hp = p[4].hp;
+			    if( (p[i].hp = p[4].hp) > bai(p[i].type+6) )
+				p[i].hp = bai(p[i].type+6);
 			    p[4].hp = 0;
 			    p[4].x = 1000;
 			}
@@ -211,7 +213,7 @@ void field_set(void){
 		  	game.defe[0][1] = 0;
 			def_ugoki2();
                 }
-                }
+            }
         }else{
             if(pad.y - PAD_R <= -ATK_Y && pad.y - PAD_R >= -ATK_Y + speed.y){
                 for(i = 0;i < 2;i++){
@@ -222,12 +224,13 @@ void field_set(void){
 		    if( (p[i+2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i+2].ap = 100;
                     if( (p[i+2].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
-			if(p[5].hp <= 0){    
+			if(p[5].hp <= 0){
                             p[i+2].x = 1000;//HPが0以下になった時の処理
 			    p[i+2].hp = 0;
 			}
 			if(p[5].hp > 0){
-			    p[i+2].hp = p[5].hp;
+			    if( (p[i+2].hp = p[5].hp) > bai(p[i].type+6) )
+				p[i+2].hp = bai(p[i].type+6);
 			    p[5].hp = 0;
 			    p[5].x = 1000;
 			}
@@ -249,7 +252,8 @@ void field_set(void){
                 for(i = 0;i < 2;i++){
                     if(p[i+2].type == 2 || p[i+2].type == 3)
                         break;
-                }
+		    }
+                    fprintf(stderr,"\n%f\n",p[i+2].x);
                 if(pad.x+PAD_R > p[i+2].x - SUP_W && pad.x-PAD_R < p[i+2].x + SUP_W){
 		    if( (p[i+2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i+2].ap = 100;
@@ -259,7 +263,8 @@ void field_set(void){
 			    p[i+2].hp = 0;
 			}
 			if(p[5].hp > 0){
-			    p[i+2].hp = p[5].hp;
+			    if( (p[i+2].hp = p[5].hp) > bai(p[i].type+6) )
+				p[i+2].hp = bai(p[i].type+6);
 			    p[5].hp = 0;
 			    p[5].x = 1000;
 			}
