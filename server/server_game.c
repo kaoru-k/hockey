@@ -21,6 +21,7 @@ typedef struct{
 }GAME;
 
 PAD speed={0,0};
+int current_frame = 0;
 GAME game = {0,0,0,1,{0,0}, {{0,0},{0,0}} };
 
 extern int  def_ugoki(int i);
@@ -387,5 +388,6 @@ void field_set(void){
 		def_ugoki2();
 	    }
 	}
-    }	
+    }
+    current_frame++;
 }

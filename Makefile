@@ -3,7 +3,7 @@
 # 徳島大学 工学部 知能情報工学科 27班
 #*************************************
 
-LDLIBS  = -lSDL -lGL -lGLU -lnsl -lm -lrt
+LDLIBS  = -lSDL -lGL -lGLU -lglut -lnsl -lm -lrt
 TARGET1 = server
 TARGET2 = client
 OBJS1   = server/server.o server/server_game.o server/server_net.o
@@ -29,4 +29,4 @@ test: $(OBJS2) server/server_game.o
 
 # clean
 clean : 
-	$(RM) server/$(TARGET1) client/$(TARGET2) client/$(TARGET2)_test $(OBJS1) $(OBJS2)
+	$(RM) server/$(TARGET1) client/$(TARGET2) client/$(TARGET2)_test $(OBJS1) $(OBJS2) *~ server/*~ client/*~
