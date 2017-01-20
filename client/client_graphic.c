@@ -12,7 +12,7 @@
 PAD pad = {0,0};
 SDL_Rect camera = {0.0, 0.0};
 int cameramode = 0; //0の時：初期or1p2p / 1の時:3p4p *削除予定
-
+int i = 0;
 static int  initializeSDL(int flags);
 static int  initializeVideo(int width, int height, int flags);
 static int  initializeOpenGL(int width, int height);
@@ -109,8 +109,8 @@ static int initializeOpenGL(int width, int height) {
 
 	// 照明を設定する
 	static GLfloat position[] = {-10.0f, 10.0f, 10.0f, 1.0f};
-	static GLfloat ambient [] = { 0.5f, 0.5f, 0.5f, 1.0f};
-	static GLfloat diffuse [] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	static GLfloat ambient [] = { 0.9f, 0.9f, 0.9f, 1.0f};
+	static GLfloat diffuse [] = { 0.0f, 0.0f, 0.0f, 0.0f};
 	static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
 	glLightfv(GL_LIGHT0, GL_POSITION, position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
@@ -120,6 +120,7 @@ static int initializeOpenGL(int width, int height) {
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 
+	
 	return 0;
 }
 
@@ -362,11 +363,12 @@ static void draw3D(void)
     
 
     GLfloat white[] = { 0.654, 0.243, 1.0, 1.0 };
+	GLfloat aaa[] = { 0.9, 0.9, 0.0, 0.0 };
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
     // 円球を描画する
     GLUquadric* quadric = gluNewQuadric();
     GLUquadric* quadric2= gluNewQuadric();
-    //     GLUquadric* quadric3= gluNewQuadric();
+         GLUquadric* quadric3= gluNewQuadric();
 
     glTranslatef(pad.x, pad.y, 0.0f);
     gluCylinder(quadric, 10, 10, 5, 30, 30);
@@ -375,16 +377,17 @@ static void draw3D(void)
    
     glTranslatef(0.0, 0.0, 5.0f);
     gluDisk(quadric2, 0, 10, 30, 30);
-    //    gluCylinder(quadric3, 0, 12, 10, 30, 30);
+ glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, aaa);
+      gluCylinder(quadric3, 0, 12, 10, 30, 30);
     glTranslatef(-pad.x, -pad.y, -5.0f);
 
    
 
     gluDeleteQuadric(quadric);
     gluDeleteQuadric(quadric2);
-    //  gluDeleteQuadric(quadric3);
+      gluDeleteQuadric(quadric3);
 
-    
+    onoff();
     GLdouble sidevertex[][3] = {
       { 100.0, -160.0, 0.0 },
       { 100.1, -160.0, 0.0 },
@@ -713,9 +716,9 @@ static void drawPlane(void)
 
 /*必殺技（致命傷）*/
 int onoff(void){
-	int i = 0;
+	
 	static GLfloat positionh[4];
-	static GLfloat ambient [] = { 0.5f, 0.5f, 0.5f, 1.0f};
+	static GLfloat ambient [] = { 1.0f, 1.0f, 1.0f, 1.0f};
 	static GLfloat diffuse [] = { 0.5f, 0.5f, 0.5f, 1.0f};
 	static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
 	GLfloat yellow[] = { 1.0, 1.0, 0.0, 1.0 };
