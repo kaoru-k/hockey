@@ -29,4 +29,4 @@ test: $(OBJS2) server/server_game.o
 
 # clean
 clean : 
-	$(RM) server/$(TARGET1) client/$(TARGET2) client/$(TARGET2)_test $(OBJS1) $(OBJS2)
+	$(RM) server/$(TARGET1) client/$(TARGET2) client/$(TARGET2)_test $(OBJS1) $(OBJS2) *~ server/*~ client/*~
