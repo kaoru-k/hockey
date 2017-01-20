@@ -8,11 +8,12 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <GL/glut.h>
-#define REC 16
+#define REC 32
 
 PAD pad = {0,0};
 SDL_Rect camera = {0.0, 0.0};
 int cameramode = 0; //0の時：初期or1p2p / 1の時:3p4p *削除予定
+
 int i = 0;
 static int  initializeSDL(int flags);
 static int  initializeVideo(int width, int height, int flags);
@@ -37,17 +38,20 @@ int Pot(int inSize)
 
 int init_sdl(void)
 {
+
     if (initializeSDL(SDL_INIT_VIDEO)) {
         return 1;
     }
     if (initializeOpenGL(1024, 768)) {
         return 1;
     }
+	
     //テクスチャ作成
-    //creatTex("image.bmp", &texA);
+    creatTex("./image/image.bmp", &texA);
+	
 }
 
-/*void creatTex(char *file, GLuint *tex)
+void creatTex(char *file, GLuint *tex)
 {
 GLuint textures;
 SDL_Surface *imgSrc[2];
@@ -64,7 +68,7 @@ imgSrc[1]=SDL_CreateRGBSurface
   Pot(imgSrc[0]->w), Pot(imgSrc[0]->h),
   32,
   #if SDL_BYTEORDER==SDL_LIL_ENDIAN /* OpenGL RGBA masks */
-/*    0x000000FF, 
+    0x000000FF, 
     0x0000FF00, 
     0x00FF0000, 
     0xFF000000
@@ -108,8 +112,6 @@ int num;//Surface解放
 for(num=0; num<2; num++) SDL_FreeSurface(imgSrc[num]);
 }
 
-
-
 void modelD(GLdouble alp,GLint tex)
 {
 glBindTexture(GL_TEXTURE_2D, tex);
@@ -118,13 +120,13 @@ GLfloat texture_color[] = {1, 1, 1, alp};
 glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
 
 glBegin(GL_QUADS);
-  glTexCoord2i(0, 0);  glVertex2i( REC*0.5, REC*0.5);
-  glTexCoord2i(1, 0);  glVertex2i( REC*0.5,-REC*0.5);
+  glTexCoord2i(0, 0);  glVertex2i( REC*0.8, REC*0.5);
+  glTexCoord2i(1, 0);  glVertex2i( REC*0.8,-REC*0.5);
   glTexCoord2i(1, 1);  glVertex2i(-REC*0.5,-REC*0.5);
   glTexCoord2i(0, 1);  glVertex2i(-REC*0.5, REC*0.5);
 glEnd();
 }
-*/
+
 int draw_field(void)
 {
     if(cameramode == 0){
@@ -140,7 +142,7 @@ int draw_field(void)
     drawPlane();
     drawAxis();
     draw2D();
-  //  modelD_test();
+    modelD_test();
     //glFinish();
     SDL_Delay(10);
 
@@ -148,7 +150,7 @@ int draw_field(void)
 	
 }
 
-/*void modelD_test()
+void modelD_test()
 {
 glLoadIdentity();
 glEnable(GL_TEXTURE_2D);//テクスチャON
@@ -161,7 +163,7 @@ modelD(alp,texA);//modelD
 
 glDisable(GL_TEXTURE_2D);//テクスチャOFF
 }
-*/
+
 static int initializeSDL(int flags) {
     // SDLを初期化する
 	if (SDL_Init(flags) < 0) {
