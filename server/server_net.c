@@ -100,7 +100,7 @@ int network(void)
     timeout.tv_sec  = 0;
     timeout.tv_usec = 4;
     int i;
-    int result = 1;
+    int result;
 
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
@@ -112,8 +112,14 @@ int network(void)
 
             if (out_con(i) == COM_EXIT) endflag = 1;
 
-            if (endflag == 0) set_con(COM_NONE);
-            else              set_con(COM_EXIT);
+            if (endflag == 0) {
+		set_con(COM_NONE);
+                result = 1;
+            }
+            else {
+                set_con(COM_EXIT);
+                result = 0;
+            }
 
             send_data(BROADCAST, &send_con, sizeof(CONTAINER));
             fprintf(stderr, "send_data()   to:%d\n", i);

@@ -66,7 +66,7 @@ int network_send(void)
         set_con(COM_NONE);
     else
         set_con(COM_EXIT);
-    fprintf(stderr, "send_data()\n");
+    //fprintf(stderr, "send_data()\n");
     send_data(&send_con, sizeof(CONTAINER));
     //thr1 = SDL_CreateThread(send_thread, NULL);
 }
@@ -82,7 +82,7 @@ int network_recv(void)
         error_message("select()");
 
     else if (FD_ISSET(sock, &read_flag)) {
-        fprintf(stderr, "recv_data() ");
+        //fprintf(stderr, "recv_data() ");
         recv_data(&recv_con, sizeof(CONTAINER));
         if (out_con() == COM_EXIT) {
             endflag = 1;
@@ -119,10 +119,10 @@ static char out_con(void)
         for (i = 0; i < 6; i++)
             if (i != myid) copy_player(&p[i], &recv_con.p[i]);
 
-        fprintf(stderr, "com=%d\n", recv_con.com);
+        //fprintf(stderr, "com=%d\n", recv_con.com);
     }
     else
-        fprintf(stderr, "pass\n");
+        //fprintf(stderr, "pass\n");
     
     return recv_con.com;
 }
