@@ -91,13 +91,14 @@ int network_recv(void)
     }
 
     int i;
+    /*
     fprintf(stderr, "***********************************\n");
     for (i = 0; i < 6; i++) {
         fprintf(stderr, "    p%d  x:%f\n", i, p[i].x);
     }
     fprintf(stderr, "    PAD x:%f y:%f\n", pad.x, pad.y);
     fprintf(stderr, "***********************************\n");
-
+    */
     return 1;
 }
 

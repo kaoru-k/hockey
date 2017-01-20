@@ -48,6 +48,12 @@ int draw_field(void)
     drawPlane();
     drawAxis();
     draw2D();
+    //glFinish();
+
+    fprintf(stderr, "***********************************\n");
+    fprintf(stderr, "  CAMERA x:%d y:%d\n", camera.x, camera.y);
+    fprintf(stderr, "***********************************\n");
+
     SDL_GL_SwapBuffers();
 	
 }
@@ -657,8 +663,6 @@ static void draw3D(void)
 		      glVertex3dv(score[face[0][i]]);
     		}
 	  glEnd();*/
-
-  	  glFlush();
 }
 
 //大地創造

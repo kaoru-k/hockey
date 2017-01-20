@@ -134,13 +134,13 @@ static void set_con(char command)
 
 static char out_con(int cid)
 {
-    if (client_frame[cid] < recv_con.frame) {
+    //if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
         p[cid].x = recv_con.p[cid].x;
         fprintf(stderr, "from:%d com:%d\n", cid, recv_con.com);
-    }
-    else
-        fprintf(stderr, "from:%d pass\n", cid);
+        //}
+        //else
+        //fprintf(stderr, "from:%d pass\n", cid);
     
     return recv_con.com;
 }
