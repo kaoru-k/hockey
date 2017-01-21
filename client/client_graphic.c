@@ -30,7 +30,7 @@ static int  Pot(int inSize);
 static void creatTex(char *file, GLuint *tex);
 static void modelD(GLdouble alp,GLint tex);
 static void modelD_test(void);
-
+static int  onoff(void);
 
 int init_sdl(void)
 {
@@ -60,7 +60,7 @@ int draw_field(void)
     drawPlane();
     drawAxis();
     draw2D();
-    modelD_test();
+    //modelD_test();
     //glFinish();
     SDL_Delay(10);
 
@@ -466,8 +466,6 @@ static void draw3D(void)
 
     glTranslatef(pad.x, pad.y, 0.0f);
     gluCylinder(quadric, 10, 10, 5, 30, 30);
-  
-
    
     glTranslatef(0.0, 0.0, 5.0f);
     gluDisk(quadric2, 0, 10, 30, 30);
@@ -481,7 +479,7 @@ static void draw3D(void)
     gluDeleteQuadric(quadric2);
     gluDeleteQuadric(quadric3);
 
-    onoff();
+    //onoff();
     GLdouble sidevertex[][3] = {
         { 100.0, -160.0, 0.0 },
         { 100.1, -160.0, 0.0 },

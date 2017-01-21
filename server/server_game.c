@@ -21,7 +21,9 @@ typedef struct{
 }GAME;
 
 PAD speed={0,0};
+#ifndef TEST
 int current_frame = 0;
+#endif
 GAME game = {0,0,0,1,{0,0}, {{0,0},{0,0}} };
 
 extern int  def_ugoki(int i);
