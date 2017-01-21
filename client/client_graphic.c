@@ -8,18 +8,20 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 #include <GL/glut.h>
-#define REC 32
 
-PAD pad = {0,0};
-SDL_Rect camera = {0.0, 0.0};
-int cameramode = 0; //0の時：初期or1p2p / 1の時:3p4p *削除予定
+#define REC      32
+#define WINDOW_W 1024
+#define WINDOW_H 768
 
-int flash = 0;
-GLuint texA=0;//テクスチャ
+PAD         pad        = {0,0};
+int         cameramode = 0;                 //0の時：初期or1p2p / 1の時:3p4p *削除予定
+SDL_Rect    camera     = {0.0, 0.0};
+GLuint      texA       = 0;                 //テクスチャ
+int         flash      = 0;
 
-static int  initializeSDL(int flags);
-static int  initializeVideo(int width, int height, int flags);
-static int  initializeOpenGL(int width, int height);
+//static int  initializeSDL(int flags);
+//static int  initializeVideo(int width, int height, int flags);
+static void set_OpenGL(void);
 static void draw3D(void);
 static void draw2D(void);
 static void view3D(void);
@@ -34,15 +36,25 @@ static int  onoff(void);
 
 int init_sdl(void)
 {
-    if (initializeSDL(SDL_INIT_VIDEO)) {
-        return 1;
-    }
-    if (initializeOpenGL(1024, 768)) {
-        return 1;
-    }
+    // SDLを初期化する
+    SDL_Init(SDL_INIT_VIDEO);
+    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_SetVideoMode(WINDOW_W, WINDOW_H, 0, SDL_OPENGL);
+
+    set_OpenGL();
+
+    // ジョイスティックサブシステムを初期化する
+    SDL_InitSubSystem(SDL_INIT_JOYSTICK);
+    joystick = SDL_JoystickOpen(0);	// ジョイスティックを開いて構造体に割り当てる（有効にする）．ここではジョイスティックは1つとして引数に0を指定
+    SDL_JoystickEventState(SDL_ENABLE);	// ジョイスティック関連のイベントを取得可能にする
+
+    // ジョイスティックが開けなかったら
+    if(!joystick)
+        printf("failed to open joystick.\n");
+
     //テクスチャ作成
     creatTex("./image/image.bmp", &texA);
-	
 }
 
 int draw_field(void)
@@ -61,11 +73,7 @@ int draw_field(void)
     drawAxis();
     draw2D();
     //modelD_test();
-    //glFinish();
-    SDL_Delay(10);
-
     SDL_GL_SwapBuffers();
-	
 }
 
 static int Pot(int inSize)
@@ -174,15 +182,9 @@ static int initializeSDL(int flags)
     
     // ジョイスティックサブシステムを初期化する
     SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-    joystick = SDL_JoystickOpen(0);	// ジョイスティックを開いて構造体に割り当てる（有効にする）．ここではジョイスティックは1つとして引数に0を指定
-    SDL_JoystickEventState(SDL_ENABLE);	// ジョイスティック関連のイベントを取得可能にする
-
-    // ジョイスティックが開けなかったら
-    if(!joystick) {
-        printf("failed to open joystick.\n");
-    }
-
-    atexit(SDL_Quit);
+    joystick = SDL_JoystickOpen(0);	
+    SDL_JoystickEventState(SDL_ENABLE);
+    if(!joystick) printf("failed to open joystick.\n");
 
     return 0;
 }
@@ -197,20 +199,17 @@ static int initializeVideo(int width, int height, int flags) {
     return 0;
 }
 
-static int initializeOpenGL(int width, int height) {
-    if (initializeVideo(width, height, SDL_OPENGL)) {
-        return 1;
-    }
-    
+static void set_OpenGL(void)
+{
     // ビューポートを設定する
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, WINDOW_W, WINDOW_H);
     glClearColor( 1.0, 1.0, 1.0, 1.0);
     glEnable(GL_DEPTH_TEST);
 
     // 射影行列を設定する
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(90.0, (GLdouble) width / (GLdouble) height, 1.0, 460.0);
+    gluPerspective(90.0, (GLdouble) WINDOW_W / (GLdouble) WINDOW_H, 1.0, 460.0);
     
     // 照明を設定する
     static GLfloat position[] = {-10.0f, 10.0f, 10.0f, 1.0f};
@@ -224,8 +223,6 @@ static int initializeOpenGL(int width, int height) {
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
-	
-    return 0;
 }
 
 //2D描画用
