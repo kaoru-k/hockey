@@ -160,7 +160,7 @@ void field_set(void){
                     if(p[i].type == 2 || p[i].type == 3)
                         break;
                 }
-                    fprintf(stderr,"\n%d\n",i);
+                    //fprintf(stderr,"\n%d\n",i);
                 if(pad.x + PAD_R > p[i].x - SUP_W && pad.x - PAD_R < p[i].x + SUP_W){
 		    if( (p[i].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i].ap = 100;
@@ -255,7 +255,7 @@ void field_set(void){
                     if(p[i+2].type == 2 || p[i+2].type == 3)
                         break;
 		    }
-                    fprintf(stderr,"\n%f\n",p[i+2].x);
+                    //fprintf(stderr,"\n%f\n",p[i+2].x);
                 if(pad.x+PAD_R > p[i+2].x - SUP_W && pad.x-PAD_R < p[i+2].x + SUP_W){
 		    if( (p[i+2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[i+2].ap = 100;
@@ -326,9 +326,6 @@ void field_set(void){
                 game.scene = 1;
                 if(++game.point[0] == 2)
                     fprintf(stderr,"lose\n");
-                    fprintf(stderr,"lose\n");
-                    fprintf(stderr,"lose\n");
-                    fprintf(stderr,"lose\n");
 
             }
         }else if(pad.y - PAD_R <= (-1)*FIELD_H){
@@ -342,7 +339,7 @@ void field_set(void){
                 game.time = game.now;
                 game.scene = 1;
                 if(++game.point[1] == 2)
-                    fprintf(stderr,"win");
+                    fprintf(stderr,"win\n");
             }
         }
     }else{	

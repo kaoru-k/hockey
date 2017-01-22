@@ -16,8 +16,8 @@ static fd_set mask;
 
 int myid;
 int latest_frame;
-CONTAINER send_con;
-CONTAINER recv_con;
+CONTAINER_C send_con;
+CONTAINER_S recv_con;
 
 static void set_con(char command);
 static char out_con(void);
@@ -83,7 +83,7 @@ int network_recv(void)
 
     else if (FD_ISSET(sock, &read_flag)) {
         //fprintf(stderr, "recv_data() ");
-        recv_data(&recv_con, sizeof(CONTAINER));
+        recv_data(&recv_con, sizeof(CONTAINER_S));
         if (out_con() == COM_EXIT) {
             endflag = 1;
             return 0;
@@ -106,7 +106,7 @@ static void set_con(char command)
 {
     send_con.com = command;
     send_con.frame = current_frame;
-    send_con.p[myid].x = p[myid].x;
+    send_con.x = p[myid].x;
 }
 
 static char out_con(void)
@@ -169,6 +169,6 @@ static void error_message(char *message)
 static int send_thread(void* args)
 {
     fprintf(stderr, "send_data()\n");
-    send_data(&send_con, sizeof(CONTAINER));
+    send_data(&send_con, sizeof(CONTAINER_C));
     return 0;
 }

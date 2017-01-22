@@ -15,25 +15,27 @@
 #define BROADCAST      -1
 
 /* コマンド */
-#define COM_NONE       'N'    //None      何もなし（座標をやり取りする）
-#define COM_CONTINUE   'C'    //Continue  コンティニュー
-#define COM_EXIT       'X'    //eXit      終了
+#define COM_NONE       'N'    // None      何もなし（座標をやり取りする）
+#define COM_WIN        'W'    // Win       勝ち
+#define COM_LOSE       'L'    // Lose      負け
+#define COM_CONTINUE   'C'    // Continue  コンティニュー
+#define COM_EXIT       'X'    // eXit      終了
 
 /* フィールド */
-#define FIELD_H  160   //フィールドの縦幅
-#define FIELD_W  100   //フィールドの横幅
-#define GOAL_W   30    //ゴールの幅
+#define FIELD_H  160          // フィールドの縦幅
+#define FIELD_W  100          // フィールドの横幅
+#define GOAL_W   30           // ゴールの幅
 
 /* プレイヤー */
-#define DEF_Y 150      //ディフェンダーのY座標
-#define DEF_W 30       //ディフェンダーの幅
-#define SUP_Y 115      //サポーターのY座標
-#define SUP_W 10       //サポーターの幅
-#define ATK_Y 75       //アタッカーのY座標
-#define ATK_W 20       //アタッカーの幅
+#define DEF_Y 150             // ディフェンダーのY座標
+#define DEF_W 30              // ディフェンダーの幅
+#define SUP_Y 115             // サポーターのY座標
+#define SUP_W 10              // サポーターの幅
+#define ATK_Y 75              // アタッカーのY座標
+#define ATK_W 20              // アタッカーの幅
 
 /* パッド */
-#define PAD_R 10       //パッドの半径
+#define PAD_R 10              // パッドの半径
 
 
 /* クライアント情報用の構造体 */
@@ -45,34 +47,29 @@ typedef struct{
 
 /* プレイヤーを表す構造体 */
 typedef struct{
-    int   type;      // プレイヤーの種類(0,1:アタッカー  2,3:サポーター  4:ディフェンダー）0マクリー,1リーパー　2ゼニヤッタ,3マーシー
-    int   hp;        // プレイヤーの体力
-    int   ap;        // 必殺技ポイント
-    float x;         // プレイヤーのX座標
+    int   type;               // プレイヤーの種類(0,1:アタッカー  2,3:サポーター  4:ディフェンダー）0マクリー,1リーパー　2ゼニヤッタ,3マーシー
+    int   hp;                 // プレイヤーの体力
+    int   ap;                 // 必殺技ポイント
+    float x;                  // プレイヤーのX座標
 }PLAYER;
 
 /* パッドの構造体 */
 typedef struct{
-    float x;         // パッドのX座標
-    float y;         // パッドのY座標
+    float x;                  // パッドのX座標
+    float y;                  // パッドのY座標
 }PAD;
 
+/* サーバ→クライアント用の構造体 */
 typedef struct{
-    char   com;      // コマンド
-    int    frame;    // フレーム番号
-    PAD    pad;      // パックの座標
-    PLAYER p[6];     // プレイヤー情報
-}CONTAINER;
-
-typedef struct{
-    char   com;      // コマンド
-    int    frame;    // フレーム番号
-    PAD    pad;      // パックの座標
-    PLAYER p[6];     // プレイヤー情報
+    char   com;               // コマンド
+    int    frame;             // フレーム番号
+    PAD    pad;               // パックの座標
+    PLAYER p[6];              // プレイヤー情報
 }CONTAINER_S;
 
+/* クライアント→サーバ用の構造体 */
 typedef struct{
-    char  com;       // コマンド
-    int   frame;     // フレーム番号
-    float x;         // プレイヤーのX座標
+    char  com;                // コマンド
+    int   frame;              // フレーム番号
+    float x;                  // プレイヤーのX座標
 }CONTAINER_C;

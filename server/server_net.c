@@ -16,8 +16,8 @@
 
 CLIENT clients[4];
 PLAYER p[6];
-CONTAINER send_con;
-CONTAINER recv_con;
+CONTAINER_S send_con;
+CONTAINER_C recv_con;
 int client_frame[4] = {0,0,0,0};
 
 static fd_set mask;
@@ -113,7 +113,7 @@ int network(void)
 
     for (i = 0; i < num_clients; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
-            recv_data(i, &recv_con, sizeof(CONTAINER));
+            recv_data(i, &recv_con, sizeof(CONTAINER_C));
             fprintf(stderr, "recv_data() ");
 
             if (out_con(i) == COM_EXIT) endflag = 1;
@@ -127,7 +127,7 @@ int network(void)
                 result = 0;
             }
 
-            send_data(BROADCAST, &send_con, sizeof(CONTAINER));
+            send_data(BROADCAST, &send_con, sizeof(CONTAINER_S));
             fprintf(stderr, "send_data()   to:%d\n", i);
         }
     }
@@ -148,7 +148,7 @@ static char out_con(int cid)
 {
     if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
-        p[cid].x = recv_con.p[cid].x;
+        p[cid].x = recv_con.x;
         fprintf(stderr, "from:%d com:%d\n", cid, recv_con.com);
     }
     else
