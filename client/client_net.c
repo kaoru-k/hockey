@@ -67,7 +67,7 @@ int network_send(void)
     else
         set_con(COM_EXIT);
     //fprintf(stderr, "send_data()\n");
-    send_data(&send_con, sizeof(CONTAINER));
+    send_data(&send_con, sizeof(CONTAINER_C));
     //thr1 = SDL_CreateThread(send_thread, NULL);
 }
 

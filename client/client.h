@@ -29,6 +29,7 @@ extern int  network_send(void);
 extern int  network_recv(void);
 
 // client_game.c
+extern int  game_setting(void);
 extern int  Keyevent(void);
 
 // client_graphic.c

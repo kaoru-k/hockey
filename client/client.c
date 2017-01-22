@@ -38,6 +38,17 @@ int main(int argc, char *argv[])
     
     setup_client(server_name, port);
     init_sdl();
+    draw_field();
+    if(myid == 0 || myid == 1){
+        cameramode = 0;
+        camera.x = 0; camera.y = 140;
+    }
+    else
+    {
+        cameramode = 1;
+        camera.x = 0; camera.y = -140;
+    }
+
     thr1 = SDL_CreateThread(network_thread, &flag);
 
     while (flag) {
@@ -45,17 +56,6 @@ int main(int argc, char *argv[])
         current_frame++;
 	network_send();	
         draw_field();
-
-	if(myid == 0 || myid == 1){
-		cameramode = 0;
-		camera.x = 0;
-		camera.y = 140;
-        }else if(myid == 2 || myid == 3){
-		cameramode = 1;
-                camera.x = 0;
-                camera.y = -140;
-	}
-
     }
 
     SDL_WaitThread(thr1, NULL);   

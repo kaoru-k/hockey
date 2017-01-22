@@ -19,8 +19,6 @@ SDL_Rect    camera     = {0.0, 0.0};
 GLuint      texA       = 0;                 //テクスチャ
 int         flash      = 0;
 
-//static int  initializeSDL(int flags);
-//static int  initializeVideo(int width, int height, int flags);
 static void set_OpenGL(void);
 static void draw3D(void);
 static void draw2D(void);
@@ -76,129 +74,6 @@ int draw_field(void)
     SDL_GL_SwapBuffers();
 }
 
-static int Pot(int inSize)
-{
-    int outSize=1;
-    while(outSize<inSize) outSize<<=1;
-    return outSize;
-}
-
-static void creatTex(char *file, GLuint *tex)
-{
-    GLuint textures;
-    SDL_Surface *imgSrc[2];
-    SDL_Rect area;
-
-    //画像読み込み
-    imgSrc[0]=SDL_LoadBMP(file);
-    if(imgSrc[0]==NULL)SDL_Quit();//読み込まれなかったら終了
-
-    //imgSrc[0]を変換
-    imgSrc[1]=SDL_CreateRGBSurface
-        (SDL_SWSURFACE,
-         Pot(imgSrc[0]->w), Pot(imgSrc[0]->h),
-         32,
-#if SDL_BYTEORDER==SDL_LIL_ENDIAN /* OpenGL RGBA masks */
-         0x000000FF, 
-         0x0000FF00, 
-         0x00FF0000, 
-         0xFF000000
-#else
-         0xFF000000,
-         0x00FF0000, 
-         0x0000FF00, 
-         0x000000FF
-#endif
-            );
-    if(imgSrc[1]==NULL)SDL_Quit();
-
-    area.x=0;  area.y=0;
-    area.w=imgSrc[0]->w;
-    area.h=imgSrc[0]->h;
-
-    SDL_BlitSurface(imgSrc[0], &area, imgSrc[1], &area);
-
-
-    //テクスチャ作成
-    glGenTextures(1, &textures);
-    glBindTexture(GL_TEXTURE_2D, textures);
-    //拡大時
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    //縮小時
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexImage2D
-        (
-            GL_TEXTURE_2D,//2Dテクスチャ
-            0,
-            GL_RGBA,//GL_RGBA
-            imgSrc[1]->w, imgSrc[1]->h,//テクスチャ幅・高さ
-            0,//ボーダー
-            GL_RGBA,//pixelsの渡すデータ形式
-            GL_UNSIGNED_BYTE,//pixelsのデータ型
-            imgSrc[1]->pixels
-            );
-    *tex=textures; if(*tex==0){SDL_Quit();}
-    
-    int num;//Surface解放
-    for(num=0; num<2; num++) SDL_FreeSurface(imgSrc[num]);
-}
-
-static void modelD(GLdouble alp,GLint tex)
-{
-    glBindTexture(GL_TEXTURE_2D, tex);
-    alp = 1.0;
-    GLfloat texture_color[] = {1, 1, 1, alp};
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
-    
-    glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( REC*0.8, REC*0.5);
-    glTexCoord2i(1, 0);  glVertex2i( REC*0.8,-REC*0.5);
-    glTexCoord2i(1, 1);  glVertex2i(-REC*0.5,-REC*0.5);
-    glTexCoord2i(0, 1);  glVertex2i(-REC*0.5, REC*0.5);
-    glEnd();
-}
-
-static void modelD_test()
-{
-    glLoadIdentity();
-    glEnable(GL_TEXTURE_2D);//テクスチャON
-
-    static GLdouble alp,vec;
-    if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
-    else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
-    
-    modelD(alp,texA);//modelD
-    
-    glDisable(GL_TEXTURE_2D);//テクスチャOFF
-}
-
-static int initializeSDL(int flags) 
-{
-    // SDLを初期化する
-    if (SDL_Init(flags) < 0) {
-        fprintf(stderr, "%s\n", SDL_GetError());
-        return 1;
-    }
-    
-    // ジョイスティックサブシステムを初期化する
-    SDL_InitSubSystem(SDL_INIT_JOYSTICK);
-    joystick = SDL_JoystickOpen(0);	
-    SDL_JoystickEventState(SDL_ENABLE);
-    if(!joystick) printf("failed to open joystick.\n");
-
-    return 0;
-}
-
-static int initializeVideo(int width, int height, int flags) {
-    // ビデオモードの設定をする
-    if (0 == SDL_SetVideoMode(width, height, 0, flags)) {
-        fprintf(stderr, "%s\n", SDL_GetError());
-        return 1;
-    }
-
-    return 0;
-}
-
 static void set_OpenGL(void)
 {
     // ビューポートを設定する
@@ -228,14 +103,14 @@ static void set_OpenGL(void)
 //2D描画用
 static void view2D()
 {
-    glMatrixMode(GL_PROJECTION);// 射影変換行列設定
+    glMatrixMode(GL_PROJECTION);         // 射影変換行列設定
     //glDisable(GL_LIGHT0);
     //glEnable(GL_LIGHT1);
-    glPopMatrix();// 現在の射影変換行列を保存
-    //glOrtho(0, 1024, 768, 0, -1, 1);// 正射影変換設定
-    glMatrixMode(GL_MODELVIEW);// モデルビュー変換行列設定
-    glPopMatrix();// 現在のモデルビュー行列を保存
-    glLoadIdentity();// 単位行列を設定
+    glPopMatrix();                       // 現在の射影変換行列を保存
+    //glOrtho(0, 1024, 768, 0, -1, 1);   // 正射影変換設定
+    glMatrixMode(GL_MODELVIEW);          // モデルビュー変換行列設定
+    glPopMatrix();                       // 現在のモデルビュー行列を保存
+    glLoadIdentity();                    // 単位行列を設定
 }
 
 //3D描画用
@@ -800,6 +675,102 @@ static void drawPlane(void)
         glVertex3d(  xsize, y, 0.0 );
     }
     glEnd();
+}
+
+static int Pot(int inSize)
+{
+    int outSize=1;
+    while(outSize<inSize) outSize<<=1;
+    return outSize;
+}
+
+static void creatTex(char *file, GLuint *tex)
+{
+    GLuint textures;
+    SDL_Surface *imgSrc[2];
+    SDL_Rect area;
+
+    //画像読み込み
+    imgSrc[0]=SDL_LoadBMP(file);
+    if(imgSrc[0]==NULL)SDL_Quit();//読み込まれなかったら終了
+
+    //imgSrc[0]を変換
+    imgSrc[1]=SDL_CreateRGBSurface
+        (SDL_SWSURFACE,
+         Pot(imgSrc[0]->w), Pot(imgSrc[0]->h),
+         32,
+#if SDL_BYTEORDER==SDL_LIL_ENDIAN /* OpenGL RGBA masks */
+         0x000000FF, 
+         0x0000FF00, 
+         0x00FF0000, 
+         0xFF000000
+#else
+         0xFF000000,
+         0x00FF0000, 
+         0x0000FF00, 
+         0x000000FF
+#endif
+            );
+    if(imgSrc[1]==NULL)SDL_Quit();
+
+    area.x=0;  area.y=0;
+    area.w=imgSrc[0]->w;
+    area.h=imgSrc[0]->h;
+
+    SDL_BlitSurface(imgSrc[0], &area, imgSrc[1], &area);
+
+
+    //テクスチャ作成
+    glGenTextures(1, &textures);
+    glBindTexture(GL_TEXTURE_2D, textures);
+    //拡大時
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    //縮小時
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexImage2D
+        (
+            GL_TEXTURE_2D,//2Dテクスチャ
+            0,
+            GL_RGBA,//GL_RGBA
+            imgSrc[1]->w, imgSrc[1]->h,//テクスチャ幅・高さ
+            0,//ボーダー
+            GL_RGBA,//pixelsの渡すデータ形式
+            GL_UNSIGNED_BYTE,//pixelsのデータ型
+            imgSrc[1]->pixels
+            );
+    *tex=textures; if(*tex==0){SDL_Quit();}
+    
+    int num;//Surface解放
+    for(num=0; num<2; num++) SDL_FreeSurface(imgSrc[num]);
+}
+
+static void modelD(GLdouble alp,GLint tex)
+{
+    glBindTexture(GL_TEXTURE_2D, tex);
+    alp = 1.0;
+    GLfloat texture_color[] = {1, 1, 1, alp};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( REC*0.8, REC*0.5);
+    glTexCoord2i(1, 0);  glVertex2i( REC*0.8,-REC*0.5);
+    glTexCoord2i(1, 1);  glVertex2i(-REC*0.5,-REC*0.5);
+    glTexCoord2i(0, 1);  glVertex2i(-REC*0.5, REC*0.5);
+    glEnd();
+}
+
+static void modelD_test()
+{
+    glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);//テクスチャON
+
+    static GLdouble alp,vec;
+    if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
+    else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
+    
+    modelD(alp,texA);//modelD
+    
+    glDisable(GL_TEXTURE_2D);//テクスチャOFF
 }
 
 /*必殺技（致命傷）*/

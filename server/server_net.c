@@ -114,7 +114,7 @@ int network(void)
     for (i = 0; i < num_clients; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &recv_con, sizeof(CONTAINER_C));
-            fprintf(stderr, "recv_data() ");
+            //fprintf(stderr, "recv_data() ");
 
             if (out_con(i) == COM_EXIT) endflag = 1;
 
@@ -128,7 +128,7 @@ int network(void)
             }
 
             send_data(BROADCAST, &send_con, sizeof(CONTAINER_S));
-            fprintf(stderr, "send_data()   to:%d\n", i);
+            //fprintf(stderr, "send_data()   to:%d\n", i);
         }
     }
     return result;
@@ -149,10 +149,10 @@ static char out_con(int cid)
     if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
         p[cid].x = recv_con.x;
-        fprintf(stderr, "from:%d com:%d\n", cid, recv_con.com);
+        //fprintf(stderr, "from:%d com:%d\n", cid, recv_con.com);
     }
     else
-        fprintf(stderr, "from:%d pass\n", cid);
+        //fprintf(stderr, "from:%d pass\n", cid);
     
     return recv_con.com;
 }
