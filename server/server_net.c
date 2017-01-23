@@ -116,32 +116,31 @@ int network(void)
     for (i = 0; i < num_clients; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &recv_con, sizeof(CONTAINER_C));
-            //fprintf(stderr, "recv_data() ");
 
             switch (out_con(i)) {
-            case COM_EXIT:
+            case COM_EXIT :
                 endflag = 1;   break;
-            case COM_SPECIAL:
-                s_flag[i] = 1; break;
+            case COM_SPECIAL :
+		s_flag[i] = 1; break;
             default:
-                s_flag[i] = 0;
+                s_flag[i] = 0; break;
             }
 
-            if (endflag == 0) {
-		set_con(COM_NONE);
-                result = 1;
+            if (endflag) {
+		set_con(COM_EXIT);
+                result = 0;
             }
-            else if (s_on()) {
-                set_con(COM_SPECIAL);
+            else if (s_on()) {              
+		set_con(COM_SPECIAL);
                 result = 1;
             }
             else {
-                set_con(COM_EXIT);
-                result = 0;
+                set_con(COM_NONE);
+                result = 1;
             }
 
             send_data(BROADCAST, &send_con, sizeof(CONTAINER_S));
-            //fprintf(stderr, "send_data()   to:%d\n", i);
+            //fprintf(stderr, "send_data()   to:%d com:%d\n", i, send_con.com);
         }
     }
     return result;
@@ -162,10 +161,9 @@ static char out_con(int cid)
     if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
         p[cid].x = recv_con.x;
-        //fprintf(stderr, "from:%d com:%d\n", cid, recv_con.com);
+        //fprintf(stderr, "recv_data() from:%d com:%d\n", cid, recv_con.com);
     }
-    else
-        //fprintf(stderr, "from:%d pass\n", cid);
+    //else fprintf(stderr, "recv_data() from:%d pass\n", cid);
     
     return recv_con.com;
 }
@@ -235,7 +233,7 @@ static int s_on(void)
 {
     int i;
     for (i = 0; i < num_clients; i++) {
-        if (s_flag[i] = 1) return 0;
+        if (s_flag[i] == 1) return 1;
     }
     return 0;
 }

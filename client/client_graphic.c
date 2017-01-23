@@ -345,13 +345,11 @@ static void draw3D(void)
     gluCylinder(quadric3, 0, 12, 10, 30, 30);
     glTranslatef(-pad.x, -pad.y, -5.0f);
 
-   
-
     gluDeleteQuadric(quadric);
     gluDeleteQuadric(quadric2);
     gluDeleteQuadric(quadric3);
 
-    if (recv_flag == 0) onoff();
+    if (recv_flag == 1) onoff();
     GLdouble sidevertex[][3] = {
         { 100.0, -160.0, 0.0 },
         { 100.1, -160.0, 0.0 },

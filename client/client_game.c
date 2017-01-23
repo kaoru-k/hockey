@@ -47,7 +47,7 @@ int Keyevent(void)
                 return 1;
 #endif              
             case SDLK_RIGHT:
-                camera.x -= 5;
+                camera.x -= 5; 
                 break;
             case SDLK_LEFT:
                 camera.x += 5;
@@ -59,10 +59,10 @@ int Keyevent(void)
                 camera.y += 5;
                 break;
             case SDLK_d:
-			speedx[0] = -3;
+                speedx[0] = -3;
                 break;
             case SDLK_a:
-			speedx[0] = 3;
+                speedx[0] = 3;
                 break;
             case SDLK_w:
             case SDLK_s:
@@ -81,6 +81,7 @@ int Keyevent(void)
             default:
                 break;
             }
+            break;
         case SDL_JOYAXISMOTION:
             if(event.jaxis.axis==0){
                 if(event.jaxis.value < 0){
@@ -96,13 +97,21 @@ int Keyevent(void)
                 }else
                     speedx[0] = 0.0;
             }
+            break;
         case SDL_JOYBUTTONDOWN:
             switch(event.jbutton.button){
             case 0 :
                 send_flag = 1; break;
-            default:
-                send_flag = 0; break;
+            case 4 :
+                camera.x += 5; break;
+            case 5 :
+                camera.x -= 5; break;
+            case 11:
+                endflag=1; return 1;
             }
+            break;
+	default:
+            send_flag = 0;
         }
 	
     }
