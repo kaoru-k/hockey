@@ -23,6 +23,7 @@ int client_frame[4] = {0,0,0,0};
 static fd_set mask;
 static int num_socks;
 static int endflag = 0;
+static int s_flag[4] = {0};
 
 static void set_con(char command);
 static char out_con(int cid);
@@ -31,6 +32,7 @@ static void copy_player(PLAYER *a, const PLAYER *b);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
 static void error_message(char *message);
+static int  s_on(void);
 
 void setup_server(u_short port)
 {
@@ -116,10 +118,21 @@ int network(void)
             recv_data(i, &recv_con, sizeof(CONTAINER_C));
             //fprintf(stderr, "recv_data() ");
 
-            if (out_con(i) == COM_EXIT) endflag = 1;
+            switch (out_con(i)) {
+            case COM_EXIT:
+                endflag = 1;   break;
+            case COM_SPECIAL:
+                s_flag[i] = 1; break;
+            default:
+                s_flag[i] = 0;
+            }
 
             if (endflag == 0) {
 		set_con(COM_NONE);
+                result = 1;
+            }
+            else if (s_on()) {
+                set_con(COM_SPECIAL);
                 result = 1;
             }
             else {
@@ -216,4 +229,13 @@ static void error_message(char *message)
     perror(message);
     fprintf(stderr, "%d\n", errno);
     exit(1);
+}
+
+static int s_on(void)
+{
+    int i;
+    for (i = 0; i < num_clients; i++) {
+        if (s_flag[i] = 1) return 0;
+    }
+    return 0;
 }

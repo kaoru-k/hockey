@@ -16,10 +16,13 @@
 
 /* コマンド */
 #define COM_NONE       'N'    // None      何もなし（座標をやり取りする）
-#define COM_WIN        'W'    // Win       勝ち
-#define COM_LOSE       'L'    // Lose      負け
+#define COM_SPECIAL    'S'    // Special   必殺技
 #define COM_CONTINUE   'C'    // Continue  コンティニュー
 #define COM_EXIT       'X'    // eXit      終了
+#define COM_WIN        'W'    // Win       「Win」表示   (点数送信)
+#define COM_LOSE       'L'    // Lose      「Lose」表示  (点数送信)
+#define COM_READY      'R'    // Ready     「Ready」表示 
+#define COM_START      'T'    // sTart     「Start」表示
 
 /* フィールド */
 #define FIELD_H  160          // フィールドの縦幅

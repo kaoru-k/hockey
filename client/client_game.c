@@ -96,6 +96,13 @@ int Keyevent(void)
                 }else
                     speedx[0] = 0.0;
             }
+        case SDL_JOYBUTTONDOWN:
+            switch(event.jbutton.button){
+            case 0 :
+                send_flag = 1; break;
+            default:
+                send_flag = 0; break;
+            }
         }
 	
     }

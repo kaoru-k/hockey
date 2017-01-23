@@ -351,7 +351,7 @@ static void draw3D(void)
     gluDeleteQuadric(quadric2);
     gluDeleteQuadric(quadric3);
 
-    //onoff();
+    if (recv_flag == 0) onoff();
     GLdouble sidevertex[][3] = {
         { 100.0, -160.0, 0.0 },
         { 100.1, -160.0, 0.0 },

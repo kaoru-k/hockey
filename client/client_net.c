@@ -16,6 +16,8 @@ static fd_set mask;
 
 int myid;
 int latest_frame;
+int send_flag = 0;
+int recv_flag = 0;
 CONTAINER_C send_con;
 CONTAINER_S recv_con;
 
@@ -62,10 +64,12 @@ void setup_client(char *server_name, u_short port)
 int network_send(void)
 {
     SDL_Thread *thr1;
-    if (endflag == 0)
-        set_con(COM_NONE);
-    else
+    if (endflag == 1)
         set_con(COM_EXIT);
+    else if (send_flag == 1)
+        set_con(COM_SPECIAL);
+    else
+        set_con(COM_NONE);
     //fprintf(stderr, "send_data()\n");
     send_data(&send_con, sizeof(CONTAINER_C));
     //thr1 = SDL_CreateThread(send_thread, NULL);
@@ -84,9 +88,16 @@ int network_recv(void)
     else if (FD_ISSET(sock, &read_flag)) {
         //fprintf(stderr, "recv_data() ");
         recv_data(&recv_con, sizeof(CONTAINER_S));
-        if (out_con() == COM_EXIT) {
+        switch (out_con()) {
+        case COM_EXIT:
             endflag = 1;
             return 0;
+        case COM_SPECIAL:
+            recv_flag = 1;
+            break;
+        default:
+            recv_flag = 0;
+            break;
         }
     }
 
@@ -121,9 +132,8 @@ static char out_con(void)
 
         //fprintf(stderr, "com=%d\n", recv_con.com);
     }
-    else
-        //fprintf(stderr, "pass\n");
-    
+    // else fprintf(stderr, "pass\n");
+
     return recv_con.com;
 }
 

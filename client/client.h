@@ -17,9 +17,11 @@ extern int    myid;
 extern SDL_Rect     pack;
 extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;
-extern int    endflag;
 extern int    cameramode;     //削除予定
 extern int    current_frame;
+extern int    endflag;
+extern int    send_flag;
+extern int    recv_flag;
 
 /***** 外部関数 *****/
 // client_net.c
