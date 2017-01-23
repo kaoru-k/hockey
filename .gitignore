@@ -190,6 +190,6 @@ $RECYCLE.BIN/
 core
 
 # 実行ファイル
-client/client
+hockey_client
 client/client_test
-server/server
+hockey_server
