@@ -12,13 +12,14 @@ int flag = 1;
 int current_frame = 0;
 
 static int network_thread(void* args);
+static int game_thread(void *args);
 
 int main(int argc, char *argv[])
 {
 #ifndef TEST   
     u_short port = DEFAULT_PORT;
     char server_name[50];
-    SDL_Thread *thr1;
+    SDL_Thread *thr1, *thr2;
 
     sprintf(server_name, "localhost");
 
@@ -50,15 +51,17 @@ int main(int argc, char *argv[])
     }
 
     thr1 = SDL_CreateThread(network_thread, &flag);
+    //thr2 = SDL_CreateThread(game_thread, &flag);
 
     while (flag) {
+        draw_field();
         flag = Keyevent();
         current_frame++;
-	network_send();	
-        draw_field();
+        network_send();
     }
 
-    SDL_WaitThread(thr1, NULL);   
+    SDL_WaitThread(thr1, NULL);
+    //SDL_WaitThread(thr2, NULL);
 
     return 0;
 
@@ -92,5 +95,13 @@ static int network_thread(void* args)
         flag = network_recv(); 
     }
     terminate_client();
+    return 0;
+}
+
+static int game_thread(void* args)
+{
+    fprintf(stderr, "game_thread()    started.\n");
+    while (flag) {
+    }
     return 0;
 }
