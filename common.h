@@ -42,10 +42,10 @@
 
 /* クライアント情報用の構造体 */
 typedef struct{
-    int cid;
-    int sock;
-    int control;
-    struct sockaddr_in addr;
+    int cid;                  // プレイヤー番号
+    int sock;                 // ソケット
+    int control;              // 操作するキャラクター(0,3→アタッカー 1,4→サポーター)
+    struct sockaddr_in addr;  // クライアントのアドレス
 }CLIENT;
 
 /* プレイヤーを表す構造体 */
