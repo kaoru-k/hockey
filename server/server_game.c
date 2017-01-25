@@ -18,13 +18,14 @@ typedef struct{
     int scene;
     int point[2];
     int defe[2][2];
+    int co;
 }GAME;
 
 PAD speed={0,0};
 #ifndef TEST
 int current_frame = 0;
 #endif
-GAME game = {0,0,0,1,{0,0}, {{0,0},{0,0}} };
+GAME game = {0,0,0,1,{0,0}, {{0,0},{0,0}}, 0 };
 
 extern int  def_ugoki(int i);
 extern void  def_ugoki2();
@@ -96,8 +97,15 @@ void field_set(void){
 
     int i,j;
     float k,l;
-    pad.x += speed.x;
-    pad.y += speed.y;
+    if(game.co == 0){//通常
+        pad.x += speed.x;
+        pad.y += speed.y;
+    }else if(game.co != 0){//必殺
+        if(game.co/abs(game.co) != speed.y/fabs(speed.y)){
+	    game.co = 0;
+        }
+	pad.y += game.co;
+    }
     /* 乱数初期化 */
     srand(time(NULL));
     if(game.scene == 0){
@@ -133,13 +141,13 @@ void field_set(void){
                     if( (p[i].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
 			if(p[4].hp <= 0){
                             p[i].x = 1000;//HPが0以下になった時の処理
-			    p[i].hp = 0;
+			    p[4].hp = 0;
 			}
 			if(p[4].hp > 0){
 			    if( (p[i].hp = p[4].hp) > bai(p[i].type+6) )
 				p[i].hp = bai(p[i].type+6);
 			    p[4].hp = 0;
-			    p[4].x = 1000;
+			    p[i].x = 1000;
 			}			
                     }
                     if( (l = sqrt(speed.x*speed.x + speed.y * speed.y)) < 7){
@@ -151,9 +159,13 @@ void field_set(void){
                     	speed.y = -l * sin(k);
                     	speed.x = l * cos(k);
 		    }
-                        game.defe[1][1] = def_ugoki(1);
-		  	game.defe[0][1] = 0;
-			def_ugoki2();
+                    //game.defe[1][1] = def_ugoki(1); //////////////////////////////ここからテスト
+		    game.co = -10;		      ///////////////////
+		    speed.y = -sqrt(speed.x*speed.x + speed.y * speed.y);
+		    speed.x = 0;
+		    game.defe[1][1] = pad.x;          ///////////////////ここまで
+  		    game.defe[0][1] = 0;
+		    def_ugoki2();
                 }
             }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + speed.y){
                 for(i = 0;i < 2;i++){
@@ -295,20 +307,34 @@ void field_set(void){
 		    if(p[5].hp > bai(p[5].type + 6))
 		        p[5].hp = bai(p[5].type + 6);
                 }
-            }else if(-pad.y + PAD_R >= DEF_Y && -pad.y + PAD_R <= DEF_Y - speed.y){
-                if(pad.x+PAD_R > p[5].x - DEF_W && pad.x-PAD_R < p[5].x + DEF_W){
-                    if( (p[5].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
-                        p[5].x = 1000;//HPが0以下になった時の処理
-			p[5].hp = 0;
-                    }
-                    if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
-                    	speed.y = -speed.y * 0.9;
-		        speed.x = speed.x * 0.9;
-		    }else
-                    speed.y = -speed.y;
+            }else if(-pad.y + PAD_R >= DEF_Y){
+		if(game.co == 0 && -pad.y + PAD_R <= DEF_Y - speed.y){
+                    if(pad.x+PAD_R > p[5].x - DEF_W && pad.x-PAD_R < p[5].x + DEF_W){
+                        if( (p[5].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+                            p[5].x = 1000;//HPが0以下になった時の処理
+			    p[5].hp = 0;
+                        }
+                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                    	    speed.y = -speed.y * 0.9;
+		            speed.x = speed.x * 0.9;
+		        }else
+                            speed.y = -speed.y;
                         game.defe[0][1] = def_ugoki(-1);
 		  	game.defe[1][1] = 0;
-			def_ugoki2();
+	    	        def_ugoki2();
+		    }
+		}
+		if(game.co != 0 && -pad.y + PAD_R <= DEF_Y - game.co){
+                    if(pad.x+PAD_R > p[5].x - DEF_W && pad.x-PAD_R < p[5].x + DEF_W){
+                    	speed.y = -speed.y;
+                        game.defe[0][1] = def_ugoki(-1);
+		        game.defe[1][1] = 0;
+		        def_ugoki2();
+                        if( (p[5].hp += game.co*10) <= 0 ){      //ｈｐ減少
+                            p[5].x = 1000;//HPが0以下になった時の処理
+			    p[5].hp = 0;
+                        } 
+		    }
                 }
             }
         }
@@ -317,10 +343,10 @@ void field_set(void){
         if(pad.y + PAD_R > FIELD_H){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
                 pad.y = 2 * FIELD_H - pad.y - 2*PAD_R;
-                speed.y = speed.y * (-1);
-                    game.defe[1][1] = def_ugoki(1);
-		    game.defe[0][1] = 0;
-		    def_ugoki2();
+		speed.y = -speed.y;
+                game.defe[1][1] = def_ugoki(1);
+	        game.defe[0][1] = 0;
+	        def_ugoki2();
             }else{
                 game.time = game.now;
                 game.scene = 1;
@@ -331,10 +357,10 @@ void field_set(void){
         }else if(pad.y - PAD_R <= (-1)*FIELD_H){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
                 pad.y = (-2) * FIELD_H - pad.y + 2*PAD_R;
-                speed.y = speed.y * (-1);
-                    game.defe[0][1] = def_ugoki(-1);
-		    game.defe[1][1] = 0;
-		    def_ugoki2();
+		speed.y = -speed.y;
+                game.defe[0][1] = def_ugoki(-1);
+	        game.defe[1][1] = 0;
+	        def_ugoki2();
             }else{
                 game.time = game.now;
                 game.scene = 1;
@@ -345,13 +371,13 @@ void field_set(void){
     }else{	
 	if(game.now - game.time > 2 && game.scene == 1){
 	    game.scene = 2;
-	    p[0].hp = 650;
+	    p[0].hp = bai(p[0].type+6);
 	    p[0].x = 0;
-	    p[1].hp = 300;
+	    p[1].hp = bai(p[1].type+6);
 	    p[1].x = 0;
- 	    p[2].hp = 550;
+ 	    p[2].hp = bai(p[2].type+6);
 	    p[2].x = 0;
- 	    p[3].hp = 450;
+ 	    p[3].hp = bai(p[3].type+6);
 	    p[3].x = 0;
 	    p[4].hp = 800;
 	    p[4].x = 0;
