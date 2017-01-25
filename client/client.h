@@ -14,6 +14,7 @@
 extern PLAYER p[6];           //0,1,2,3->human 4,5->cpu
 extern PAD    pad;
 extern int    myid;
+extern int    control_id;
 extern SDL_Rect     pack;
 extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;
@@ -26,6 +27,7 @@ extern int    recv_flag;
 /***** 外部関数 *****/
 // client_net.c
 extern void setup_client(char *server_name, u_short port);
+extern void setting_client(void);
 extern void terminate_client(void);
 extern int  network_send(void);
 extern int  network_recv(void);

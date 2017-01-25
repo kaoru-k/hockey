@@ -15,6 +15,7 @@ static int num_sock;
 static fd_set mask;
 
 int myid;
+int control_id;
 int latest_frame;
 int send_flag = 0;
 int recv_flag = 0;
@@ -59,6 +60,11 @@ void setup_client(char *server_name, u_short port)
     FD_SET(0, &mask);
     FD_SET(sock, &mask);
     fprintf(stderr, "Client setup is done.\n");
+}
+
+void setting_client(void)
+{
+    control_id = myid;
 }
 
 int network_send(void)
@@ -117,7 +123,7 @@ static void set_con(char command)
 {
     send_con.com = command;
     send_con.frame = current_frame;
-    send_con.x = p[myid].x;
+    send_con.x = p[control_id].x;
 }
 
 static char out_con(void)

@@ -40,11 +40,11 @@
 /* パッド */
 #define PAD_R 10              // パッドの半径
 
-
 /* クライアント情報用の構造体 */
 typedef struct{
     int cid;
     int sock;
+    int control;
     struct sockaddr_in addr;
 }CLIENT;
 

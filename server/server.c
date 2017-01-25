@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 
     setup_server(port);
     thr1 = SDL_CreateThread(network_thread, NULL);
+    setting_server();
 
     while(flag) {
 	clock_gettime(CLOCK_REALTIME, &time_tmp);

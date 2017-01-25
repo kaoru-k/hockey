@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
     
     setup_client(server_name, port);
     init_sdl();
+    setting_client();
     draw_field();
     if(myid == 0 || myid == 1){
         cameramode = 0;

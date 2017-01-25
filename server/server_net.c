@@ -101,6 +101,15 @@ void setup_server(u_short port)
     fprintf(stderr, "Server setup is done.\n");
 }
 
+void setting_server(void)
+{
+    int i;
+    
+    for (i = 0; i < num_clients; i++) {
+        clients[i].control = clients[i].cid;
+    }
+}
+
 int network(void)
 {
     fd_set read_flag = mask;
@@ -160,7 +169,7 @@ static char out_con(int cid)
 {
     if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
-        p[cid].x = recv_con.x;
+        p[clients[cid].control].x = recv_con.x;
         //fprintf(stderr, "recv_data() from:%d com:%d\n", cid, recv_con.com);
     }
     //else fprintf(stderr, "recv_data() from:%d pass\n", cid);

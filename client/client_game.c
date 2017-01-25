@@ -19,11 +19,6 @@ PLAYER p[6] = {{0,650,0,0},
                {4,800,0,0},
                {4,800,0,0}};
 
-int game_setting(void)
-{
-    return 0;
-}
-
 int Keyevent(void)
 {   
     // イベントを処理する
@@ -85,14 +80,14 @@ int Keyevent(void)
         case SDL_JOYAXISMOTION:
             if(event.jaxis.axis==0){
                 if(event.jaxis.value < 0){
-                    if(myid == 0 || myid == 1)
+                    if(control_id == 0 || control_id == 1)
                 	speedx[0] = 3;
-		    else if(myid == 2 || myid == 3)
+		    else if(control_id == 2 || control_id == 3)
 			speedx[0] = -3;
                 }else if(event.jaxis.value >  0){
-                    if(myid == 0 || myid == 1)
+                    if(control_id == 0 || control_id == 1)
                 	speedx[0] = -3;
-		    else if(myid == 2 || myid == 3)
+		    else if(control_id == 2 || control_id == 3)
 			speedx[0] = 3;
                 }else
                     speedx[0] = 0.0;
@@ -117,8 +112,8 @@ int Keyevent(void)
     }
     
     network_send();
-    if(FIELD_W > p[myid].x + speedx[0] + ATK_W && p[myid].x + speedx[0] - ATK_W > -FIELD_W)
-        p[myid].x += speedx[0];
+    if(FIELD_W > p[control_id].x + speedx[0] + ATK_W && p[control_id].x + speedx[0] - ATK_W > -FIELD_W)
+        p[control_id].x += speedx[0];
     
     return 1;   
 }
