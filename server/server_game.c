@@ -12,14 +12,14 @@
 #include "../client/client.h"
 #endif
 typedef struct{
-    int time;
-    int now;
+    int time; //時間を計るため
+    int now;  //現在の時間を知るため
     int heal;
-    int scene;
-    int point[2];
-    int defe[2][2];
-    int co;
-    double spd[2];
+    int scene;  //0:ゲーム画面　1:ゴールした瞬間 2:ゴール後球を構えている時
+    int point[2]; //点数　point[0]:p[2]p[3]側　point[1]:p[0]p[1]側
+    int defe[2][2];   //ディフェンダーの移動する向きと目標座標
+    int co;      //こまんど　
+    double spd[2];  //コマンドを発動した時に,スピードを一時的に保存するため
 }GAME;
 
 PAD speed={0,0};
@@ -224,10 +224,10 @@ void field_set(void){
 	    		speed.y = game.spd[1];
     		    }
                     if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
-                    	speed.y = -speed.y * 0.9;
+                    	//speed.y = -speed.y * 0.9;
 		        speed.x = speed.x * 0.9;
 		    }else
-			speed.y = -speed.y;
+			//speed.y = -speed.y;
                         game.defe[1][1] = def_ugoki(1);
 		  	game.defe[0][1] = 0;
 			def_ugoki2();
@@ -391,7 +391,7 @@ void field_set(void){
 	    game.defe[1][1] = 0;
 	    game.co = 0;
 	    speed.x = 0;speed.y = 0;
-            if(game.point[0] == 2 || game.point[1] == 2){
+            if(game.point[0] == 2 || game.point[1] == 2){//勝敗がついた時
                 game.point[0] = 0;
                 game.point[1] = 0;
                 for(i =0;i<4;i++)
