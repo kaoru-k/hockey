@@ -8,21 +8,21 @@
 #include <SDL/SDL.h>
 
 /***** 定数 *****/
-
+#define M_BOUND 0
 
 /***** グローバル変数 *****/
 extern PLAYER p[6];           //0,1,2,3->human 4,5->cpu
-extern PAD    pad;
-extern int    myid;
-extern int    control_id;
+extern PAD  pad;
+extern int  myid;
+extern int  control_id;
 extern SDL_Rect     pack;
 extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;
-extern int    cameramode;     //削除予定
-extern int    current_frame;
-extern int    endflag;
-extern int    send_flag;
-extern int    recv_flag;
+extern int  cameramode;     //削除予定
+extern int  current_frame;
+extern int  endflag;
+extern int  send_flag;
+extern int  recv_flag;
 
 /***** 外部関数 *****/
 // client_net.c
@@ -39,6 +39,10 @@ extern int  Keyevent(void);
 // client_graphic.c
 extern int  init_sdl(void);
 extern int  draw_field(void);
+
+// client_sound.c
+extern int  setup_sound(void);
+extern void play_sound(int index);
 
 #ifdef TEST
 // server_game.c (テスト用)

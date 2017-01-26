@@ -3,7 +3,7 @@
 # 徳島大学 工学部 知能情報工学科 27班
 #*************************************
 
-LDLIBS  = -lSDL -lGL -lGLU -lnsl -lm -lrt
+LDLIBS  = -lSDL -lSDL_mixer -lGL -lGLU -lnsl -lm -lrt
 TARGET1 = hockey_server
 TARGET2 = hockey_client
 OBJS1   = server/server.o server/server_game.o server/server_net.o
