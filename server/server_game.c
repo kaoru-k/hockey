@@ -347,7 +347,7 @@ void field_set(void){
                 game.scene = 1;
                 if(++game.point[0] == 2)
                     fprintf(stderr,"lose\n");
-
+                fprintf(stderr,"[%d] - [%d]\n",game.point[0],game.point[1]);
             }
         }else if(pad.y - PAD_R <= (-1)*FIELD_H){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
@@ -366,6 +366,7 @@ void field_set(void){
                 game.scene = 1;
                 if(++game.point[1] == 2)
                     fprintf(stderr,"win\n");
+                fprintf(stderr,"[%d] - [%d]\n",game.point[0],game.point[1]);
             }
         }
     }else{	
