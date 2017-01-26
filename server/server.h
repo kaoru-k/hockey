@@ -21,6 +21,7 @@ extern int    client_frame[4];
 void setup_server(u_short port);
 void terminate_server(void);
 int  network(void);
+int s_on(void);
 
 // server_game.c
 void field_set(void);
