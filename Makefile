@@ -24,6 +24,7 @@ $(TARGET2): $(OBJS2)
 	$(CC) -o $(TARGET2) $(OBJS2) $(LDLIBS)
 
 # test
+test: CFLAGS=-DTEST
 test: $(OBJS2) server/server_game.o
 	$(CC) $(CFLAGS) -o client/$(TARGET2)_test $(OBJS2) server/server_game.o $(LDLIBS)
 

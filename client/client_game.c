@@ -111,8 +111,7 @@ int Keyevent(void)
 	
     }
     
-    network_send();
-    if(FIELD_W > p[control_id].x + speedx[0] + ATK_W && p[control_id].x + speedx[0] - ATK_W > -FIELD_W)
+    if(FIELD_W > p[control_id].x + speedx[0] + ATK_W && p[control_id].x + speedx[0] - ATK_W > -FIELD_W && p[control_id].hp > 0)
         p[control_id].x += speedx[0];
     
     return 1;   

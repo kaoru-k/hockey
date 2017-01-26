@@ -105,10 +105,8 @@ void setting_server(void)
 {
     int i;
     
-    //for (i = 0; i < num_clients; i++)
-    //    clients[i].control = clients[i].cid;
-    clients[0].control = 1;
-    clients[1].control = 0;
+    for (i = 0; i < num_clients; i++)
+        clients[i].control = clients[i].cid;
 }
 
 int network(void)
@@ -150,7 +148,7 @@ int network(void)
             }
 
             send_data(BROADCAST, &send_con, sizeof(CONTAINER_S));
-            fprintf(stderr, "send_data()   to:%d com:%d\n", i, send_con.com);
+            fprintf(stderr, "send_data()   to:%d com:%c\n", i, send_con.com);
         }
     }
     return result;
@@ -171,9 +169,9 @@ static char out_con(int cid)
     if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
         p[clients[cid].control].x = recv_con.x;
-        //fprintf(stderr, "recv_data() from:%d com:%d\n", cid, recv_con.com);
+        fprintf(stderr, "recv_data() from:%d com:%c\n", cid, recv_con.com);
     }
-    //else fprintf(stderr, "recv_data() from:%d pass\n", cid);
+    else fprintf(stderr, "recv_data() from:%d pass\n", cid);
     
     return recv_con.com;
 }
@@ -199,7 +197,7 @@ static int recv_data(int cid, void *data, int size)
         exit(1);
     }
     if ((data == NULL) || (size <= 0)) {
-        fprintf(stderr, "receive_data(); data is illeagal!\n");
+        fprintf(stderr, "recv_data(); data is illeagal!\n");
         exit(1);
     }
     return read(clients[cid].sock, data, size);
