@@ -105,9 +105,10 @@ void setting_server(void)
 {
     int i;
     
-    for (i = 0; i < num_clients; i++) {
-        clients[i].control = clients[i].cid;
-    }
+    //for (i = 0; i < num_clients; i++)
+    //    clients[i].control = clients[i].cid;
+    clients[0].control = 1;
+    clients[1].control = 0;
 }
 
 int network(void)
@@ -149,7 +150,7 @@ int network(void)
             }
 
             send_data(BROADCAST, &send_con, sizeof(CONTAINER_S));
-            //fprintf(stderr, "send_data()   to:%d com:%d\n", i, send_con.com);
+            fprintf(stderr, "send_data()   to:%d com:%d\n", i, send_con.com);
         }
     }
     return result;

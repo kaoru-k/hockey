@@ -64,7 +64,9 @@ void setup_client(char *server_name, u_short port)
 
 void setting_client(void)
 {
-    control_id = myid;
+    if (myid == 0) control_id = 1;
+    else if(myid == 1) control_id = 0;
+	
 }
 
 int network_send(void)
