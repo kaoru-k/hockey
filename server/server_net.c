@@ -32,7 +32,6 @@ static void copy_player(PLAYER *a, const PLAYER *b);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
 static void error_message(char *message);
-static int  s_on(void);
 
 void setup_server(u_short port)
 {
@@ -237,7 +236,7 @@ static void error_message(char *message)
     exit(1);
 }
 
-static int s_on(void)
+int s_on(void)
 {
     int i;
     for (i = 0; i < num_clients; i++) {
