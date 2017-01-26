@@ -131,29 +131,25 @@ void field_set(void){
         //プレイヤーにぶつかった時
         if(speed.y > 0){
             if(pad.y + PAD_R >= ATK_Y && pad.y + PAD_R <= ATK_Y + speed.y){
-                for(i = 0;i < 2;i++){
-                    if(p[i].type == 0 || p[i].type == 1)
-                        break;
-                }
-                if(pad.x + PAD_R > p[i].x - ATK_W && pad.x - PAD_R< p[i].x + ATK_W){
-		    if( (p[i].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
-			p[i].ap = 100;
-                    if( (p[i].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
+                if(pad.x + PAD_R > p[0].x - ATK_W && pad.x - PAD_R< p[0].x + ATK_W){
+		    if( (p[0].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
+			p[0].ap = 100;
+                    if( (p[0].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*10) <= 0 ){      //ｈｐ減少
 			if(p[4].hp <= 0){
-                            p[i].x = 1000;//HPが0以下になった時の処理
-			    p[4].hp = 0;
+                            p[0].x = 1000;//HPが0以下になった時の処理
+			    p[0].hp = 0;
 			}
 			if(p[4].hp > 0){
-			    if( (p[i].hp = p[4].hp) > bai(p[i].type+6) )
-				p[i].hp = bai(p[i].type+6);
+			    if( (p[0].hp = p[4].hp) > bai(p[0].type+6) )
+				p[0].hp = bai(p[0].type+6);
 			    p[4].hp = 0;
-			    p[i].x = 1000;
+			    p[4].x = 1000;
 			}			
                     }
                     if( (l = sqrt(speed.x*speed.x + speed.y * speed.y)) < 7){
                     	k = M_PI * (10 + rand()%80)/100;
-                   	speed.y = -l * sin(k) * bai(p[i].type);
-                    	speed.x = l * cos(k) * bai(p[i].type);
+                   	speed.y = -l * sin(k) * bai(p[0].type);
+                    	speed.x = l * cos(k) * bai(p[0].type);
 		    }else{
                         k = M_PI * (10 + rand()%80)/100;
                     	speed.y = -l * sin(k);
