@@ -90,64 +90,69 @@ extern void def_ugoki2(){
         game.defe[1][0] = -1;
 }
 
-void sosei(int a){
+int sosei(int a){
     if(a == 1){
     if(p[0].hp == 0){
 	p[0].hp = bai(p[0].type+6);
 	p[0].x = 0;
-	return;
+	return 0;
     }
         if(p[4].hp == 0){
 	    p[4].hp = bai(p[4].type+6);
 	    p[4].x = 0;
-	    return;
+	    return 0;
         }
     }
     if(a == -1){
     if(p[2].hp == 0){
 	p[2].hp = bai(p[2].type+6);
 	p[2].x = 0;
-	return;
+	return 0;
     }
 	if(p[5].hp == 0){
 	    p[5].hp = bai(p[5].type + 6);
 	    p[5].x = 0;
-	    return;
+	    return 0;
 	}
     }
+    return -1;
 }
 
 //typeキャラタイプ　a : 敵側か味方側か
-void hissatu(int type,int a){
+int hissatu(int type,int a){
     switch(type){
-    case 0:
-        game.co = -10*a;
-        break;
     case 1:
-        sosei(a);
-        break;
-    case 2:
+        game.co = -10*a;
+        return -1;
+    case 0:
         game.co = a;
-        break;
-    case 3:
+        return -1;
+    case 2:
 	game.time = game.now;
 	if(a == 1)
             game.han[1] = 20;
   	if(a == -1)
 	    game.han[0] = 20;
         break;
+    case 3:
+        return sosei(a);
+        break;
     default:break;
     }
+    return 0;
 }
 
 //必殺コマンド,引数 必殺を使ったキャラのid
 void Hcom(int id){
+    int i;
     if(id == 0 || id == 1){
-        hissatu(p[id].type,1);
+        if((i = hissatu(p[id].type,1)) !=-1)
+	    p[id].ap = 0;
         return;
     }
     if(id == 2 || id == 3){
-        hissatu(p[id].type,-1);
+        if((i = hissatu(p[id].type,-1)) != -1)
+	    p[id].ap = 0;
         return;
     }
 }
@@ -170,7 +175,8 @@ void field_set(void){
     pad.y += speed.y;
 
 //必殺
-    Hcom(s_on());
+    if(p[s_on()].ap == 100 && game.scene == 0)
+        Hcom(s_on());
 //ゼニヤッタの必殺終了条件
     if(game.han[0] != 10){
 	if(game.now - game.time > 30)
@@ -229,7 +235,12 @@ void field_set(void){
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
-                    if(game.co != -1){
+		    if(game.co == 1){
+			game.co = 5;
+			p[0].ap = 0;
+		    }
+
+                    if(game.co != -5){
                         if( (l = sqrt(speed.x*speed.x + speed.y * speed.y)) < 7){
                             k = M_PI * (10 + rand()%80)/100;
                             speed.y = -l * sin(k) * bai(p[0].type);
@@ -242,6 +253,7 @@ void field_set(void){
                         game.defe[1][1] = def_ugoki(1); /////////////////////////////ここからテスト
                         //game.co = -10;		      ////////////////////
                         if(game.co == -10){
+			    p[0].ap = 0;
                             game.spd[0] = speed.x;
                             game.spd[1] = speed.y;
                             speed.x = 0;
@@ -275,7 +287,7 @@ void field_set(void){
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
-                    if(game.co != -1){
+                    if(game.co != -5){
                         if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
                             speed.y = -speed.y * bai(p[1].type);
                             speed.x = speed.x * bai(p[1].type);
@@ -307,7 +319,7 @@ void field_set(void){
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
-                    if(game.co != -1){
+                    if(game.co != -5){
                         if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
                             speed.y = -speed.y * 0.9;
                             speed.x = speed.x * 0.9;
@@ -343,7 +355,11 @@ void field_set(void){
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
-                    if(game.co != 1){
+		    if(game.co == -1){
+		 	game.co = -5;
+			p[2].ap = 0;
+		    }
+                    if(game.co != 5){
                         if( (l = sqrt(speed.x*speed.x + speed.y*speed.y)) < 7){
                             k = M_PI * (10 + rand()%80)/100;
                             speed.y = l * sin(k) * bai(p[2].type);
@@ -355,6 +371,7 @@ void field_set(void){
                         }
                         game.defe[0][1] = def_ugoki(-1);
                         if(game.co == 10){
+			    p[2].ap = 0;
                             game.spd[0] = speed.x;
                             game.spd[1] = speed.y;
                             speed.x = 0;
@@ -364,7 +381,7 @@ void field_set(void){
                         game.defe[1][1] = 0;
                         def_ugoki2();
                     }else
-                        game.co = 1;
+                        game.co = 0;
                 }   
             }else if(-pad.y + PAD_R >= SUP_Y && -pad.y + PAD_R <= SUP_Y - speed.y){
                 if(pad.x+PAD_R > p[3].x - SUP_W && pad.x-PAD_R < p[3].x + SUP_W){
@@ -388,7 +405,7 @@ void field_set(void){
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
-                    if(game.co != 1){
+                    if(game.co != 5){
                         if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
                             speed.y = -speed.y * bai(p[3].type);
                             speed.x = speed.x * bai(p[3].type);
@@ -419,7 +436,7 @@ void field_set(void){
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
-                    if(game.co != 1){
+                    if(game.co != 5){
                         if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
                             speed.y = -speed.y * 0.9;
                             speed.x = speed.x * 0.9;
