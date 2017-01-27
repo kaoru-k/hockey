@@ -40,7 +40,6 @@ int init_sdl(void)
     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_SetVideoMode(WINDOW_W, WINDOW_H, 0, SDL_OPENGL);
-
     set_OpenGL();
 
     // ジョイスティックサブシステムを初期化する

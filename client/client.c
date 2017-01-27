@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     flag = 1;
 
     setting_client();
-
+	
     draw_field();
     if(myid == 0 || myid == 1){
         cameramode = 0;
