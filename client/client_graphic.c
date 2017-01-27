@@ -16,7 +16,7 @@
 PAD         pad        = {0,0};
 int         cameramode = 0;                 //0の時：初期or1p2p / 1の時:3p4p *削除予定
 SDL_Rect    camera     = {0.0, 0.0};
-GLuint      texA       = 0;                 //テクスチャ
+GLuint      texA[5]    = {0};           //テクスチャ
 int         flash      = 0;
 
 static void set_OpenGL(void);
@@ -28,7 +28,7 @@ static void drawAxis(void);
 static void drawPlane(void);
 static int  Pot(int inSize);
 static void creatTex(char *file, GLuint *tex);
-static void modelD(GLdouble alp,GLint tex);
+static void modelD(GLdouble alp);
 static void modelD_test(void);
 static int  onoff(void);
 
@@ -52,7 +52,12 @@ int init_sdl(void)
         printf("failed to open joystick.\n");
 
     //テクスチャ作成
-    creatTex("./image/image.bmp", &texA);
+    creatTex("./image/mc.bmp", &texA[0]);
+    creatTex("./image/rep.bmp", &texA[1]);
+    creatTex("./image/mcy.bmp", &texA[2]);
+    creatTex("./image/zeni.bmp", &texA[3]);
+    creatTex("./image/image.bmp", &texA[4]);
+    
 }
 
 int draw_field(void)
@@ -70,7 +75,7 @@ int draw_field(void)
     drawPlane();
     drawAxis();
     draw2D();
-    //modelD_test();
+    modelD_test();
     SDL_GL_SwapBuffers();
 }
 
@@ -742,18 +747,57 @@ static void creatTex(char *file, GLuint *tex)
     for(num=0; num<2; num++) SDL_FreeSurface(imgSrc[num]);
 }
 
-static void modelD(GLdouble alp,GLint tex)
+static void modelD(GLdouble alp)
 {
-    glBindTexture(GL_TEXTURE_2D, tex);
-    alp = 1.0;
+    if(cameramode == 0){
+    glBindTexture(GL_TEXTURE_2D, texA[0]);
     GLfloat texture_color[] = {1, 1, 1, alp};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( REC*0.8, REC*0.5);
-    glTexCoord2i(1, 0);  glVertex2i( REC*0.8,-REC*0.5);
-    glTexCoord2i(1, 1);  glVertex2i(-REC*0.5,-REC*0.5);
-    glTexCoord2i(0, 1);  glVertex2i(-REC*0.5, REC*0.5);
+    glTexCoord2i(0, 0);  glVertex2i( 65, 88);
+    glTexCoord2i(1, 0);  glVertex2i( 65, 73);
+    glTexCoord2i(1, 1);  glVertex2i( 50, 73);
+    glTexCoord2i(0, 1);  glVertex2i( 50, 88);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, texA[2]);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 65, 28);
+    glTexCoord2i(1, 0);  glVertex2i( 65, 13);
+    glTexCoord2i(1, 1);  glVertex2i( 50, 13);
+    glTexCoord2i(0, 1);  glVertex2i( 50, 28);
+    glEnd();
+    }else if(cameramode == 1){
+    glBindTexture(GL_TEXTURE_2D, texA[1]);
+    GLfloat texture_color[] = {1, 1, 1, alp};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 65, 88);
+    glTexCoord2i(1, 0);  glVertex2i( 65, 73);
+    glTexCoord2i(1, 1);  glVertex2i( 50, 73);
+    glTexCoord2i(0, 1);  glVertex2i( 50, 88);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, texA[3]);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 65, 28);
+    glTexCoord2i(1, 0);  glVertex2i( 65, 13);
+    glTexCoord2i(1, 1);  glVertex2i( 50, 13);
+    glTexCoord2i(0, 1);  glVertex2i( 50, 28);
+    glEnd();
+    }
+
+    glBindTexture(GL_TEXTURE_2D, texA[4]);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 65, -34.5);
+    glTexCoord2i(1, 0);  glVertex2i( 65, -49.5);
+    glTexCoord2i(1, 1);  glVertex2i( 50, -49.5);
+    glTexCoord2i(0, 1);  glVertex2i( 50, -34.5);
     glEnd();
 }
 
@@ -766,7 +810,7 @@ static void modelD_test()
     if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
     else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
     
-    modelD(alp,texA);//modelD
+    modelD(alp);//modelD
     
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 }
