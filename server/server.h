@@ -15,6 +15,8 @@ extern float  gt;
 extern float  ti;
 extern int    current_frame;
 extern int    client_frame[4];
+extern int    start_flag;
+extern int    sound_flag;
 
 /***** 外部関数 *****/
 // server_net.c
