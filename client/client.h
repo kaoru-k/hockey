@@ -21,7 +21,7 @@ extern SDL_Joystick *joystick;
 extern int  cameramode;     //削除予定
 extern int  current_frame;
 extern int  endflag;
-extern int  send_flag;
+extern char send_flag;
 extern int  recv_flag;
 
 /***** 外部関数 *****/

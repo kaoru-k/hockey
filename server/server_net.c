@@ -24,6 +24,8 @@ static fd_set mask;
 static int num_socks;
 static int endflag = 0;
 static int s_flag[4] = {0};
+int start_flag = 0;
+int sound_flag = 0;
 
 static void set_con(char command);
 static char out_con(int cid);
@@ -129,6 +131,8 @@ int network(void)
                 endflag = 1;   break;
             case COM_SPECIAL :
 		s_flag[i] = 1; break;
+            case COM_START :
+                start_flag = 1;
             default:
                 s_flag[i] = 0; break;
             }
@@ -141,13 +145,17 @@ int network(void)
 		set_con(COM_SPECIAL);
                 result = 1;
             }
+            else if (sound_flag) {
+                sound_flag = 0;
+                set_con(COM_BOUND);
+            }
             else {
                 set_con(COM_NONE);
                 result = 1;
             }
 
             send_data(BROADCAST, &send_con, sizeof(CONTAINER_S));
-            //fprintf(stderr, "send_data()   to:%d com:%c\n", i, send_con.com);
+            fprintf(stderr, "send_data()   to:%d com:%c\n", i, send_con.com);
         }
     }
     return result;
@@ -168,9 +176,9 @@ static char out_con(int cid)
     if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
         p[clients[cid].control].x = recv_con.x;
-        //fprintf(stderr, "recv_data() from:%d com:%c\n", cid, recv_con.com);
+        fprintf(stderr, "recv_data() from:%d com:%c\n", cid, recv_con.com);
     }
-    //else fprintf(stderr, "recv_data() from:%d pass\n", cid);
+    else fprintf(stderr, "recv_data() from:%d pass\n", cid);
     
     return recv_con.com;
 }

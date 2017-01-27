@@ -400,7 +400,8 @@ void field_set(void){
 	}
 	if(game.now - game.time > 2)
 	    pad.x = p[0].x;
-	if(game.now - game.time > 3 && s_on()){
+	if(game.now - game.time > 3 && start_flag){
+            start_flag = 0;
             game.now = 0;
 	    game.scene = 0;/*
             k = M_PI * (10 + rand()%180)/100;

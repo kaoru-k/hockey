@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 
 /* ネットワーク */
-#define DEFAULT_PORT   51000
+#define DEFAULT_PORT   51000  // デフォルトのポート番号 
 #define MAX_LEN_BUFFER 256
 #define MAX_LEN_ADDR   32
 #define BROADCAST      -1
@@ -17,28 +17,29 @@
 /* コマンド */
 #define COM_NONE       'N'    // None      何もなし（座標をやり取りする）
 #define COM_SPECIAL    'S'    // Special   必殺技
+#define COM_START      'T'    // sTart     ゲームスタート
 #define COM_CONTINUE   'C'    // Continue  コンティニュー
 #define COM_EXIT       'X'    // eXit      終了
 #define COM_WIN        'W'    // Win       「Win」表示   (点数送信)
 #define COM_LOSE       'L'    // Lose      「Lose」表示  (点数送信)
 #define COM_READY      'R'    // Ready     「Ready」表示 
-#define COM_START      'T'    // sTart     「Start」表示
+#define COM_BOUND      'B'    // Bound     跳ね返る音
 
 /* フィールド */
-#define FIELD_H  160          // フィールドの縦幅
-#define FIELD_W  100          // フィールドの横幅
-#define GOAL_W   30           // ゴールの幅
+#define FIELD_H        160    // フィールドの縦幅
+#define FIELD_W        100    // フィールドの横幅
+#define GOAL_W         30     // ゴールの幅
 
 /* プレイヤー */
-#define DEF_Y 150             // ディフェンダーのY座標
-#define DEF_W 30              // ディフェンダーの幅
-#define SUP_Y 115             // サポーターのY座標
-#define SUP_W 10              // サポーターの幅
-#define ATK_Y 75              // アタッカーのY座標
-#define ATK_W 20              // アタッカーの幅
+#define DEF_Y          150    // ディフェンダーのY座標
+#define DEF_W          30     // ディフェンダーの幅
+#define SUP_Y          115    // サポーターのY座標
+#define SUP_W          10     // サポーターの幅
+#define ATK_Y          75     // アタッカーのY座標
+#define ATK_W          20     // アタッカーの幅
 
 /* パッド */
-#define PAD_R 10              // パッドの半径
+#define PAD_R          10     // パッドの半径
 
 /* クライアント情報用の構造体 */
 typedef struct{

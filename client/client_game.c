@@ -96,17 +96,19 @@ int Keyevent(void)
         case SDL_JOYBUTTONDOWN:
             switch(event.jbutton.button){
             case 0 :
-                send_flag = 1; break;
+                send_flag = COM_START;   break;
+            case 1 :
+                send_flag = COM_SPECIAL; break;
             case 4 :
                 camera.x += 5; break;
             case 5 :
                 camera.x -= 5; break;
             case 11:
-                endflag=1; return 1;
+                endflag = 1; break;
             }
             break;
 	default:
-            send_flag = 0;
+            send_flag = COM_NONE; break;
         }
 	
     }
@@ -115,6 +117,5 @@ int Keyevent(void)
 
     if(FIELD_W > p[control_id].x + speedx[0] + ATK_W && p[control_id].x + speedx[0] - ATK_W > -FIELD_W && p[control_id].hp > 0)
         p[control_id].x += speedx[0];
-    
     return 1;   
 }

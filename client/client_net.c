@@ -14,11 +14,11 @@ static int sock;
 static int num_sock;
 static fd_set mask;
 
-int myid;
-int control_id;
-int latest_frame;
-int send_flag = 0;
-int recv_flag = 0;
+int  myid;
+int  control_id;
+int  latest_frame;
+char send_flag;
+int  recv_flag = 0;
 CONTAINER_C send_con;
 CONTAINER_S recv_con;
 
@@ -72,10 +72,8 @@ int network_send(void)
     SDL_Thread *thr1;
     if (endflag == 1)
         set_con(COM_EXIT);
-    else if (send_flag == 1)
-        set_con(COM_SPECIAL);
     else
-        set_con(COM_NONE);
+        set_con(send_flag);
     //fprintf(stderr, "send_data()\n");
     send_data(&send_con, sizeof(CONTAINER_C));
     //thr1 = SDL_CreateThread(send_thread, NULL);
@@ -96,15 +94,13 @@ int network_recv(void)
         recv_data(&recv_con, sizeof(CONTAINER_S));
         switch (out_con()) {
         case COM_EXIT:
-            endflag = 1;
-            return 0;
+            endflag = 1; return 0;
+	case COM_BOUND:
+            play_sound(M_BOUND); break;
         case COM_SPECIAL:
-            play_sound(M_BOUND);
-            recv_flag = 1;
-            break;
+            recv_flag = 1; break;
         default:
-            recv_flag = 0;
-            break;
+            recv_flag = 0; break;
         }
     }
 
