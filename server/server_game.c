@@ -150,12 +150,12 @@ int hissatu(int type,int a){
 void Hcom(int id){
     int i;
     if(id == 0 || id == 1){
-        if((i = hissatu(p[id].type,1,id)) !=-1)
+        if((i = hissatu(p[id].type,1)) !=-1)
 	    p[id].ap = 0;
         return;
     }
     if(id == 2 || id == 3){
-        if((i = hissatu(p[id].type,-1,id)) != -1)
+        if((i = hissatu(p[id].type,-1)) != -1)
 	    p[id].ap = 0;
         return;
     }
