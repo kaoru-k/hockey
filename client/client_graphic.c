@@ -36,6 +36,7 @@ static int  onoff(void);
 int init_sdl(void)
 {
     char title[50];
+    SDL_Surface* icon = SDL_LoadBMP("image/KBTIT.bmp");
     // SDLを初期化する
     SDL_Init(SDL_INIT_VIDEO);
     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
@@ -43,6 +44,7 @@ int init_sdl(void)
     SDL_SetVideoMode(WINDOW_W, WINDOW_H, 0, SDL_OPENGL);
     sprintf(title, "AIR HOCKEY [myid=%d]", myid);
     SDL_WM_SetCaption(title, "AIR HOCKEY");
+    SDL_WM_SetIcon(icon, NULL);
     set_OpenGL();
 
     // ジョイスティックサブシステムを初期化する
