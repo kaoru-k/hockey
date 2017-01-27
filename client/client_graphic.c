@@ -124,13 +124,6 @@ void StartWindow(void)
     if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
     else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
     
-    glBindTexture(GL_TEXTURE_2D, texA[1]);
-    glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 20, 33);
-    glTexCoord2i(1, 0);  glVertex2i( 20,-33);
-    glTexCoord2i(1, 1);  glVertex2i(-20,-33);
-    glTexCoord2i(0, 1);  glVertex2i(-20, 33);
-    glEnd();
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
     GLfloat texture_color[] = {1, 1, 1, alp};
