@@ -141,7 +141,7 @@ int network(void)
 		set_con(COM_EXIT);
                 result = 0;
             }
-            else if (s_on()) {              
+            else if (s_on() != -1) {              
 		set_con(COM_SPECIAL);
                 result = 1;
             }
