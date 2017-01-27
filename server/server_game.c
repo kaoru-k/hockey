@@ -184,14 +184,17 @@ void field_set(void){
         if(pad.x + PAD_R > FIELD_W){
             pad.x = 2 * FIELD_W - pad.x - 2 * PAD_R;
             speed.x = speed.x * (-1);
+	    sound_flag = 1;
         }else if(pad.x - PAD_R < (-1)*FIELD_W){
             pad.x = (-2) * FIELD_W - pad.x + 2 * PAD_R;
             speed.x = speed.x * (-1);
+	    sound_flag = 1;
         }
         //プレイヤーにぶつかった時
         if(speed.y > 0){
             if(pad.y + PAD_R >= ATK_Y && pad.y + PAD_R <= ATK_Y + speed.y){
                 if(pad.x + PAD_R > p[0].x - ATK_W && pad.x - PAD_R< p[0].x + ATK_W){
+		    sound_flag = 1;
 		    if( (p[0].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[0].ap = 100;
                     if( (p[0].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*game.han) <= 0 ){      //ｈｐ減少
@@ -233,8 +236,8 @@ void field_set(void){
 		    def_ugoki2();
                 }
             }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + speed.y){
-                    //fprintf(stderr,"\n%d\n",i);
                 if(pad.x + PAD_R > p[1].x - SUP_W && pad.x - PAD_R < p[1].x + SUP_W){
+		    sound_flag = 1;
 		    if( (p[1].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[1].ap = 100;
                     if( (p[1].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*game.han) <= 0 ){      //ｈｐ減少
@@ -273,6 +276,7 @@ void field_set(void){
                 }
             }else if(pad.y + PAD_R >= DEF_Y && pad.y + PAD_R <= DEF_Y + speed.y){
                 if(pad.x + PAD_R> p[4].x - DEF_W && pad.x-PAD_R < p[4].x + DEF_W){
+		    sound_flag = 1;
                     if( (p[4].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*game.han) <= 0 ){      //ｈｐ減少
                         p[4].x = 1000;//HPが0以下になった時の処理
 			p[4].hp = 0;
@@ -295,6 +299,7 @@ void field_set(void){
         }else{
             if(pad.y - PAD_R <= -ATK_Y && pad.y - PAD_R >= -ATK_Y + speed.y){
                 if(pad.x+PAD_R > p[2].x - ATK_W && pad.x-PAD_R < p[2].x + ATK_W){
+		    sound_flag = 1;
 		    if( (p[2].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[2].ap = 100;
                     if( (p[2].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*game.han) <= 0 ){      //ｈｐ減少
@@ -336,6 +341,7 @@ void field_set(void){
                 }
             }else if(-pad.y + PAD_R >= SUP_Y && -pad.y + PAD_R <= SUP_Y - speed.y){
                 if(pad.x+PAD_R > p[3].x - SUP_W && pad.x-PAD_R < p[3].x + SUP_W){
+		    sound_flag = 1;
 		    if( (p[3].ap += sqrt(speed.x*speed.x + speed.y * speed.y)) > 100)
 			p[3].ap = 100;
                     if( (p[3].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*game.han) <= 0 ){      //ｈｐ減少
@@ -391,6 +397,7 @@ void field_set(void){
                     game.defe[0][1] = def_ugoki(-1);
 		    game.defe[1][1] = 0;
 	    	    def_ugoki2();
+		    sound_flag = 1;
 		}
             }
         }
@@ -398,6 +405,7 @@ void field_set(void){
         //縦の壁にぶつかった時
         if(pad.y + PAD_R > FIELD_H){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
+		sound_flag = 1;
 		if(game.co == 10 && speed.y == game.co){
 	    	    game.co = 0;
 		    speed.x = game.spd[0];
@@ -417,6 +425,7 @@ void field_set(void){
             }
         }else if(pad.y - PAD_R <= (-1)*FIELD_H){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
+		sound_flag = 1;
 		if(game.co == -10 && speed.y == game.co){
 	    	    game.co = 0;
 		    speed.x = game.spd[0];
