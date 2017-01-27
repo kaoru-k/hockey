@@ -120,14 +120,14 @@ void sosei(int a){
 //typeキャラタイプ　a : 敵側か味方側か
 void hissatu(int type,int a){
     switch(type){
-    case 1:
+    case 0:
         game.co = -10*a;
         break;
-    case 0:
-        game.co = a;
+    case 1:
+        sosei(a);
         break;
     case 2:
-        sosei(a);
+        game.co = a;
         break;
     case 3:
 	game.time = game.now;
