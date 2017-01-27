@@ -35,11 +35,14 @@ static int  onoff(void);
 
 int init_sdl(void)
 {
+    char title[50];
     // SDLを初期化する
     SDL_Init(SDL_INIT_VIDEO);
     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_SetVideoMode(WINDOW_W, WINDOW_H, 0, SDL_OPENGL);
+    sprintf(title, "AIR HOCKEY [myid=%d]", myid);
+    SDL_WM_SetCaption(title, "AIR HOCKEY");
     set_OpenGL();
 
     // ジョイスティックサブシステムを初期化する
