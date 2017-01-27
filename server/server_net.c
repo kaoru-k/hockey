@@ -155,7 +155,7 @@ int network(void)
             }
 
             send_data(BROADCAST, &send_con, sizeof(CONTAINER_S));
-            fprintf(stderr, "send_data()   to:%d com:%c\n", i, send_con.com);
+            //fprintf(stderr, "send_data()   to:%d com:%c\n", i, send_con.com);
         }
     }
     return result;
@@ -175,10 +175,11 @@ static char out_con(int cid)
 {
     if (client_frame[cid] < recv_con.frame) {
         client_frame[cid] = recv_con.frame;
-        p[clients[cid].control].x = recv_con.x;
-        fprintf(stderr, "recv_data() from:%d com:%c\n", cid, recv_con.com);
+        if (p[clients[cid].control].hp > 0)
+            p[clients[cid].control].x = recv_con.x;
+        //fprintf(stderr, "recv_data() from:%d com:%c\n", cid, recv_con.com);
     }
-    else fprintf(stderr, "recv_data() from:%d pass\n", cid);
+    //else fprintf(stderr, "recv_data() from:%d pass\n", cid);
     
     return recv_con.com;
 }

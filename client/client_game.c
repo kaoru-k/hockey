@@ -110,12 +110,15 @@ int Keyevent(void)
 	default:
             send_flag = COM_NONE; break;
         }
-	
     }
-    
-	
 
-    if(FIELD_W > p[control_id].x + speedx[0] + ATK_W && p[control_id].x + speedx[0] - ATK_W > -FIELD_W && p[control_id].hp > 0)
-        p[control_id].x += speedx[0];
+    if (p[control_id].hp > 0 && (control_id == 0 ||control_id == 2))
+        if(FIELD_W > p[control_id].x + speedx[0] + ATK_W && p[control_id].x + speedx[0] - ATK_W > -FIELD_W)
+            p[control_id].x += speedx[0];
+
+    if (p[control_id].hp > 0 && (control_id == 1 ||control_id == 3))
+        if(FIELD_W > p[control_id].x + speedx[0] + SUP_W && p[control_id].x + speedx[0] - SUP_W > -FIELD_W)
+            p[control_id].x += speedx[0];
+
     return 1;   
 }
