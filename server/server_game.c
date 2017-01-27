@@ -120,7 +120,7 @@ void sosei(int a){
 //typeキャラタイプ　a : 敵側か味方側か
 void hissatu(int type,int a){
     switch(type){
-    case 0:
+    case 3:
         game.co = -10*a;
         break;
     case 1:
@@ -129,9 +129,10 @@ void hissatu(int type,int a){
     case 2:
         sosei(a);
         break;
-    case 3:
+    case 0:
+	game.time = game.now;
         game.co = 5*a;
-        game.han = 20;
+        game.han = 100;
         break;
     default:break;
     }
@@ -165,7 +166,16 @@ void field_set(void){
     //通常
     pad.x += speed.x;
     pad.y += speed.y;
+
+//必殺
     Hcom(s_on());
+    if(game.han != 10){
+	if(game.now - game.time > 10){
+	    game.co = 0;
+	    game.han = 10;
+	}
+    }
+
     /* 乱数初期化 */
     srand(time(NULL));
     if(game.scene == 0){
