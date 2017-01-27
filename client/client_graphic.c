@@ -16,7 +16,8 @@
 PAD         pad        = {0,0};
 int         cameramode = 0;                 //0の時：初期or1p2p / 1の時:3p4p *削除予定
 SDL_Rect    camera     = {0.0, 0.0};
-GLuint      texA[5]    = {0};           //テクスチャ
+GLuint      texA[6]    = {0};           //キャラテクスチャ
+GLuint      Starttex   = 0;
 int         flash      = 0;
 
 static void set_OpenGL(void);
@@ -52,11 +53,13 @@ int init_sdl(void)
         printf("failed to open joystick.\n");
 
     //テクスチャ作成
-    creatTex("./image/mc.bmp", &texA[0]);
-    creatTex("./image/rep.bmp", &texA[1]);
-    creatTex("./image/mcy.bmp", &texA[2]);
+    creatTex("./image/mcree.bmp", &texA[0]);
+    creatTex("./image/reaper.bmp", &texA[1]);
+    creatTex("./image/macy.bmp", &texA[2]);
     creatTex("./image/zeni.bmp", &texA[3]);
-    creatTex("./image/image.bmp", &texA[4]);
+    creatTex("./image/Dva.bmp", &texA[4]); 
+    creatTex("./image/zaria.bmp", &texA[5]);
+    creatTex("./image/zaria.bmp", &Starttex);
     
 }
 
@@ -103,6 +106,49 @@ static void set_OpenGL(void)
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+}
+
+void StartWindow(void)
+{
+    gluLookAt( 0.0f, 0.0f, 70.0f,
+	       0.0, 0.0f, 0.0f,
+	       1.0f,  0.0f, 0.0f);
+
+    glMatrixMode(GL_PROJECTION);// 射影変換行列設定	
+    //glEnable(GL_LIGHT0);
+    glPushMatrix();// 射影変換行列を復元
+    glMatrixMode(GL_MODELVIEW);// モデルビュー変換行列設定
+    glPushMatrix();// モデルビュー行列を復元
+    glLoadIdentity();// 単位行列を設定
+
+    glMatrixMode(GL_PROJECTION);// 射影変換行列設定	
+    //glEnable(GL_LIGHT0);
+    glPushMatrix();// 射影変換行列を復元
+    glMatrixMode(GL_MODELVIEW);// モデルビュー変換行列設定
+    glPushMatrix();// モデルビュー行列を復元
+    glLoadIdentity();// 単位行列を設定
+
+    glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);//テクスチャON
+
+    static GLdouble alp,vec;
+    if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
+    else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
+
+    glBindTexture(GL_TEXTURE_2D, Starttex);
+    GLfloat texture_color[] = {1, 1, 1, alp};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 70, 93);
+    glTexCoord2i(1, 0);  glVertex2i( 70,-93);
+    glTexCoord2i(1, 1);  glVertex2i(-70,-93);
+    glTexCoord2i(0, 1);  glVertex2i(-70, 93);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);//テクスチャOFF
+
+    SDL_GL_SwapBuffers();
 }
 
 //2D描画用
@@ -769,6 +815,16 @@ static void modelD(GLdouble alp)
     glTexCoord2i(1, 1);  glVertex2i( 50, 13);
     glTexCoord2i(0, 1);  glVertex2i( 50, 28);
     glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, texA[4]);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 65, -34.5);
+    glTexCoord2i(1, 0);  glVertex2i( 65, -49.5);
+    glTexCoord2i(1, 1);  glVertex2i( 50, -49.5);
+    glTexCoord2i(0, 1);  glVertex2i( 50, -34.5);
+    glEnd();
+
     }else if(cameramode == 1){
     glBindTexture(GL_TEXTURE_2D, texA[1]);
     GLfloat texture_color[] = {1, 1, 1, alp};
@@ -789,9 +845,8 @@ static void modelD(GLdouble alp)
     glTexCoord2i(1, 1);  glVertex2i( 50, 13);
     glTexCoord2i(0, 1);  glVertex2i( 50, 28);
     glEnd();
-    }
 
-    glBindTexture(GL_TEXTURE_2D, texA[4]);
+    glBindTexture(GL_TEXTURE_2D, texA[5]);
 
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( 65, -34.5);
@@ -799,6 +854,8 @@ static void modelD(GLdouble alp)
     glTexCoord2i(1, 1);  glVertex2i( 50, -49.5);
     glTexCoord2i(0, 1);  glVertex2i( 50, -34.5);
     glEnd();
+
+    }
 }
 
 static void modelD_test()
