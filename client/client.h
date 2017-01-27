@@ -39,6 +39,7 @@ extern int  Keyevent(void);
 // client_graphic.c
 extern int  init_sdl(void);
 extern int  draw_field(void);
+extern void  StartWindow(void);
 
 // client_sound.c
 extern int  setup_sound(void);

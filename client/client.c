@@ -40,6 +40,17 @@ int main(int argc, char *argv[])
     setup_client(server_name, port);
     init_sdl();
     setup_sound();
+
+    int test = 0;
+    SDL_Event event;
+    //draw_field();
+    while(flag){
+       StartWindow();
+	if(SDL_PollEvent(&event))
+		flag = 0;
+    }
+    flag = 1;
+
     setting_client();
 
     draw_field();
