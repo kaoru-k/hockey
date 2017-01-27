@@ -59,7 +59,7 @@ int init_sdl(void)
     creatTex("./image/zeni.bmp", &texA[3]);
     creatTex("./image/Dva.bmp", &texA[4]); 
     creatTex("./image/zaria.bmp", &texA[5]);
-    creatTex("./image/zaria.bmp", &Starttex);
+    creatTex("./image/H.bmp", &Starttex);
     
 }
 
@@ -113,6 +113,7 @@ void StartWindow(void)
     gluLookAt( 0.0f, 0.0f, 70.0f,
 	       0.0, 0.0f, 0.0f,
 	       1.0f,  0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);// 射影変換行列設定	
     //glEnable(GL_LIGHT0);
