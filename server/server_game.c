@@ -3,37 +3,27 @@
   サーバのゲームモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
+#include "server.h"
 #include <time.h>
 #include <math.h>
-#include "server.h"
-
-typedef struct{
-    int time; //時間を計るため
-    int now;  //現在の時間を知るため
-    int heal;
-    int scene;  //0:ゲーム画面　1:ゴールした瞬間 2:ゴール後球を構えている時
-    int point[3]; //点数　point[0]:p[2]p[3]側　point[1]:p[0]p[1]側 point[2]:前回負けたチーム
-    int defe[2][2];   //ディフェンダーの移動する向きと目標座標
-    int co[2];      //こまんど　
-    double spd[2];  //コマンドを発動した時に,スピードを一時的に保存するため
-    double han[2]; //ダメージ倍率  基本10、ゼニヤッタの必殺時2倍(20)
-}GAME;
 
 PAD speed={0,0};
 GAME game = {0,0,0,3,{0,0,1}, {{0,0},{0,0}}, {0,0} ,{0,0}, {10,10}};
 
-extern int  def_ugoki(int i);
-extern void  def_ugoki2();
-extern void field_set(void);
-static float  bai  (int type);
+int win;
 
-/*倍率を返す関数*************
-そのまま　: 跳ね返り
-+4　　　 : 回復力　　（サポーターのみ）
-+6 　　　: HP
-*********************/
+static int   def_ugoki(int i);
+static void  def_ugoki2(void);
+static float bai(int type);
 
-static float bai(int type){
+static float bai(int type)
+{
+/*************************************
+倍率を返す関数
+そのまま	: 跳ね返り
++4	: 回復力　　（サポーターのみ）
++6	: HP
+*************************************/
     switch(type){
     case 0:return 1.1;  //跳ね返り
     case 1:return 1.14;
@@ -469,13 +459,12 @@ void field_set(void){
 	        def_ugoki2();
             }else{
                 game.time = game.now;
+                win = 1;
                 game.scene = 1;
 		game.point[2] = 0;
-                if(++game.point[1] == 2){
-                    fprintf(stderr,"lose\n");
+                if(++game.point[1] == 2)
 		    game.point[2] = 1;
-		}
-                fprintf(stderr,"[%d] - [%d]\n",game.point[0],game.point[1]);
+                fprintf(stderr,"x[%d] - [%d]o\n",game.point[0],game.point[1]);
             }
         }else if(pad.y - PAD_R <= (-1)*FIELD_H){
             if(pad.x >= GOAL_W || pad.x <= -GOAL_W){
@@ -492,13 +481,12 @@ void field_set(void){
 	        def_ugoki2();
             }else{
                 game.time = game.now;
+                win = 0;
                 game.scene = 1;
 		game.point[2] = 2;
-                if(++game.point[0] == 2){
-                    fprintf(stderr,"win\n");
+                if(++game.point[0] == 2)
 		    game.point[2] = 1;
-		}
-                fprintf(stderr,"[%d] - [%d]\n",game.point[0],game.point[1]);
+                fprintf(stderr,"o[%d] - [%d]x\n",game.point[0],game.point[1]);
             }
         }
     }else{

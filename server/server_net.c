@@ -18,7 +18,8 @@ CLIENT clients[4];
 PLAYER p[6];
 CONTAINER_S send_con;
 CONTAINER_C recv_con;
-int client_frame[4] = {0,0,0,0};
+int client_frame[4] = {0};
+int current_frame = 0;
 
 static fd_set mask;
 static int num_socks;
@@ -141,6 +142,23 @@ int network(void)
 		set_con(COM_EXIT);
                 result = 0;
             }
+            else if (game.scene == 1) {
+                for (i = 0; i < 4; i++)
+                    client_frame[i] = 0;
+		current_frame = 0;
+
+                send_con.p[0].x = game.point[0];
+                send_con.p[1].x = game.point[1];
+                for (i = 0; i < num_clients; i++) {
+                    if ( (win == 0 && (i == 0 || i == 1)) || (win == 1 && (i == 2 || i == 3)) ) 
+                        send_con.com = COM_WIN;
+                    else
+                        send_con.com = COM_LOSE;
+                    
+                    send_data(i, &send_con, sizeof(CONTAINER_S));
+                }
+                return 1;
+            }
             else if (s_on() != -1) {              
 		set_con(COM_SPECIAL);
                 result = 1;
@@ -148,6 +166,7 @@ int network(void)
             else if (sound_flag) {
                 sound_flag = 0;
                 set_con(COM_BOUND);
+                result = 1;
             }
             else {
                 set_con(COM_NONE);

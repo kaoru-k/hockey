@@ -19,6 +19,7 @@ int  control_id;
 int  latest_frame;
 char send_flag;
 int  recv_flag = 0;
+int  point[2];
 CONTAINER_C send_con;
 CONTAINER_S recv_con;
 
@@ -95,6 +96,12 @@ int network_recv(void)
         switch (out_con()) {
         case COM_EXIT:
             endflag = 1; return 0;
+        case COM_WIN:
+            fprintf(stderr,"WIN  [%d]-[%d]\n", point[0], point[1]);
+            recv_flag = 10; break;
+        case COM_LOSE:
+            fprintf(stderr,"LOSE [%d]-[%d]\n", point[0], point[1]);
+            recv_flag = -1; break;
 	case COM_BOUND:
             play_sound(M_BOUND); break;
         case COM_SPECIAL:
@@ -126,13 +133,19 @@ static void set_con(char command)
 static char out_con(void)
 {
     int i;
-    
+    if (recv_con.com == COM_WIN || recv_con.com == COM_LOSE) {
+        point[0] = recv_con.p[0].x;
+        point[1] = recv_con.p[1].x;
+        current_frame = 0;
+        latest_frame = 0;
+        return recv_con.com;
+    }
+
     if (recv_con.frame > latest_frame) {
         recv_con.frame = latest_frame;
         copy_pad(&pad, &recv_con.pad);
         for (i = 0; i < 6; i++)
             copy_player(&p[i], &recv_con.p[i]);
-
         //fprintf(stderr, "com=%d\n", recv_con.com);
     }
     // else fprintf(stderr, "pass\n");
