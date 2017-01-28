@@ -15,14 +15,15 @@ extern PLAYER p[6];           //0,1,2,3->human 4,5->cpu
 extern PAD  pad;
 extern int  myid;
 extern int  control_id;
-extern SDL_Rect     pack;
-extern SDL_Rect     camera;
-extern SDL_Joystick *joystick;
-extern int  cameramode;     //削除予定
+extern int  cameramode;
 extern int  current_frame;
+extern int  flag;
 extern int  endflag;
 extern char send_flag;
 extern int  recv_flag;
+extern SDL_Rect     pack;
+extern SDL_Rect     camera;
+extern SDL_Joystick *joystick;
 
 /***** 外部関数 *****/
 // client_net.c

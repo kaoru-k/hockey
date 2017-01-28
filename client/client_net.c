@@ -3,6 +3,7 @@
   クライアントのネットワークモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
+
 #include "client.h"
 #include <unistd.h>
 #include <sys/socket.h>

@@ -1,5 +1,6 @@
 /*************************************
-  client_main.c
+  client.c
+  クライアントのメインモジュール
   徳島大学 工学部 知能情報工学科 27班
 *************************************/
 
@@ -9,6 +10,7 @@
 #include <sys/time.h>
 
 int flag = 1;
+int endflag = 0;
 int current_frame = 0;
 
 static int network_thread(void* args);
@@ -42,38 +44,39 @@ int main(int argc, char *argv[])
 
     int test = 0;
     SDL_Event event;
-
-    while(flag){
-       StartWindow();
-	if(SDL_PollEvent(&event))
+    
+    while(endflag == 0) {
+        while(flag){
+            StartWindow();
+            if(SDL_PollEvent(&event))
 		flag = 0;
+        }
+        flag = 1;
+
+        setting_client();
+        
+        draw_field();
+        if(myid == 0 || myid == 1){
+            cameramode = 0;
+            camera.x = 0; camera.y = 140;
+        }
+        else
+        {
+            cameramode = 1;
+            camera.x = 0; camera.y = -140;
+        }
+
+        thr1 = SDL_CreateThread(network_thread, &flag);
+
+        while (flag) {
+            flag = Keyevent();
+            network_send();
+            if (current_frame % 2) draw_field();
+            current_frame++;
+        }
+        SDL_WaitThread(thr1, NULL);
     }
-    flag = 1;
-
-    setting_client();
-	
-    draw_field();
-    if(myid == 0 || myid == 1){
-        cameramode = 0;
-        camera.x = 0; camera.y = 140;
-    }
-    else
-    {
-        cameramode = 1;
-        camera.x = 0; camera.y = -140;
-    }
-
-    thr1 = SDL_CreateThread(network_thread, &flag);
-
-    while (flag) {
-        if (current_frame % 2) draw_field();
-        flag = Keyevent();
-        current_frame++;
-        network_send();
-    }
-
-    SDL_WaitThread(thr1, NULL);
-
+    terminate_client();
     return 0;
 }
     
@@ -81,8 +84,7 @@ static int network_thread(void* args)
 {
     fprintf(stderr, "network_thread() started.\n");
     while (flag) {
-        flag = network_recv(); 
+        flag = network_recv();
     }
-    terminate_client();
     return 0;
 }

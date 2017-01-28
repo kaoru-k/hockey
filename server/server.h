@@ -28,6 +28,7 @@ extern float  gt;
 extern float  ti;
 extern int    current_frame;
 extern int    client_frame[4];
+extern int    endflag;
 extern int    start_flag;
 extern int    sound_flag;
 extern int    win;
@@ -35,6 +36,7 @@ extern int    win;
 /***** 外部関数 *****/
 // server_net.c
 void setup_server(u_short port);
+void setting_server(void);
 void terminate_server(void);
 int  network(void);
 int s_on(void);

@@ -8,8 +8,6 @@ TARGET1 = hockey_server
 TARGET2 = hockey_client
 OBJS1   = server/server.o server/server_game.o server/server_net.o
 OBJS2   = client/client.o client/client_game.o client/client_graphic.o client/client_net.o client/client_sound.o
-HEADS1  = server/server.h
-HEADS2  = client/client.h
 .PHONY: all clean
 
 # default

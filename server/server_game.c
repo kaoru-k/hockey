@@ -12,9 +12,12 @@ GAME game = {0,0,0,3,{0,0,1}, {{0,0},{0,0}}, {0,0} ,{0,0}, {10,10}};
 
 int win;
 
+static float bai(int type);
 static int   def_ugoki(int i);
 static void  def_ugoki2(void);
-static float bai(int type);
+static int   sosei(int a);
+static int   hissatu(int type,int a);
+static void  Hcom(int id);
 
 static float bai(int type)
 {
@@ -41,7 +44,7 @@ static float bai(int type)
 }
 
 //ディフェンダーの目指す場所
-extern int def_ugoki(int i){
+static int def_ugoki(int i){
     int a = 0;
     int b = 1;
     b = 1;
@@ -61,7 +64,7 @@ extern int def_ugoki(int i){
 }
 
 //ディフェンダーの目指す場所２
-extern void def_ugoki2(){
+static void def_ugoki2(){
     if(game.defe[0][1] > p[4].x)
         game.defe[0][0] = 1;
     else
@@ -73,7 +76,7 @@ extern void def_ugoki2(){
         game.defe[1][0] = -1;
 }
 
-int sosei(int a){
+static int sosei(int a){
     if(a == 1){
     if(p[0].hp == 0){
 	p[0].hp = bai(p[0].type+6);
@@ -102,7 +105,7 @@ int sosei(int a){
 }
 
 //typeキャラタイプ　a : 敵側か味方側か
-int hissatu(int type,int a){
+static int hissatu(int type,int a){
     switch(type){
     case 1:
 	game.co[1] = 10 * a;
@@ -130,7 +133,7 @@ int hissatu(int type,int a){
 }
 
 //必殺コマンド,引数 必殺を使ったキャラのid
-void Hcom(int id){
+static void Hcom(int id){
     int i;
     if(id == 0 || id == 1){
         if((i = hissatu(p[id].type,1)) !=-1)

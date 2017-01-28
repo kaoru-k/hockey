@@ -23,7 +23,6 @@ int current_frame = 0;
 
 static fd_set mask;
 static int num_socks;
-static int endflag = 0;
 static int s_flag[4] = {0};
 int start_flag = 0;
 int sound_flag = 0;

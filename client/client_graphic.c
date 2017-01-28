@@ -14,11 +14,14 @@
 #define WINDOW_H 768
 
 PAD         pad        = {0,0};
-int         cameramode = 0;                 //0の時：初期or1p2p / 1の時:3p4p *削除予定
+int         cameramode = 0;             // 0の時：初期or1p2p / 1の時:3p4p
 SDL_Rect    camera     = {0.0, 0.0};
-GLuint      texA[6]    = {0};           //キャラテクスチャ
+GLuint      texA[6]    = {0};           // キャラテクスチャ
 GLuint      Starttex   = 0;
 int         flash      = 0;
+GLUquadric* quadric;
+GLUquadric* quadric2;
+GLUquadric* quadric3;
 
 static void set_OpenGL(void);
 static void draw3D(void);
@@ -38,7 +41,7 @@ int init_sdl(void)
     char title[50];
     SDL_Surface* icon = SDL_LoadBMP("image/KBTIT.bmp");
     // SDLを初期化する
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_SetVideoMode(WINDOW_W, WINDOW_H, 0, SDL_OPENGL);
@@ -110,6 +113,10 @@ static void set_OpenGL(void)
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+
+    quadric = gluNewQuadric();
+    quadric2 = gluNewQuadric();
+    quadric3 = gluNewQuadric();
 }
 
 void StartWindow(void)
@@ -403,9 +410,6 @@ static void draw3D(void)
     GLfloat aaa[] = { 0.9, 0.9, 0.0, 0.0 };
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
     // 円球を描画する
-    GLUquadric* quadric = gluNewQuadric();
-    GLUquadric* quadric2= gluNewQuadric();
-    GLUquadric* quadric3= gluNewQuadric();
 
     glTranslatef(pad.x, pad.y, 0.0f);
     gluCylinder(quadric, 10, 10, 5, 30, 30);
@@ -416,9 +420,9 @@ static void draw3D(void)
     gluCylinder(quadric3, 0, 12, 10, 30, 30);
     glTranslatef(-pad.x, -pad.y, -5.0f);
 
-    gluDeleteQuadric(quadric);
-    gluDeleteQuadric(quadric2);
-    gluDeleteQuadric(quadric3);
+    //gluDeleteQuadric(quadric);
+    //gluDeleteQuadric(quadric2);
+    //gluDeleteQuadric(quadric3);
 
     if (recv_flag == 1) onoff();
     GLdouble sidevertex[][3] = {
