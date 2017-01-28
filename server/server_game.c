@@ -228,14 +228,14 @@ void field_set(void){
 			p[0].ap = 100;
                     if( (p[0].hp -= sqrt(speed.x*speed.x + speed.y * speed.y)*game.han[0]) <= 0 ){      //ｈｐ減少
 			if(p[4].hp <= 0){
-                            p[4].x = 1000;//HPが0以下になった時の処理
-			    p[4].hp = 0;
+                            p[0].x = 1000;//HPが0以下になった時の処理
+			    p[0].hp = 0;
 			}
 			if(p[4].hp > 0){
 			    if( (p[0].hp = p[4].hp) > bai(p[0].type+6) )
 				p[0].hp = bai(p[0].type+6);
-			    p[0].hp = 0;
-			    p[0].x = 1000;
+			    p[4].hp = 0;
+			    p[4].x = 1000;
 			}
                     }
     		    if(game.co[1] == 10 && speed.y == game.co[1]){//必殺
