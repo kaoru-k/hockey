@@ -15,8 +15,7 @@ static int network_thread(void* args);
 static int game_thread(void *args);
 
 int main(int argc, char *argv[])
-{
-#ifndef TEST   
+{  
     u_short port = DEFAULT_PORT;
     char server_name[50];
     SDL_Thread *thr1;
@@ -43,7 +42,7 @@ int main(int argc, char *argv[])
 
     int test = 0;
     SDL_Event event;
-    //draw_field();
+
     while(flag){
        StartWindow();
 	if(SDL_PollEvent(&event))
@@ -76,28 +75,6 @@ int main(int argc, char *argv[])
     SDL_WaitThread(thr1, NULL);
 
     return 0;
-
-#else
-    
-    double time_now = 0;
-    double time_last = 0;
-    struct timespec time_tmp;
-    init_sdl();
-    
-    while (flag) {
-	clock_gettime(CLOCK_REALTIME, &time_tmp);
-        time_now = (int)time_tmp.tv_sec + (double)time_tmp.tv_nsec * 0.000000001;
-	if(time_now - time_last > 0.016){
-            field_set();
-            time_last = time_now;
-	}
-        flag = Keyevent();
-        draw_field();
-        SDL_Delay(5);
-    }
-
-    return 0;
-#endif
 }
     
 static int network_thread(void* args)

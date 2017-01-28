@@ -44,9 +44,3 @@ extern void  StartWindow(void);
 // client_sound.c
 extern int  setup_sound(void);
 extern void play_sound(int index);
-
-#ifdef TEST
-// server_game.c (テスト用)
-extern void field_set(void);
-extern int  def_ugoki(int i);
-#endif

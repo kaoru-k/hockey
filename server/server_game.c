@@ -5,12 +5,8 @@
 *************************************/
 #include <time.h>
 #include <math.h>
-
-#ifndef TEST
 #include "server.h"
-#else
-#include "../client/client.h"
-#endif
+
 typedef struct{
     int time; //時間を計るため
     int now;  //現在の時間を知るため
@@ -24,9 +20,6 @@ typedef struct{
 }GAME;
 
 PAD speed={0,0};
-#ifndef TEST
-int current_frame = 0;
-#endif
 GAME game = {0,0,0,3,{0,0,1}, {{0,0},{0,0}}, {0,0} ,{0,0}, {10,10}};
 
 extern int  def_ugoki(int i);
@@ -583,13 +576,13 @@ void field_set(void){
 	start_flag = 0;
     }
 
-    
+    /*
     fprintf(stderr, "***********************************\n");
     for (i = 0; i < 6; i++) {
         fprintf(stderr, "    p%d  x:%f\n", i, p[i].x);
     }
     fprintf(stderr, "    PAD x:%f y:%f\n", pad.x, pad.y);
     fprintf(stderr, "***********************************\n");
-    
+    */
     current_frame++;
 }
