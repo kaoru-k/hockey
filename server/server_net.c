@@ -118,15 +118,15 @@ int network(void)
     timeout.tv_sec  = 0;
     timeout.tv_usec = 4;
     int i;
-    int result;
+    int result = 1;
 
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
-
+    
     for (i = 0; i < num_clients; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &recv_con, sizeof(CONTAINER_C));
-
+            
             switch (out_con(i)) {
             case COM_EXIT :
                 endflag = 1;   break;

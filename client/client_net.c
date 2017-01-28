@@ -146,9 +146,9 @@ static char out_con(void)
         copy_pad(&pad, &recv_con.pad);
         for (i = 0; i < 6; i++)
             copy_player(&p[i], &recv_con.p[i]);
-        //fprintf(stderr, "com=%d\n", recv_con.com);
+        //printf(stderr, "com=%d\n", recv_con.com);
     }
-    // else fprintf(stderr, "pass\n");
+    //else fprintf(stderr, "pass\n");
 
     return recv_con.com;
 }
