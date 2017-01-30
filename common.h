@@ -17,7 +17,7 @@
 /* コマンド */
 #define COM_NONE       'N'    // None      何もなし（座標をやり取りする）
 #define COM_SPECIAL    'S'    // Special   必殺技
-#define COM_S_AND_B    'D'    // s anD b   必殺技+跳ね返る音
+#define COM_S_AND_B    'D'    // S anD B   必殺技+跳ね返る音
 #define COM_START      'T'    // sTart     ゲームスタート
 #define COM_CONTINUE   'C'    // Continue  コンティニュー
 #define COM_RESET      'R'    // Reset     初期化
