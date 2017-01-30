@@ -107,6 +107,9 @@ int network_recv(void)
             play_sound(M_BOUND); break;
         case COM_SPECIAL:
             recv_flag = 1; break;
+	case COM_S_AND_B:
+            play_sound(M_BOUND);
+            recv_flag = 1; break;
         default:
             recv_flag = 0; break;
         }
