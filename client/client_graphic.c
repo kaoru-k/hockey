@@ -74,7 +74,7 @@ int init_sdl(void)
     creatTex("./image/1.bmp", &AP);
     creatTex("./image/kakuteiv.bmp", &Result[0]);
     creatTex("./image/kakuteid.bmp", &Result[1]);
-    creatTex("./image/10.bmp", &PointTex[0]);
+    creatTex("./image/0.bmp", &PointTex[0]);
     creatTex("./image/1.bmp", &PointTex[1]);
     creatTex("./image/2.bmp", &PointTex[2]);
 
