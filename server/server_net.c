@@ -158,8 +158,13 @@ int network(void)
                 }
                 return 1;
             }
-            else if (s_on() != -1) {              
-		set_con(COM_SPECIAL);
+            else if (s_on() != -1) {
+                if (sound_flag) {
+                    sound_flag = 0;
+                    set_con(COM_S_AND_B);
+                }
+		else
+                    set_con(COM_SPECIAL);
                 result = 1;
             }
             else if (sound_flag) {

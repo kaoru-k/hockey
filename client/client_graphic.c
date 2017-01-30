@@ -37,7 +37,8 @@ static int  Pot(int inSize);
 static void creatTex(char *file, GLuint *tex);
 static void modelD(GLdouble alp);
 static void modelD_test(void);
-static int  onoff(void);
+static void flash_on(void);
+static void flash_off(void);
 
 int init_sdl(void)
 {
@@ -115,17 +116,31 @@ static void set_OpenGL(void)
     static GLfloat ambient [] = { 0.9f, 0.9f, 0.9f, 1.0f};
     static GLfloat diffuse [] = { 0.0f, 0.0f, 0.0f, 0.0f};
     static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
+
+    static GLfloat ambient1 [] = { 1.0f, 1.0f, 1.0f, 1.0f};
+    static GLfloat diffuse1[] = { 1.0, 1.0, 0.0, 1.0 };
+    static GLfloat specular1[] = { 0.0f, 0.0f, 0.0f, 0.0f};
+
     glLightfv(GL_LIGHT0, GL_POSITION, position);
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+    
+    glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, specular1);
+    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
     quadric = gluNewQuadric();
     quadric2 = gluNewQuadric();
     quadric3 = gluNewQuadric();
+
+
+
 }
 
 void StartWindow(void)
@@ -424,14 +439,21 @@ static void draw3D(void)
     glTranslatef(0.0, 0.0, 5.0f);
     gluDisk(quadric2, 0, 10, 30, 30);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, aaa);
-    gluCylinder(quadric3, 0, 12, 10, 30, 30);
+    if (recv_flag == 1)gluCylinder(quadric3, 0, 12, 10, 30, 30);
     glTranslatef(-pad.x, -pad.y, -5.0f);
 
     //gluDeleteQuadric(quadric);
     //gluDeleteQuadric(quadric2);
     //gluDeleteQuadric(quadric3);
 
-    if (recv_flag == 1) onoff();
+    if (recv_flag == 1) {
+        flash++;
+        if (flash ==  5) flash_on();
+        if (flash >= 10) flash_off();
+    }
+    else if (flash >= 5)
+        flash_off();
+
     GLdouble sidevertex[][3] = {
         { 100.0, -160.0, 0.0 },
         { 100.1, -160.0, 0.0 },
@@ -956,43 +978,22 @@ static void modelD_test()
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 }
 
-/*必殺技（致命傷）*/
-int onoff(void)
+static void flash_on(void)
 {
-	static GLfloat positionh[4];
-	static GLfloat ambient [] = { 1.0f, 1.0f, 1.0f, 1.0f};
-	static GLfloat diffuse [] = { 0.5f, 0.5f, 0.5f, 1.0f};
-	static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
-	GLfloat yellow[] = { 1.0, 1.0, 0.0, 1.0 };
+    static GLfloat positionh[4];
+    positionh[0] = pad.x;
+    positionh[1] = pad.y;
+    positionh[2] = 0.0f;
+    positionh[3] = 1.0f;
 
-		
-	positionh[0] = pad.x;
-	positionh[1] = pad.y;
-	positionh[2] = 0.0f;
-	positionh[3] = 1.0f;
-	
-	flash++;
-	if(flash == 5){
-            glLightfv(GL_LIGHT1, GL_POSITION, positionh);
-            glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
-            glLightfv(GL_LIGHT1, GL_DIFFUSE, yellow);
-            glLightfv(GL_LIGHT1, GL_SPECULAR, specular);
-            glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-            glEnable(GL_LIGHTING);
-            glEnable(GL_LIGHT1);
-            //printf("a\n");
-	}
-	
-	if(flash == 10){
-            glLightfv(GL_LIGHT1, GL_POSITION, positionh);
-            glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
-            glLightfv(GL_LIGHT1, GL_DIFFUSE, yellow);
-            glLightfv(GL_LIGHT1, GL_SPECULAR, specular);
-            glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-            glEnable(GL_LIGHTING);
-            glDisable(GL_LIGHT1);
-            flash = 0;
-            //printf("b\n");
-	}
-	return 0;
+    glLightfv(GL_LIGHT1, GL_POSITION, positionh);
+    glEnable(GL_LIGHT1);
+}
+
+
+/*必殺技（致命傷）*/
+static void flash_off(void)
+{
+    glDisable(GL_LIGHT1);
+    flash = 0;
 }
