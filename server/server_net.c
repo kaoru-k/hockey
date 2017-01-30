@@ -18,11 +18,11 @@ CLIENT clients[4];
 PLAYER p[6];
 CONTAINER_S send_con;
 CONTAINER_C recv_con;
-int client_frame[4] = {0,0,0,0};
+int client_frame[4] = {0};
+int current_frame = 0;
 
 static fd_set mask;
 static int num_socks;
-static int endflag = 0;
 static int s_flag[4] = {0};
 int start_flag = 0;
 int sound_flag = 0;
@@ -117,15 +117,15 @@ int network(void)
     timeout.tv_sec  = 0;
     timeout.tv_usec = 4;
     int i;
-    int result;
+    int result = 1;
 
     if (select(num_socks, (fd_set *)&read_flag, NULL, NULL, &timeout) == -1)
         error_message("select()");
-
+    
     for (i = 0; i < num_clients; i++) {
         if (FD_ISSET(clients[i].sock, &read_flag)) {
             recv_data(i, &recv_con, sizeof(CONTAINER_C));
-
+            
             switch (out_con(i)) {
             case COM_EXIT :
                 endflag = 1;   break;
@@ -141,13 +141,36 @@ int network(void)
 		set_con(COM_EXIT);
                 result = 0;
             }
-            else if (s_on() != -1) {              
-		set_con(COM_SPECIAL);
+            else if (game.scene == 1) {
+                for (i = 0; i < 4; i++)
+                    client_frame[i] = 0;
+		current_frame = 0;
+
+                send_con.p[0].x = game.point[0];
+                send_con.p[1].x = game.point[1];
+                for (i = 0; i < num_clients; i++) {
+                    if ( (win == 0 && (i == 0 || i == 1)) || (win == 1 && (i == 2 || i == 3)) ) 
+                        send_con.com = COM_WIN;
+                    else
+                        send_con.com = COM_LOSE;
+                    
+                    send_data(i, &send_con, sizeof(CONTAINER_S));
+                }
+                return 1;
+            }
+            else if (s_on() != -1) {
+                if (sound_flag) {
+                    sound_flag = 0;
+                    set_con(COM_S_AND_B);
+                }
+		else
+                    set_con(COM_SPECIAL);
                 result = 1;
             }
             else if (sound_flag) {
                 sound_flag = 0;
                 set_con(COM_BOUND);
+                result = 1;
             }
             else {
                 set_con(COM_NONE);

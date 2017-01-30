@@ -11,6 +11,7 @@
 
 int num_clients = 4;
 int flag = 1;
+int endflag = 0;
 PAD pad = {1,1};
 
 static int network_thread(void* args);
@@ -44,20 +45,22 @@ int main(int argc, char *argv[])
     fprintf(stderr, "Port number = %d\n", port);
 
     setup_server(port);
-    thr1 = SDL_CreateThread(network_thread, NULL);
-    setting_server();
+    
+    while (endflag == 0) {
+        setting_server();
+        thr1 = SDL_CreateThread(network_thread, NULL);
 
-    while(flag) {
-	clock_gettime(CLOCK_REALTIME, &time_tmp);
-        time_now = (int)time_tmp.tv_sec + (double)time_tmp.tv_nsec * 0.000000001;
-	if(time_now - time_last > 0.016){
-	    field_set();
-	    time_last = time_now;
-	}
+        while(flag) {
+            clock_gettime(CLOCK_REALTIME, &time_tmp);
+            time_now = (int)time_tmp.tv_sec + (double)time_tmp.tv_nsec * 0.000000001;
+            if(time_now - time_last > 0.016){
+                field_set();
+                time_last = time_now;
+            }
+        }
+        SDL_WaitThread(thr1, NULL);
     }
-
-    SDL_WaitThread(thr1, NULL);
-
+    terminate_server();
     return 0;
 }
 
@@ -67,6 +70,5 @@ static int network_thread(void* args)
     while (flag) {
         flag = network();
     }
-    terminate_server();
     return 0;
 }

@@ -14,11 +14,14 @@
 #define WINDOW_H 768
 
 PAD         pad        = {0,0};
-int         cameramode = 0;                 //0の時：初期or1p2p / 1の時:3p4p *削除予定
+int         cameramode = 0;             // 0の時：初期or1p2p / 1の時:3p4p
 SDL_Rect    camera     = {0.0, 0.0};
-GLuint      texA[6]    = {0};           //キャラテクスチャ
+GLuint      texA[6]    = {0};           // キャラテクスチャ
 GLuint      Starttex   = 0;
 int         flash      = 0;
+GLUquadric* quadric;
+GLUquadric* quadric2;
+GLUquadric* quadric3;
 
 static void set_OpenGL(void);
 static void draw3D(void);
@@ -31,14 +34,15 @@ static int  Pot(int inSize);
 static void creatTex(char *file, GLuint *tex);
 static void modelD(GLdouble alp);
 static void modelD_test(void);
-static int  onoff(void);
+static void flash_on(void);
+static void flash_off(void);
 
 int init_sdl(void)
 {
     char title[50];
     SDL_Surface* icon = SDL_LoadBMP("image/KBTIT.bmp");
     // SDLを初期化する
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
     SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_SetVideoMode(WINDOW_W, WINDOW_H, 0, SDL_OPENGL);
@@ -103,13 +107,31 @@ static void set_OpenGL(void)
     static GLfloat ambient [] = { 0.9f, 0.9f, 0.9f, 1.0f};
     static GLfloat diffuse [] = { 0.0f, 0.0f, 0.0f, 0.0f};
     static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
+
+    static GLfloat ambient1 [] = { 1.0f, 1.0f, 1.0f, 1.0f};
+    static GLfloat diffuse1[] = { 1.0, 1.0, 0.0, 1.0 };
+    static GLfloat specular1[] = { 0.0f, 0.0f, 0.0f, 0.0f};
+
     glLightfv(GL_LIGHT0, GL_POSITION, position);
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
     glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+    
+    glLightfv(GL_LIGHT1, GL_AMBIENT, ambient1);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse1);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, specular1);
+    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+
+    quadric = gluNewQuadric();
+    quadric2 = gluNewQuadric();
+    quadric3 = gluNewQuadric();
+
+
+
 }
 
 void StartWindow(void)
@@ -234,14 +256,26 @@ void draw2D()
   	glEnd();
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
-	glBegin(GL_QUADS);
-        if(p[0].ap == 100)
+
+        glEnable(GL_TEXTURE_2D);//テクスチャON
+        glBindTexture(GL_TEXTURE_2D, texA[0]);
+	for(i = 0; i < (((double)40 / 100) * p[0].ap); i++)
+        glBegin(GL_QUADS);
+        glTexCoord2i(0, 0);  glVertex2i( 55, 72);
+        glTexCoord2i(1, 0);  glVertex2i( 55, 72 - (((double)40 / 100) * i) );
+        glTexCoord2i(1, 1);  glVertex2i( 50, 72 - (((double)40 / 100) * i) );
+        glTexCoord2i(0, 1);  glVertex2i( 50, 72);
+        glEnd();
+	glDisable(GL_TEXTURE_2D);//テクスチャOFF
+
+        /*if(p[0].ap == 100)
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_MAX_color);
 
+	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 	    glVertex2dv(ATK_AP[i]);
         }	  
-  	glEnd();
+  	glEnd();*/
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	glBegin(GL_QUADS);
@@ -251,10 +285,10 @@ void draw2D()
   	glEnd();
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
-	glBegin(GL_QUADS);
         if(p[1].ap == 100)
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_MAX_color);
 
+	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
             glVertex2dv(SUP_AP[i]);
         }	  
@@ -326,10 +360,10 @@ void draw2D()
   	glEnd();
         
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
-	glBegin(GL_QUADS);
         if(p[2].ap == 100)
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_MAX_color);
 
+	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
             glVertex2dv(ATK_AP2[i]);
         }	  
@@ -343,10 +377,10 @@ void draw2D()
   	glEnd();
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
-	glBegin(GL_QUADS);
-        if(p[3].ap == 100)
+	if(p[3].ap == 100)
 		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_MAX_color);
 
+	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
             glVertex2dv(SUP_AP2[i]);
         }	  
@@ -391,9 +425,6 @@ static void draw3D(void)
     GLfloat aaa[] = { 0.9, 0.9, 0.0, 0.0 };
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, white);
     // 円球を描画する
-    GLUquadric* quadric = gluNewQuadric();
-    GLUquadric* quadric2= gluNewQuadric();
-    GLUquadric* quadric3= gluNewQuadric();
 
     glTranslatef(pad.x, pad.y, 0.0f);
     gluCylinder(quadric, 10, 10, 5, 30, 30);
@@ -401,14 +432,21 @@ static void draw3D(void)
     glTranslatef(0.0, 0.0, 5.0f);
     gluDisk(quadric2, 0, 10, 30, 30);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, aaa);
-    gluCylinder(quadric3, 0, 12, 10, 30, 30);
+    if (recv_flag == 1)gluCylinder(quadric3, 0, 12, 10, 30, 30);
     glTranslatef(-pad.x, -pad.y, -5.0f);
 
-    gluDeleteQuadric(quadric);
-    gluDeleteQuadric(quadric2);
-    gluDeleteQuadric(quadric3);
+    //gluDeleteQuadric(quadric);
+    //gluDeleteQuadric(quadric2);
+    //gluDeleteQuadric(quadric3);
 
-    if (recv_flag == 1) onoff();
+    if (recv_flag == 1) {
+        flash++;
+        if (flash ==  5) flash_on();
+        if (flash >= 10) flash_off();
+    }
+    else if (flash >= 5)
+        flash_off();
+
     GLdouble sidevertex[][3] = {
         { 100.0, -160.0, 0.0 },
         { 100.1, -160.0, 0.0 },
@@ -880,43 +918,22 @@ static void modelD_test()
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 }
 
-/*必殺技（致命傷）*/
-int onoff(void)
+static void flash_on(void)
 {
-	static GLfloat positionh[4];
-	static GLfloat ambient [] = { 1.0f, 1.0f, 1.0f, 1.0f};
-	static GLfloat diffuse [] = { 0.5f, 0.5f, 0.5f, 1.0f};
-	static GLfloat specular[] = { 0.0f, 0.0f, 0.0f, 0.0f};
-	GLfloat yellow[] = { 1.0, 1.0, 0.0, 1.0 };
+    static GLfloat positionh[4];
+    positionh[0] = pad.x;
+    positionh[1] = pad.y;
+    positionh[2] = 0.0f;
+    positionh[3] = 1.0f;
 
-		
-	positionh[0] = pad.x;
-	positionh[1] = pad.y;
-	positionh[2] = 0.0f;
-	positionh[3] = 1.0f;
-	
-	flash++;
-	if(flash == 5){
-            glLightfv(GL_LIGHT1, GL_POSITION, positionh);
-            glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
-            glLightfv(GL_LIGHT1, GL_DIFFUSE, yellow);
-            glLightfv(GL_LIGHT1, GL_SPECULAR, specular);
-            glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-            glEnable(GL_LIGHTING);
-            glEnable(GL_LIGHT1);
-            //printf("a\n");
-	}
-	
-	if(flash == 10){
-            glLightfv(GL_LIGHT1, GL_POSITION, positionh);
-            glLightfv(GL_LIGHT1, GL_AMBIENT, ambient);
-            glLightfv(GL_LIGHT1, GL_DIFFUSE, yellow);
-            glLightfv(GL_LIGHT1, GL_SPECULAR, specular);
-            glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
-            glEnable(GL_LIGHTING);
-            glDisable(GL_LIGHT1);
-            flash = 0;
-            //printf("b\n");
-	}
-	return 0;
+    glLightfv(GL_LIGHT1, GL_POSITION, positionh);
+    glEnable(GL_LIGHT1);
+}
+
+
+/*必殺技（致命傷）*/
+static void flash_off(void)
+{
+    glDisable(GL_LIGHT1);
+    flash = 0;
 }

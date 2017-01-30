@@ -17,13 +17,15 @@
 /* コマンド */
 #define COM_NONE       'N'    // None      何もなし（座標をやり取りする）
 #define COM_SPECIAL    'S'    // Special   必殺技
+#define COM_S_AND_B    'D'    // s anD b   必殺技+跳ね返る音
 #define COM_START      'T'    // sTart     ゲームスタート
 #define COM_CONTINUE   'C'    // Continue  コンティニュー
+#define COM_RESET      'R'    // Reset     初期化
 #define COM_EXIT       'X'    // eXit      終了
 #define COM_WIN        'W'    // Win       「Win」表示   (点数送信)
-#define COM_LOSE       'L'    // Lose      「Lose」表示  (点数送信)
-#define COM_READY      'R'    // Ready     「Ready」表示 
+#define COM_LOSE       'L'    // Lose      「Lose」表示  (点数送信) 
 #define COM_BOUND      'B'    // Bound     跳ね返る音
+#define COM_KILL       'K'    // Kill      死んだ時の音
 
 /* フィールド */
 #define FIELD_H        160    // フィールドの縦幅
