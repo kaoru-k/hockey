@@ -21,6 +21,7 @@ extern int  flag;
 extern int  endflag;
 extern char send_flag;
 extern int  recv_flag;
+extern int  point[2];
 extern SDL_Rect     pack;
 extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;

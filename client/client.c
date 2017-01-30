@@ -46,10 +46,13 @@ int main(int argc, char *argv[])
     SDL_Event event;
     
     while(endflag == 0) {
-        while(flag){
+        
+	while(flag){//スタート画面
             StartWindow();
-            if(SDL_PollEvent(&event))
-		flag = 0;
+            if(SDL_PollEvent(&event)){
+		if(event.type == SDL_JOYBUTTONDOWN)
+		    flag = 0;
+	    }
         }
         flag = 1;
 

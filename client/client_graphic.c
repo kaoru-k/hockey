@@ -17,7 +17,10 @@ PAD         pad        = {0,0};
 int         cameramode = 0;             // 0の時：初期or1p2p / 1の時:3p4p
 SDL_Rect    camera     = {0.0, 0.0};
 GLuint      texA[6]    = {0};           // キャラテクスチャ
-GLuint      Starttex   = 0;
+GLuint      Starttex   = 0;		//スタート画面
+GLuint	    AP	       = 0;		//必殺技ゲージ（満タン時用）
+GLuint      Result[2]  = {0};           //結果画像
+GLuint      PointTex[10]  = {0};
 int         flash      = 0;
 GLUquadric* quadric;
 GLUquadric* quadric2;
@@ -67,7 +70,13 @@ int init_sdl(void)
     creatTex("./image/Dva.bmp", &texA[4]); 
     creatTex("./image/zaria.bmp", &texA[5]);
     creatTex("./image/H.bmp", &Starttex);
-    
+    creatTex("./image/1.bmp", &AP);
+    creatTex("./image/kakuteiv.bmp", &Result[0]);
+    creatTex("./image/kakuteid.bmp", &Result[1]);
+    creatTex("./image/10.bmp", &PointTex[0]);
+    creatTex("./image/1.bmp", &PointTex[1]);
+    creatTex("./image/2.bmp", &PointTex[2]);
+
 }
 
 int draw_field(void)
@@ -223,14 +232,6 @@ void draw2D()
             {65, -50 - (((double)40 / 800) * p[4].hp)}
 	};
 
-/*	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
-	GLdouble DEF_AP[][2] ={
-            {50, -50 - (((double)40 / 100) * p[4].ap)},
-            {50, -50},
-	    {55, -50},
-	    {55, -50 - (((double)40 / 100) * p[4].ap)}
-	};
-*/
 	int i;
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, ATK_HP_color);
@@ -240,28 +241,34 @@ void draw2D()
         }	  
   	glEnd();
 
+	if(p[0].ap == 100){
+        glEnable(GL_TEXTURE_2D);//テクスチャON
+        glBindTexture(GL_TEXTURE_2D, AP);
+        GLfloat texture_color[] = {1, 1, 1, 1};
+        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    
+	for(i = 0; i <  8; i++){
+        glBegin(GL_QUADS);
+        glTexCoord2i(0, 0);  glVertex2d( 55, 72.5 - (5 * i) );
+        glTexCoord2i(1, 0);  glVertex2d( 55, 72.5 - (5 * (i + 1)) );
+        glTexCoord2i(1, 1);  glVertex2d( 50, 72.5 - (5 * (i + 1)) );
+        glTexCoord2i(0, 1);  glVertex2d( 50, 72.5 - (5 * i) );
+        glEnd();
+        }
+	glDisable(GL_TEXTURE_2D);//テクスチャOFF
+        }else{
+
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 
-        glEnable(GL_TEXTURE_2D);//テクスチャON
-        glBindTexture(GL_TEXTURE_2D, texA[0]);
-	for(i = 0; i < (((double)40 / 100) * p[0].ap); i++)
-        glBegin(GL_QUADS);
-        glTexCoord2i(0, 0);  glVertex2i( 55, 72);
-        glTexCoord2i(1, 0);  glVertex2i( 55, 72 - (((double)40 / 100) * i) );
-        glTexCoord2i(1, 1);  glVertex2i( 50, 72 - (((double)40 / 100) * i) );
-        glTexCoord2i(0, 1);  glVertex2i( 50, 72);
-        glEnd();
-	glDisable(GL_TEXTURE_2D);//テクスチャOFF
-
         /*if(p[0].ap == 100)
-		glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_MAX_color);
-
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_MAX_color);
+*/
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 	    glVertex2dv(ATK_AP[i]);
         }	  
-  	glEnd();*/
-
+  	glEnd();
+        }
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
@@ -825,28 +832,28 @@ static void modelD(GLdouble alp)
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 65, 88);
-    glTexCoord2i(1, 0);  glVertex2i( 65, 73);
-    glTexCoord2i(1, 1);  glVertex2i( 50, 73);
-    glTexCoord2i(0, 1);  glVertex2i( 50, 88);
+    glTexCoord2i(0, 0);  glVertex2d( 65, 88);
+    glTexCoord2i(1, 0);  glVertex2d( 65, 73);
+    glTexCoord2i(1, 1);  glVertex2d( 50, 73);
+    glTexCoord2i(0, 1);  glVertex2d( 50, 88);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, texA[2]);
 
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 65, 28);
-    glTexCoord2i(1, 0);  glVertex2i( 65, 13);
-    glTexCoord2i(1, 1);  glVertex2i( 50, 13);
-    glTexCoord2i(0, 1);  glVertex2i( 50, 28);
+    glTexCoord2i(0, 0);  glVertex2d( 65, 28);
+    glTexCoord2i(1, 0);  glVertex2d( 65, 13);
+    glTexCoord2i(1, 1);  glVertex2d( 50, 13);
+    glTexCoord2i(0, 1);  glVertex2d( 50, 28);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, texA[4]);
 
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 65, -34.5);
-    glTexCoord2i(1, 0);  glVertex2i( 65, -49.5);
-    glTexCoord2i(1, 1);  glVertex2i( 50, -49.5);
-    glTexCoord2i(0, 1);  glVertex2i( 50, -34.5);
+    glTexCoord2i(0, 0);  glVertex2d( 65, -34.5);
+    glTexCoord2i(1, 0);  glVertex2d( 65, -49.5);
+    glTexCoord2i(1, 1);  glVertex2d( 50, -49.5);
+    glTexCoord2i(0, 1);  glVertex2d( 50, -34.5);
     glEnd();
 
     }else if(cameramode == 1){
@@ -855,31 +862,84 @@ static void modelD(GLdouble alp)
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 65, 88);
-    glTexCoord2i(1, 0);  glVertex2i( 65, 73);
-    glTexCoord2i(1, 1);  glVertex2i( 50, 73);
-    glTexCoord2i(0, 1);  glVertex2i( 50, 88);
+    glTexCoord2i(0, 0);  glVertex2d( 65, 88);
+    glTexCoord2i(1, 0);  glVertex2d( 65, 73);
+    glTexCoord2i(1, 1);  glVertex2d( 50, 73);
+    glTexCoord2i(0, 1);  glVertex2d( 50, 88);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, texA[3]);
 
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 65, 28);
-    glTexCoord2i(1, 0);  glVertex2i( 65, 13);
-    glTexCoord2i(1, 1);  glVertex2i( 50, 13);
-    glTexCoord2i(0, 1);  glVertex2i( 50, 28);
+    glTexCoord2i(0, 0);  glVertex2d( 65, 28);
+    glTexCoord2i(1, 0);  glVertex2d( 65, 13);
+    glTexCoord2i(1, 1);  glVertex2d( 50, 13);
+    glTexCoord2i(0, 1);  glVertex2d( 50, 28);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, texA[5]);
 
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 65, -34.5);
-    glTexCoord2i(1, 0);  glVertex2i( 65, -49.5);
-    glTexCoord2i(1, 1);  glVertex2i( 50, -49.5);
-    glTexCoord2i(0, 1);  glVertex2i( 50, -34.5);
+    glTexCoord2i(0, 0);  glVertex2d( 65, -34.5);
+    glTexCoord2i(1, 0);  glVertex2d( 65, -49.5);
+    glTexCoord2i(1, 1);  glVertex2d( 50, -49.5);
+    glTexCoord2i(0, 1);  glVertex2d( 50, -34.5);
     glEnd();
 
     }
+
+    if(recv_flag == 10){
+	glBindTexture(GL_TEXTURE_2D, Result[0]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 30, 5);
+	glTexCoord2i(1, 0);  glVertex2d( 30, -5);
+	glTexCoord2i(1, 1);  glVertex2d( 20, -5);
+   	glTexCoord2i(0, 1);  glVertex2d( 20, 5);
+	glEnd();
+   }else if(recv_flag == -1){
+	glBindTexture(GL_TEXTURE_2D, Result[1]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 30, 5);
+	glTexCoord2i(1, 0);  glVertex2d( 30, -5);
+	glTexCoord2i(1, 1);  glVertex2d( 20, -5);
+   	glTexCoord2i(0, 1);  glVertex2d( 20, 5);
+	glEnd();
+   }
+
+   if(cameramode == 0){
+        glBindTexture(GL_TEXTURE_2D, PointTex[point[0]]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 30, 15);
+	glTexCoord2i(1, 0);  glVertex2d( 30, 5);
+	glTexCoord2i(1, 1);  glVertex2d( 20, 5);
+   	glTexCoord2i(0, 1);  glVertex2d( 20, 15);
+	glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, PointTex[point[1]]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 30, -5);
+	glTexCoord2i(1, 0);  glVertex2d( 30, -15);
+	glTexCoord2i(1, 1);  glVertex2d( 20, -15);
+   	glTexCoord2i(0, 1);  glVertex2d( 20, -5);
+	glEnd();
+
+   }else if(cameramode == 1){
+        glBindTexture(GL_TEXTURE_2D, PointTex[point[1]]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 30, 15);
+	glTexCoord2i(1, 0);  glVertex2d( 30, 5);
+	glTexCoord2i(1, 1);  glVertex2d( 20, 5);
+   	glTexCoord2i(0, 1);  glVertex2d( 20, 15);
+	glEnd();
+
+        glBindTexture(GL_TEXTURE_2D, PointTex[point[0]]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 30, -5);
+	glTexCoord2i(1, 0);  glVertex2d( 30, -15);
+	glTexCoord2i(1, 1);  glVertex2d( 20, -15);
+   	glTexCoord2i(0, 1);  glVertex2d( 20, -5);
+	glEnd();
+   }
 }
 
 static void modelD_test()
