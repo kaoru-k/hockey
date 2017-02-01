@@ -105,9 +105,17 @@ void setup_server(u_short port)
 void setting_server(void)
 {
     int i;
+    SETTING setting[4];
     
     for (i = 0; i < num_clients; i++)
         clients[i].control = clients[i].cid;
+
+    fprintf(stderr, "Receive settings ...");
+    for (i = 0; i < num_clients; i++) {
+	fprintf(stderr, "%d ", i);
+        recv_data(i, &setting[i], sizeof(SETTING));
+    }
+    fprintf(stderr, "done.\n");
 }
 
 int network(void)
