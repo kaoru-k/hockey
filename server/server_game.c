@@ -149,6 +149,37 @@ static void Hcom(int id){
     }
 }
 
+void shokika(void){
+    int i;
+	    p[0].hp = bai(p[0].type+6);
+	    p[0].x = 0;
+	    p[1].hp = bai(p[1].type+6);
+	    p[1].x = 0;
+ 	    p[2].hp = bai(p[2].type+6);
+	    p[2].x = 0;
+ 	    p[3].hp = bai(p[3].type+6);
+	    p[3].x = 0;
+	    p[4].hp = 800;
+	    p[4].x = 0;
+	    p[5].hp = 800;
+	    p[5].x = 0;
+	    game.defe[0][0] = 0;
+	    game.defe[0][1] = 0;
+	    game.defe[1][0] = 0;
+	    game.defe[1][1] = 0;
+	    game.co[0] = 0;
+	    game.co[1] = 0;
+	    game.han[0] = 10;
+	    game.han[1] = 10;
+	    speed.x = 0;speed.y = 0;
+            if(game.point[0] == 2 || game.point[1] == 2){//勝敗がついた時
+                game.point[0] = 0;
+                game.point[1] = 0;
+                for(i =0;i<4;i++)
+                    p[i].ap = 0;
+            }
+}
+
 /* パッドの動きを計算する */
 void field_set(void){
     struct timespec time_tmp;
@@ -521,7 +552,8 @@ void field_set(void){
 	}
     }else{
 	if(game.scene == 3){
-	    game.scene = 1;
+	    shokika();
+	    game.scene = 2;
 	    game.point[2] = 1;
 	    game.time = game.now-2;
 	}
@@ -535,6 +567,8 @@ void field_set(void){
 		pad.y = 0;
 		pad.x = 0;
 	    }
+	    shokika();
+		/*
 	    p[0].hp = bai(p[0].type+6);
 	    p[0].x = 0;
 	    p[1].hp = bai(p[1].type+6);
@@ -561,7 +595,8 @@ void field_set(void){
                 game.point[1] = 0;
                 for(i =0;i<4;i++)
                     p[i].ap = 0;
-            }
+	    }
+	    */
 	}
 	if(game.now - game.time > 2)
 	    if(game.point[2] != 1)
