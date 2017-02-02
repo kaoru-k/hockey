@@ -34,11 +34,11 @@ static float bai(int type)
     case 3:return 1;
     case 4:return 90;   //回復
     case 5:return 60;
-    case 6:return 550;  //maxhp
-    case 7:return 650;
-    case 8:return 450;
-    case 9:return 300;
-    case 10:return 800;
+    case 6:return ATK1_HP;  //maxhp
+    case 7:return ATK2_HP;
+    case 8:return SUP1_HP;
+    case 9:return SUP2_HP;
+    case 10:return DEF_HP;
     default: return 0;
     }
 }
