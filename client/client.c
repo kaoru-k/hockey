@@ -55,7 +55,15 @@ int main(int argc, char *argv[])
 	    }
         }
         flag = 1;
+        while(flag){//設定画面
+            SettingWindow();
+            if(SDL_PollEvent(&event)){
+		if(event.type == SDL_JOYBUTTONDOWN)
+		    flag = 0;
+	    }
+        }
 
+        flag = 1;
         setting_client();
         
         draw_field();

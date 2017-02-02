@@ -166,10 +166,76 @@ void StartWindow(void)
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
 
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 70, 93);
-    glTexCoord2i(1, 0);  glVertex2i( 70,-93);
-    glTexCoord2i(1, 1);  glVertex2i(-70,-93);
-    glTexCoord2i(0, 1);  glVertex2i(-70, 93);
+    glTexCoord2i(0, 0);  glVertex2i( 70, 94);
+    glTexCoord2i(1, 0);  glVertex2i( 70,-94);
+    glTexCoord2i(1, 1);  glVertex2i(-70,-94);
+    glTexCoord2i(0, 1);  glVertex2i(-70, 94);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);//テクスチャOFF
+
+    SDL_GL_SwapBuffers();
+}
+
+void SettingWindow(void)
+{
+    view3D();
+    view2D();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);//テクスチャON
+
+    static GLdouble alp,vec;
+    if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
+    else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
+
+
+    glBindTexture(GL_TEXTURE_2D, texA[0]);
+    GLfloat texture_color[] = {1, 1, 1, alp};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 45, 75);
+    glTexCoord2i(1, 0);  glVertex2i( 45, 55);
+    glTexCoord2i(1, 1);  glVertex2i( 25, 55);
+    glTexCoord2i(0, 1);  glVertex2i( 25, 75);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, texA[1]);
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 45, 40);
+    glTexCoord2i(1, 0);  glVertex2i( 45, 20);
+    glTexCoord2i(1, 1);  glVertex2i( 25, 20);
+    glTexCoord2i(0, 1);  glVertex2i( 25, 40);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, texA[2]);
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 45, -20);
+    glTexCoord2i(1, 0);  glVertex2i( 45, -40);
+    glTexCoord2i(1, 1);  glVertex2i( 25, -40);
+    glTexCoord2i(0, 1);  glVertex2i( 25, -20);
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, texA[3]);
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 45, -55);
+    glTexCoord2i(1, 0);  glVertex2i( 45, -75);
+    glTexCoord2i(1, 1);  glVertex2i( 25, -75);
+    glTexCoord2i(0, 1);  glVertex2i( 25, -55);
+    glEnd();
+
+    
+
+    glBindTexture(GL_TEXTURE_2D, Starttex);
+    GLfloat texture_color1[] = {0, 0, 1, alp};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color1);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( 70, 94);
+    glTexCoord2i(1, 0);  glVertex2i( 70,-94);
+    glTexCoord2i(1, 1);  glVertex2i(-70,-94);
+    glTexCoord2i(0, 1);  glVertex2i(-70, 94);
     glEnd();
 
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
