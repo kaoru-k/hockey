@@ -65,15 +65,15 @@ void setup_client(char *server_name, u_short port)
 }
 
 void setting_client(void)
-{  
-    control_id = myid;
-    if (myid == 1)
-        setting.point = 3;
-    setting.chara = control_id;
+{
+    SETTING2 setting2;
 
+    setting.chara = myid;
     fprintf(stderr, "Send settings... ");
     send_data(&setting, sizeof(SETTING));
     fprintf(stderr, "done.");
+
+    recv_data(&setting2, sizeof(SETTING2));
 }
 
 int network_send(void)

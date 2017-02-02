@@ -98,3 +98,7 @@ typedef struct{
     int point;                // 何点先取で勝ちになるか
     int chara;                // 選んだキャラクター
 }SETTING;
+
+typedef struct{
+    int type[6];
+}SETTING2;
