@@ -100,5 +100,6 @@ typedef struct{
 }SETTING;
 
 typedef struct{
+    int point;
     int type[6];
 }SETTING2;

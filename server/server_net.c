@@ -5,6 +5,7 @@
 *************************************/
 
 #include "server.h"
+#include <time.h>
 #include <SDL/SDL.h>
 #include <string.h>
 #include <unistd.h>
@@ -35,6 +36,7 @@ static void copy_player(PLAYER2 *a, const PLAYER *b);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
 static void error_message(char *message);
+static int  rand_type(int x);
 
 void setup_server(u_short port)
 {
@@ -94,29 +96,99 @@ void setup_server(u_short port)
     for(i = 0; i < num_clients; i++) {
         FD_SET(clients[i].sock, &mask);
     }
-
-    p[0].type = 0;
-    p[1].type = 2;
-    p[2].type = 1;
-    p[3].type = 3;
-
+    
     fprintf(stderr, "Server setup is done.\n");
 }
 
 void setting_server(void)
 {
-    int i;
+    int i, j;
+    int flag[2][2] = {0};
     SETTING  setting[4];
     SETTING2 setting2;
 
     fprintf(stderr, "Receive settings ...");
     for (i = 0; i < num_clients; i++) {
         recv_data(i, &setting[i], sizeof(SETTING));
-        clients[i].control = setting[i].chara;
         fprintf(stderr, "%d ", i);
     }
-    fprintf(stderr, "done.\n");
+    // あとで消す
+    for (i = num_clients; i < 4; i++)
+        setting[i].chara = 0;
     
+    fprintf(stderr, "done.\n");
+
+    max_point = setting[0].point;
+    
+    for (i = 0; i < 4; i++) {
+        if (i == 0 || i == 1) j = 0;
+        else                  j = 1;
+        
+        switch(setting[i].chara) {
+        case 0:
+        case 1:
+            if (!flag[j][0]) {
+                if (j == 0) {
+                    clients[i].control = 0;
+                    p[0].type = setting[i].chara;
+                }
+                else {
+                    clients[i].control = 2;
+                    p[2].type = setting[i].chara;
+                }
+                flag[j][0] = 1;
+            }
+            else {
+                if (j == 0) {
+                    clients[i].control = 1;
+                    p[1].type = rand_type(1);
+                }
+                else {
+                    clients[i].control = 3;
+                    p[3].type = rand_type(1);
+                }
+            }
+            break;
+        case 2:
+        case 3:
+            if (!flag[j][1]) {
+                if (j == 0) {
+                    clients[i].control = 1;
+                    p[1].type = setting[i].chara;
+                }
+                else {
+                    clients[i].control = 3;
+                    p[3].type = setting[i].chara;
+                }
+                flag[j][1] = 1;
+            }
+            else {
+                if (j == 0) {
+                    clients[i].control = 0;
+                    p[0].type = rand_type(0);
+                }
+                else {
+                    clients[i].control = 2;
+                    p[2].type = rand_type(0);
+                }
+            }
+            break;
+        }
+    }
+    p[4].type = 4;
+    p[5].type = 4;
+
+    fprintf(stderr, "max_point: %d\n", max_point);
+    setting2.point = max_point;
+    for (i = 0; i < 6; i++) {
+        fprintf(stderr, "p[%d] type:%d\n", i, p[i].type);
+        setting2.type[i] = p[i].type;
+    }
+    
+    for (i = 0; i < num_clients; i++) {
+        send_data(i, &clients[i].control, sizeof(int));
+        send_data(i, &setting2, sizeof(SETTING2));
+    }
 }
 
 int network(void)
@@ -192,6 +264,16 @@ int network(void)
     }
     return result;
 }
+
+int s_on(void)
+{
+    int i;
+    for (i = 0; i < num_clients; i++) {
+        if (s_flag[i] == 1) return i;
+    }
+    return -1;
+}
+
 
 static void set_con(char command)
 {
@@ -276,11 +358,14 @@ static void error_message(char *message)
     exit(1);
 }
 
-int s_on(void)
+static int rand_type(int x)
 {
-    int i;
-    for (i = 0; i < num_clients; i++) {
-        if (s_flag[i] == 1) return i;
+    srand((unsigned) time(NULL));
+    
+    switch(x) {
+    case 0:
+        return (rand() % 2);
+    case 1:
+        return (rand() % 2) + 2;
     }
-    return -1;
 }

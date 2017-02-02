@@ -66,14 +66,18 @@ void setup_client(char *server_name, u_short port)
 
 void setting_client(void)
 {
+    int i;
     SETTING2 setting2;
-
-    setting.chara = myid;
+    
     fprintf(stderr, "Send settings... ");
     send_data(&setting, sizeof(SETTING));
-    fprintf(stderr, "done.");
+    fprintf(stderr, "done.\n");
 
+    recv_data(&control_id, sizeof(int));
     recv_data(&setting2, sizeof(SETTING2));
+    for (i = 0; i < 6; i++)
+        p[i].type = setting2.type[i];
+    fprintf(stderr, "point:%d type:%d\n", setting2.point, p[control_id].type);
 }
 
 int network_send(void)
