@@ -40,6 +40,13 @@
 #define ATK_Y          75     // アタッカーのY座標
 #define ATK_W          20     // アタッカーの幅
 
+/* 各キャラの体力 */
+#define DEF_HP 		800
+#define ATK1_HP		550
+#define ATK2_HP		650
+#define SUP1_HP		450
+#define SUP2_HP		300
+
 /* パッド */
 #define PAD_R          10     // パッドの半径
 
