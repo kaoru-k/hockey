@@ -10,9 +10,8 @@
 float speedx[2] = {0.0, 0.0};	// 自分の操作速度
 SDL_Joystick *joystick;         // ジョイスティックを特定・利用するための構造体
 int reset = 0;
-int setting[2] = {0, 1};
 int settingflag = 0;
-
+SETTING setting;
 
 PLAYER p[6] = {{0,650,0,0},
                {2,300,0,0},
@@ -74,16 +73,20 @@ int Keyevent(void)
         case SDL_JOYAXISMOTION:
             if(event.jaxis.axis==0){
                 if(event.jaxis.value < 0){
-                    if((settingflag == 0 && 0 < setting[settingflag]) || settingflag == 1 &&  1 < setting[settingflag])
-			setting[settingflag]--; 
+                    if(settingflag == 0 && 0 < setting.chara)
+			setting.chara--;
+		    if( myid == 0 && settingflag == 1 &&  1 < setting.point)
+			setting.point--; 
 
                     if(control_id == 0 || control_id == 1)
                 	speedx[0] = 3;
 		    else if(control_id == 2 || control_id == 3)
 			speedx[0] = -3;
                 }else if(event.jaxis.value >  0){
-                    if((settingflag == 0 && setting[settingflag] < 3) || (settingflag == 1 && setting[settingflag] < 10))
-		        setting[settingflag]++; 
+                    if(settingflag == 0 && setting.chara < 3) 
+			setting.chara++;
+		    if( myid == 0 && settingflag == 1 && setting.point < 10)
+		        setting.point++; 
                     if(control_id == 0 || control_id == 1)
                 	speedx[0] = -3;
 		    else if(control_id == 2 || control_id == 3)

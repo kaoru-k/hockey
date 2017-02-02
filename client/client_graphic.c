@@ -9,6 +9,7 @@
 #include <SDL/SDL_opengl.h>
 #include <GL/glut.h>
 
+
 #define REC      32
 #define WINDOW_W 1024
 #define WINDOW_H 768
@@ -202,7 +203,7 @@ void SettingWindow(void)
 
     int i[4] = {0};
     if(settingflag == 0)
-	i[setting[settingflag]] = 1;
+	i[setting.chara] = 1;
 
     glBindTexture(GL_TEXTURE_2D, texA[0]);
     GLfloat texture_color[] = {1, 1, 1, alp};
@@ -238,13 +239,15 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[3]), -55 + (5 * i[3]));
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, PointTex[setting[1]]);
+    if(myid == 0){
+    glBindTexture(GL_TEXTURE_2D, PointTex[setting.point]);
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( -10 + (5 * settingflag),  5 + (5 * settingflag));
     glTexCoord2i(1, 0);  glVertex2i( -10 + (5 * settingflag),-15 - (5 * settingflag));
     glTexCoord2i(1, 1);  glVertex2i( -30 - (5 * settingflag),-15 - (5 * settingflag));
     glTexCoord2i(0, 1);  glVertex2i( -30 - (5 * settingflag),  5 + (5 * settingflag));
     glEnd();
+    }
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
     GLfloat texture_color1[] = {0, 0, 1, alp};
