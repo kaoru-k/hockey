@@ -30,14 +30,14 @@ static float bai(int type)
     switch(type){
     case 0:return 1.1;  //跳ね返り
     case 1:return 1.14;
-    case 2:return 1;
-    case 3:return 0.85;
-    case 4:return 60;   //回復
-    case 5:return 90;
-    case 6:return 650;  //maxhp
-    case 7:return 550;
-    case 8:return 300;
-    case 9:return 450;
+    case 2:return 0.85;
+    case 3:return 1;
+    case 4:return 90;   //回復
+    case 5:return 60;
+    case 6:return 550;  //maxhp
+    case 7:return 650;
+    case 8:return 450;
+    case 9:return 300;
     case 10:return 800;
     default: return 0;
     }
@@ -107,26 +107,26 @@ static int sosei(int a){
 //typeキャラタイプ　a : 敵側か味方側か
 static int hissatu(int type,int a){
     switch(type){
-    case 1:
+    case 0:
 	if(a == -1)
 	    game.co[1] = 10;
 	else
             game.co[0] = -10;
         return -1;
-    case 0:
+    case 1:
 	if(a == -1)
             game.co[1] = 1;
 	else
 	    game.co[0] = 1;
         return -1;
-    case 2:
+    case 3:
 	game.time = game.now;
 	if(a == 1)
             game.han[1] = 20;
   	if(a == -1)
 	    game.han[0] = 20;
         break;
-    case 3:
+    case 2:
         return sosei(a);
         break;
     default:break;
@@ -245,7 +245,7 @@ void field_set(void){
 		    sound_flag = 1;
     		    if(game.co[1] == 10 && speed.y == game.co[1]){//必殺
 	    		game.co[1] = 0;
-			p[0].hp -= 150;
+			p[0].hp -= 10*game.han[0];
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
@@ -267,7 +267,6 @@ void field_set(void){
 			game.co[0] = 5;
 			p[0].ap = 0;
 		    }
-
                     if(game.co[1] != -5){
                         if( (l = sqrt(speed.x*speed.x + speed.y * speed.y)) < 7){
                             k = M_PI * (10 + rand()%80)/100;
@@ -293,7 +292,7 @@ void field_set(void){
                     }else{
                         if((p[2].hp += 30) > bai(p[2].type + 6))
                             p[2].hp = bai(p[2].type + 6);
-                        game.co[1] = 0;
+                            game.co[1] = 0;
 			}
                 }
             }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + speed.y){
@@ -301,7 +300,7 @@ void field_set(void){
 		    sound_flag = 1;
     		    if(game.co[1] == 10 && speed.y == game.co[1]){//必殺
 	    		game.co[1] = 0;
-			p[1].hp -= 150;
+			p[1].hp -= 10*game.han[0];
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
@@ -347,7 +346,7 @@ void field_set(void){
 		    sound_flag = 1;
     		    if(game.co[1] == 10 && speed.y == game.co[1]){//必殺
 	    		game.co[1] = 0;
-			p[4].hp -= 150;
+			p[4].hp -= 10*game.han[0];
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
@@ -377,7 +376,7 @@ void field_set(void){
 		    sound_flag = 1;
     		    if(game.co[0] == -10 && speed.y == game.co[0]){//必殺
 	    		game.co[0] = 0;
-			p[2].hp -= 150;
+			p[2].hp -= 10*game.han[1];
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
@@ -431,7 +430,7 @@ void field_set(void){
 		    sound_flag = 1;
     		    if(game.co[0] == -10 && speed.y == game.co[0]){//必殺
 	    		game.co[0] = 0;
-			p[3].hp -= 150;
+			p[3].hp -= 10*game.han[1];
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
@@ -476,7 +475,7 @@ void field_set(void){
 		if(-pad.y + PAD_R <= DEF_Y - speed.y && pad.x+PAD_R > p[5].x - DEF_W && pad.x-PAD_R < p[5].x + DEF_W){
     		    if(game.co[0] == -10 && speed.y == game.co[0]){//必殺
 	    		game.co[0] = 0;
-			p[5].hp -= 150;
+			p[5].hp -= 10*game.han[1];
 			speed.x = game.spd[0];
 	    		speed.y = game.spd[1];
     		    }
