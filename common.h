@@ -79,3 +79,8 @@ typedef struct{
     int   frame;              // フレーム番号
     float x;                  // プレイヤーのX座標
 }CONTAINER_C;
+
+typedef struct{
+    int point;                // 何点先取で勝ちになるか
+    int chara;                // 選んだキャラクター
+}SETTING;
