@@ -32,6 +32,7 @@ extern int    endflag;
 extern int    start_flag;
 extern int    sound_flag;
 extern int    win;
+extern int    max_point;
 
 /***** 外部関数 *****/
 // server_net.c

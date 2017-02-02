@@ -26,6 +26,7 @@ static int num_socks;
 static int s_flag[4] = {0};
 int start_flag = 0;
 int sound_flag = 0;
+int max_point;
 
 static void set_con(char command);
 static char out_con(int cid);
@@ -115,7 +116,8 @@ void setting_server(void)
     }
     fprintf(stderr, "done.\n");
 
-    fprintf(stderr, "point:%d\n", setting[0].point);
+    max_point = setting[0].point;
+    fprintf(stderr, "point:%d\n", max_point);
     for (i = 0; i < num_clients; i++)
         fprintf(stderr, "cid:%d chara:%d\n", clients[i].cid, clients[i].control);
 }
