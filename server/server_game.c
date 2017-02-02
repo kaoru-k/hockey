@@ -9,7 +9,6 @@
 
 PAD speed={0,0};
 GAME game = {0,0,0,3,{0,0,1}, {{0,0},{0,0}}, {0,0} ,{0,0}, {10,10}};
-
 int win;
 
 static float bai(int type);
@@ -34,11 +33,11 @@ static float bai(int type)
     case 3:return 1;
     case 4:return 90;   //回復
     case 5:return 60;
-    case 6:return ATK1_HP;  //maxhp
-    case 7:return ATK2_HP;
-    case 8:return SUP1_HP;
-    case 9:return SUP2_HP;
-    case 10:return DEF_HP;
+    case 6:return ATK1_HP0;  //maxhp
+    case 7:return ATK2_HP0;
+    case 8:return SUP1_HP0;
+    case 9:return SUP2_HP0;
+    case 10:return DEF_HP0;
     default: return 0;
     }
 }
@@ -172,7 +171,7 @@ void shokika(void){
 	    game.han[0] = 10;
 	    game.han[1] = 10;
 	    speed.x = 0;speed.y = 0;
-            if(game.point[0] == 2 || game.point[1] == 2){//勝敗がついた時
+            if(game.point[0] == max_point || game.point[1] == max_point){//勝敗がついた時
                 game.point[0] = 0;
                 game.point[1] = 0;
                 for(i =0;i<4;i++)
@@ -520,7 +519,7 @@ void field_set(void){
             }else{
                 win = 1;
 		game.point[2] = 0;
-                if(++game.point[1] == 2)
+                if(++game.point[1] == max_point)//試合勝利条件
 		    game.point[2] = 1;
                 fprintf(stderr,"x[%d] - [%d]o\n",game.point[0],game.point[1]);
             }
@@ -540,7 +539,7 @@ void field_set(void){
             }else{
                 win = 0;
 		game.point[2] = 2;
-                if(++game.point[0] == 2)
+                if(++game.point[0] == max_point)//試合勝利条件
 		    game.point[2] = 1;
                 fprintf(stderr,"o[%d] - [%d]x\n",game.point[0],game.point[1]);
             }
@@ -567,35 +566,6 @@ void field_set(void){
 		pad.x = 0;
 	    }
 	    shokika();
-		/*
-	    p[0].hp = bai(p[0].type+6);
-	    p[0].x = 0;
-	    p[1].hp = bai(p[1].type+6);
-	    p[1].x = 0;
- 	    p[2].hp = bai(p[2].type+6);
-	    p[2].x = 0;
- 	    p[3].hp = bai(p[3].type+6);
-	    p[3].x = 0;
-	    p[4].hp = 800;
-	    p[4].x = 0;
-	    p[5].hp = 800;
-	    p[5].x = 0;
-	    game.defe[0][0] = 0;
-	    game.defe[0][1] = 0;
-	    game.defe[1][0] = 0;
-	    game.defe[1][1] = 0;
-	    game.co[0] = 0;
-	    game.co[1] = 0;
-	    game.han[0] = 10;
-	    game.han[1] = 10;
-	    speed.x = 0;speed.y = 0;
-            if(game.point[0] == 2 || game.point[1] == 2){//勝敗がついた時
-                game.point[0] = 0;
-                game.point[1] = 0;
-                for(i =0;i<4;i++)
-                    p[i].ap = 0;
-	    }
-	    */
 	}
 	if(game.now - game.time > 2)
 	    if(game.point[2] != 1)
