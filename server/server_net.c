@@ -31,7 +31,7 @@ int max_point;
 static void set_con(char command);
 static char out_con(int cid);
 static void copy_pad(PAD *a, const PAD *b);
-static void copy_player(PLAYER *a, const PLAYER *b);
+static void copy_player(PLAYER2 *a, const PLAYER *b);
 static int  recv_data(int cid, void *data, int size);
 static void send_data(int cid, void *data, int size);
 static void error_message(char *message);
@@ -225,9 +225,8 @@ static void copy_pad(PAD *a, const PAD *b)
     a->y = b->y;
 }
 
-static void copy_player(PLAYER *a, const PLAYER *b)
+static void copy_player(PLAYER2 *a, const PLAYER *b)
 {
-    a->type = b->type;
     a->hp   = b->hp;
     a->ap   = b->ap;
     a->x    = b->x;

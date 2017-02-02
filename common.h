@@ -66,6 +66,13 @@ typedef struct{
     float x;                  // プレイヤーのX座標
 }PLAYER;
 
+/* コンテナ用のプレイヤー構造体 */
+typedef struct{
+    int   hp;
+    int   ap;
+    float x;
+}PLAYER2;
+
 /* パッドの構造体 */
 typedef struct{
     float x;                  // パッドのX座標
@@ -74,10 +81,10 @@ typedef struct{
 
 /* サーバ→クライアント用の構造体 */
 typedef struct{
-    char   com;               // コマンド
-    int    frame;             // フレーム番号
-    PAD    pad;               // パックの座標
-    PLAYER p[6];              // プレイヤー情報
+    char    com;               // コマンド
+    int     frame;             // フレーム番号
+    PAD     pad;               // パックの座標
+    PLAYER2 p[6];              // プレイヤー情報
 }CONTAINER_S;
 
 /* クライアント→サーバ用の構造体 */

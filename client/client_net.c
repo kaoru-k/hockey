@@ -27,7 +27,7 @@ CONTAINER_S recv_con;
 static void set_con(char command);
 static char out_con(void);
 static void copy_pad(PAD *a, const PAD *b);
-static void copy_player(PLAYER *a, const PLAYER *b);
+static void copy_player(PLAYER *a, const PLAYER2 *b);
 static void send_data(void *data, int size);
 static int  recv_data(void *data, int size);
 static void error_message(char *message);
@@ -172,9 +172,8 @@ static void copy_pad(PAD *a, const PAD *b)
     a->y = b->y;
 }
 
-static void copy_player(PLAYER *a, const PLAYER *b)
+static void copy_player(PLAYER *a, const PLAYER2 *b)
 {
-    a->type = b->type;
     a->hp   = b->hp;
     a->ap   = b->ap;
     a->x    = b->x;
