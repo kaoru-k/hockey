@@ -96,7 +96,7 @@ int Keyevent(void)
             }
 	    if(event.jaxis.axis==1){
 		if(event.jaxis.value > 0){
-		    if(settingflag == 0) settingflag = 1;
+		    if(settingflag == 0 && myid == 0) settingflag = 1;
 		}else if(event.jaxis.value < 0){
 		    if(settingflag == 1) settingflag = 0;
 		}
