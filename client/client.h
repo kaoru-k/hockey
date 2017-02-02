@@ -25,6 +25,8 @@ extern int  point[2];
 extern SDL_Rect     pack;
 extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;
+extern int setting[2];
+extern int settingflag;
 
 /***** 外部関数 *****/
 // client_net.c

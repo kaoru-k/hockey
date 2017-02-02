@@ -20,6 +20,7 @@ GLuint      texA[6]    = {0};           // キャラテクスチャ
 GLuint      Starttex   = 0;		//スタート画面
 GLuint	    AP	       = 0;		//必殺技ゲージ（満タン時用）
 GLuint      Result[2]  = {0};           //結果画像
+GLuint      GOAL  = 0;
 GLuint      PointTex[10]  = {0};
 int         flash      = 0;
 GLUquadric* quadric;
@@ -72,11 +73,20 @@ int init_sdl(void)
     creatTex("./image/zaria.bmp", &texA[5]);
     creatTex("./image/H.bmp", &Starttex);
     creatTex("./image/1.bmp", &AP);
+    creatTex("./image/GOAL.bmp", &GOAL);
     creatTex("./image/kakuteiv.bmp", &Result[0]);
     creatTex("./image/kakuteid.bmp", &Result[1]);
     creatTex("./image/0.bmp", &PointTex[0]);
     creatTex("./image/1.bmp", &PointTex[1]);
     creatTex("./image/2.bmp", &PointTex[2]);
+    creatTex("./image/3.bmp", &PointTex[3]);
+    creatTex("./image/4.bmp", &PointTex[4]);
+    creatTex("./image/5.bmp", &PointTex[5]);
+    creatTex("./image/6.bmp", &PointTex[6]);
+    creatTex("./image/7.bmp", &PointTex[7]);
+    creatTex("./image/8.bmp", &PointTex[8]);
+    creatTex("./image/9.bmp", &PointTex[9]);
+    creatTex("./image/10.bmp", &PointTex[10]);
 
 }
 
@@ -190,42 +200,51 @@ void SettingWindow(void)
     if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
     else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
 
+    int i[4] = {0};
+    if(settingflag == 0)
+	i[setting[settingflag]] = 1;
 
     glBindTexture(GL_TEXTURE_2D, texA[0]);
     GLfloat texture_color[] = {1, 1, 1, alp};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 45, 75);
-    glTexCoord2i(1, 0);  glVertex2i( 45, 55);
-    glTexCoord2i(1, 1);  glVertex2i( 25, 55);
-    glTexCoord2i(0, 1);  glVertex2i( 25, 75);
+    glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[0]), 75 + (5 * i[0]));
+    glTexCoord2i(1, 0);  glVertex2i( 45 + (5 * i[0]), 55 - (5 * i[0]));
+    glTexCoord2i(1, 1);  glVertex2i( 25 - (5 * i[0]), 55 - (5 * i[0]));
+    glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[0]), 75 + (5 * i[0]));
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, texA[1]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 45, 40);
-    glTexCoord2i(1, 0);  glVertex2i( 45, 20);
-    glTexCoord2i(1, 1);  glVertex2i( 25, 20);
-    glTexCoord2i(0, 1);  glVertex2i( 25, 40);
+    glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[1]), 30 + (5 * i[1]));
+    glTexCoord2i(1, 0);  glVertex2i( 45 + (5 * i[1]), 10 - (5 * i[1]));
+    glTexCoord2i(1, 1);  glVertex2i( 25 - (5 * i[1]), 10 - (5 * i[1]));
+    glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[1]), 30 + (5 * i[1]));
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, texA[2]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 45, -20);
-    glTexCoord2i(1, 0);  glVertex2i( 45, -40);
-    glTexCoord2i(1, 1);  glVertex2i( 25, -40);
-    glTexCoord2i(0, 1);  glVertex2i( 25, -20);
+    glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[2]), -10 + (5 * i[2]));
+    glTexCoord2i(1, 0);  glVertex2i( 45 + (5 * i[2]), -30 - (5 * i[2]));
+    glTexCoord2i(1, 1);  glVertex2i( 25 - (5 * i[2]), -30 - (5 * i[2]));
+    glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[2]), -10 + (5 * i[2]));
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, texA[3]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 45, -55);
-    glTexCoord2i(1, 0);  glVertex2i( 45, -75);
-    glTexCoord2i(1, 1);  glVertex2i( 25, -75);
-    glTexCoord2i(0, 1);  glVertex2i( 25, -55);
+    glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[3]), -55 + (5 * i[3]));
+    glTexCoord2i(1, 0);  glVertex2i( 45 + (5 * i[3]), -75 - (5 * i[3]));
+    glTexCoord2i(1, 1);  glVertex2i( 25 - (5 * i[3]), -75 - (5 * i[3]));
+    glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[3]), -55 + (5 * i[3]));
     glEnd();
 
-    
+    glBindTexture(GL_TEXTURE_2D, PointTex[setting[1]]);
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i( -10 + (5 * settingflag),  5 + (5 * settingflag));
+    glTexCoord2i(1, 0);  glVertex2i( -10 + (5 * settingflag),-15 - (5 * settingflag));
+    glTexCoord2i(1, 1);  glVertex2i( -30 - (5 * settingflag),-15 - (5 * settingflag));
+    glTexCoord2i(0, 1);  glVertex2i( -30 - (5 * settingflag),  5 + (5 * settingflag));
+    glEnd();
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
     GLfloat texture_color1[] = {0, 0, 1, alp};
@@ -997,21 +1016,13 @@ static void modelD(GLdouble alp)
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
 
-    if(recv_flag == 10){
-	glBindTexture(GL_TEXTURE_2D, Result[0]);
+    if(recv_flag == 10 || recv_flag == -1){
+	glBindTexture(GL_TEXTURE_2D, GOAL);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 30, 5);
-	glTexCoord2i(1, 0);  glVertex2d( 30, -5);
-	glTexCoord2i(1, 1);  glVertex2d( 20, -5);
-   	glTexCoord2i(0, 1);  glVertex2d( 20, 5);
-	glEnd();
-   }else if(recv_flag == -1){
-	glBindTexture(GL_TEXTURE_2D, Result[1]);
-	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 30, 5);
-	glTexCoord2i(1, 0);  glVertex2d( 30, -5);
-	glTexCoord2i(1, 1);  glVertex2d( 20, -5);
-   	glTexCoord2i(0, 1);  glVertex2d( 20, 5);
+	glTexCoord2i(0, 0);  glVertex2d( 10, 20);
+	glTexCoord2i(1, 0);  glVertex2d( 10, -20);
+	glTexCoord2i(1, 1);  glVertex2d( -10,-20);
+   	glTexCoord2i(0, 1);  glVertex2d( -10, 20);
 	glEnd();
    }
 
