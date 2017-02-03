@@ -512,6 +512,7 @@ void draw2D()
 
 static void draw3D(void)
 {
+    glColorMask(1, 1, 1, 1);  // Alphaも描画する設定
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     view3D;
 
@@ -898,7 +899,7 @@ static void creatTex(char *file, GLuint *tex)
 
     //imgSrc[0]を変換
     imgSrc[1]=SDL_CreateRGBSurface
-        (SDL_SWSURFACE,
+        (0,
          Pot(imgSrc[0]->w), Pot(imgSrc[0]->h),
          32,
 #if SDL_BYTEORDER==SDL_LIL_ENDIAN /* OpenGL RGBA masks */
@@ -929,6 +930,7 @@ static void creatTex(char *file, GLuint *tex)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     //縮小時
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
     glTexImage2D
         (
             GL_TEXTURE_2D,//2Dテクスチャ
@@ -1030,8 +1032,10 @@ static void modelD(GLdouble alp)
     }
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
-
+    
     if(recv_flag == 10 || recv_flag == -1){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, GOAL);
 	glBegin(GL_QUADS);
 	glTexCoord2i(0, 0);  glVertex2d( 10, 20);
@@ -1039,6 +1043,33 @@ static void modelD(GLdouble alp)
 	glTexCoord2i(1, 1);  glVertex2d( -10,-20);
    	glTexCoord2i(0, 1);  glVertex2d( -10, 20);
 	glEnd();
+        glDisable(GL_BLEND);
+   }
+
+   if(recv_flag == 100){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, GOAL);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 0, 40);
+	glTexCoord2i(1, 0);  glVertex2d( 0, -40);
+	glTexCoord2i(1, 1);  glVertex2d( -20,-40);
+   	glTexCoord2i(0, 1);  glVertex2d( -20, 40);
+	glEnd();
+        glDisable(GL_BLEND);
+   }
+   
+    if(recv_flag == 200){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, GOAL);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( -10, 50);
+	glTexCoord2i(1, 0);  glVertex2d( -10, -50);
+	glTexCoord2i(1, 1);  glVertex2d( -30, -50);
+   	glTexCoord2i(0, 1);  glVertex2d( -30, 50);
+	glEnd();
+        glDisable(GL_BLEND);
    }
 
    if(cameramode == 0){
