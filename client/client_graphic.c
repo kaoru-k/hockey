@@ -289,6 +289,18 @@ static void view3D()
     glLoadIdentity();// 単位行列を設定
 }
 
+//引数：キャラのタイプ　　そのタイプのHPを返す
+int mHP(int type){
+    switch(type){
+	case 0:return ATK1_HP0;
+	case 1:return ATK2_HP0;
+	case 2:return SUP1_HP0;
+	case 3:return SUP2_HP0;
+	default:return 999;
+    }
+}
+
+
 void draw2D()
 {	
     view2D();
@@ -301,10 +313,10 @@ void draw2D()
 
     if(cameramode == 0){
 	GLdouble ATK_HP[][2] ={
-            {60, 72.5 - (((double)40 / 650) * p[0].hp)},
+            {60, 72.5 - (((double)40 / mHP(p[0].type)) * p[0].hp)},
             {60, 72.5},
             {65, 72.5},
-            {65, 72.5 - (((double)40 / 650) * p[0].hp)}   
+            {65, 72.5 - (((double)40 / mHP(p[0].type)) * p[0].hp)}   
 	};
 
 	GLdouble ATK_AP[][2] ={
@@ -315,10 +327,10 @@ void draw2D()
 	};
 
 	GLdouble SUP_HP[][2] ={
-            {60, 12.5 - (((double)42.5 / 300) * p[1].hp)},
+            {60, 12.5 - (((double)42.5 / mHP(p[1].type)) * p[1].hp)},
             {60, 12.5},
             {65, 12.5},
-            {65, 12.5 - (((double)42.5 / 300) * p[1].hp)}
+            {65, 12.5 - (((double)42.5 / mHP(p[1].type)) * p[1].hp)}
 	};
 
 	GLdouble SUP_AP[][2] ={
@@ -404,10 +416,10 @@ void draw2D()
     }
     else if(cameramode == 1){
 	GLdouble ATK_HP2[][2] ={
-            {60, 72.5 - (((double)40 / 550) * p[2].hp)},
+            {60, 72.5 - (((double)40 / mHP(p[2].type)) * p[2].hp)},
             {60, 72.5},
             {65, 72.5},
-            {65, 72.5 - (((double)40 / 550) * p[2].hp)}
+            {65, 72.5 - (((double)40 / mHP(p[2].type)) * p[2].hp)}
 	};
 
 	GLdouble ATK_AP2[][2] ={
@@ -418,10 +430,10 @@ void draw2D()
 	};
 
 	GLdouble SUP_HP2[][2] ={
-            {60, 12.5 - (((double)42.5 / 450) * p[3].hp)},
+            {60, 12.5 - (((double)42.5 / mHP(p[3].type)) * p[3].hp)},
             {60, 12.5},
             {65, 12.5},
-            {65, 12.5 - (((double)42.5 / 450) * p[3].hp)}
+            {65, 12.5 - (((double)42.5 / mHP(p[3].type)) * p[3].hp)}
 	};
 
 	GLdouble SUP_AP2[][2] ={

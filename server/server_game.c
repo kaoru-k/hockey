@@ -194,8 +194,8 @@ void field_set(void){
     float k,l;
 
 //必殺
-    if(p[s_on()].ap == 100 && game.scene == 0)
-        Hcom(s_on());
+    if(/*p[clients[s_on()].control].ap == 100 &&*/ game.scene == 0)
+        Hcom(clients[s_on()].control);
 //ゼニヤッタの必殺終了条件
     if(game.han[0] != 10){
 	if(game.now - game.time > 60)
