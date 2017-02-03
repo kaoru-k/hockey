@@ -19,7 +19,8 @@
 #define COM_SPECIAL    'S'    // Special   必殺技
 #define COM_S_AND_B    'D'    // S anD B   必殺技+跳ね返る音
 #define COM_START      'T'    // sTart     ゲームスタート
-#define COM_CONTINUE   'C'    // Continue  コンティニュー
+#define COM_LAUNCH     'A'    // lAunch    発射準備
+#define COM_QUESTION   'Q'    // Question  コンティニューするかどうか
 #define COM_RESET      'R'    // Reset     初期化
 #define COM_EXIT       'X'    // eXit      終了
 #define COM_WIN        'W'    // Win       「Win」表示   (点数送信)

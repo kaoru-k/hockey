@@ -230,6 +230,19 @@ int network(void)
 		set_con(COM_EXIT);
                 result = 0;
             }
+            else if (game.scene == 2 && (game.point[0] != 0 || game.point[1] != 0)) {
+                for (i = 0; i < num_clients; i++) {
+                    if      (win == 0 && clients[i].cid == 2)
+                        set_con(COM_LAUNCH);
+                    else if (win == 1 && clients[i].cid == 0)
+                        set_con(COM_LAUNCH);
+                    else
+                        set_con(COM_NONE);
+
+                    send_data(i, &send_con, sizeof(CONTAINER_S));
+                }
+                return 1;
+            }           
             else if (game.scene == 1) {
                 for (i = 0; i < 4; i++)
                     client_frame[i] = 0;

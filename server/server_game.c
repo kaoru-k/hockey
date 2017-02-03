@@ -486,10 +486,10 @@ void field_set(void){
                     }
                     if(game.co[0] != 5){
                         if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
-                            //speed.y = -speed.y * 0.9;
+                            speed.y = -speed.y * 0.9;
                             speed.x = speed.x * 0.9;
                         }else
-                            //speed.y = -speed.y;
+                            speed.y = -speed.y;
                         game.defe[0][1] = def_ugoki(-1);
                         game.defe[1][1] = 0;
                         def_ugoki2();

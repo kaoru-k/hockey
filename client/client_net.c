@@ -114,6 +114,8 @@ int network_recv(void)
         case COM_LOSE:
             fprintf(stderr,"LOSE [%d]-[%d]\n", point[0], point[1]);
             recv_flag = -1; break;
+        case COM_LAUNCH:
+            recv_flag = 100; break;
 	case COM_BOUND:
             play_sound(M_BOUND); break;
         case COM_SPECIAL:
