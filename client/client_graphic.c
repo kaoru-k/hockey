@@ -1018,8 +1018,10 @@ static void modelD(GLdouble alp)
     }
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
-
+    
     if(recv_flag == 10 || recv_flag == -1){
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
 	glBindTexture(GL_TEXTURE_2D, GOAL);
 	glBegin(GL_QUADS);
 	glTexCoord2i(0, 0);  glVertex2d( 10, 20);
@@ -1027,7 +1029,9 @@ static void modelD(GLdouble alp)
 	glTexCoord2i(1, 1);  glVertex2d( -10,-20);
    	glTexCoord2i(0, 1);  glVertex2d( -10, 20);
 	glEnd();
+        glDisable(GL_BLEND);
    }
+   
 
    if(cameramode == 0){
         glBindTexture(GL_TEXTURE_2D, PointTex[point[0]]);
