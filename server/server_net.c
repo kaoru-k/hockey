@@ -24,7 +24,7 @@ int current_frame = 0;
 
 static fd_set mask;
 static int num_socks;
-static int s_flag[4] = {0};
+int s_flag[4] = {0};
 int start_flag = 0;
 int sound_flag = 0;
 int max_point;
@@ -130,10 +130,12 @@ void setting_server(void)
             if (!flag[j][0]) {
                 if (j == 0) {
                     clients[i].control = 0;
+                    p[0].cid  = i;
                     p[0].type = setting[i].chara;
                 }
                 else {
                     clients[i].control = 2;
+                    p[2].cid  = i;
                     p[2].type = setting[i].chara;
                 }
                 flag[j][0] = 1;
@@ -141,10 +143,12 @@ void setting_server(void)
             else {
                 if (j == 0) {
                     clients[i].control = 1;
+                    p[1].cid  = i; 
                     p[1].type = rand_type(1);
                 }
                 else {
                     clients[i].control = 3;
+                    p[3].cid  = i;
                     p[3].type = rand_type(1);
                 }
             }
@@ -154,10 +158,12 @@ void setting_server(void)
             if (!flag[j][1]) {
                 if (j == 0) {
                     clients[i].control = 1;
+                    p[1].cid  = i;
                     p[1].type = setting[i].chara;
                 }
                 else {
                     clients[i].control = 3;
+                    p[1].cid  = i;
                     p[3].type = setting[i].chara;
                 }
                 flag[j][1] = 1;
@@ -165,10 +171,12 @@ void setting_server(void)
             else {
                 if (j == 0) {
                     clients[i].control = 0;
+                    p[0].cid  = i;
                     p[0].type = rand_type(0);
                 }
                 else {
                     clients[i].control = 2;
+                    p[0].cid  = i;
                     p[2].type = rand_type(0);
                 }
             }
@@ -181,7 +189,7 @@ void setting_server(void)
     fprintf(stderr, "max_point: %d\n", max_point);
     setting2.point = max_point;
     for (i = 0; i < 6; i++) {
-        fprintf(stderr, "p[%d] type:%d\n", i, p[i].type);
+        fprintf(stderr, "p[%d] cid:%d type:%d\n", i, p[i].cid, p[i].type);
         setting2.type[i] = p[i].type;
     }
     
