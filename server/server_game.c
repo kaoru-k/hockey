@@ -10,7 +10,7 @@
 PAD speed={0,0};
 GAME game = {0,0,0,3,{0,0,1}, {{0,0},{0,0}}, {0,0} ,{0,0}, {10,10}};
 int win;
-
+int s_flag[4];
 static float bai(int type);
 static int   def_ugoki(int i);
 static void  def_ugoki2(void);
@@ -31,7 +31,7 @@ static float bai(int type)
     case 1:return 1.14;
     case 2:return 0.85;
     case 3:return 1;
-    case 4:return 90;   //回復
+    case 4:return 80;   //回復
     case 5:return 60;
     case 6:return ATK1_HP0;  //maxhp
     case 7:return ATK2_HP0;
@@ -194,15 +194,17 @@ void field_set(void){
     float k,l;
 
 //必殺
-    if(/*p[clients[s_on()].control].ap == 100 &&*/ game.scene == 0)
-        Hcom(clients[s_on()].control);
+    for(i = 0;i < 4;i++){
+    	if(p[i].ap == 100 && s_flag[p[i].cid] == 1 && game.scene == 0)
+            Hcom(i);
+    }
 //ゼニヤッタの必殺終了条件
     if(game.han[0] != 10){
-	if(game.now - game.time > 60)
-	    game.han[1] = 10;
+	if(game.now - game.time > 45) //　何秒間持続するか
+	    game.han[0] = 10;
     }
     if(game.han[1] != 10){
-	if(game.now - game.time > 60)
+	if(game.now - game.time > 45)
 	    game.han[1] = 10;
     }
 
@@ -289,9 +291,9 @@ void field_set(void){
                         game.defe[0][1] = 0;
                         def_ugoki2();
                     }else{
-                        if((p[2].hp += 30) > bai(p[2].type + 6))
+                        if((p[2].hp += 60) > bai(p[2].type + 6))
                             p[2].hp = bai(p[2].type + 6);
-                            game.co[1] = 0;
+                        game.co[1] = 0;
 			}
                 }
             }else if(pad.y + PAD_R >= SUP_Y && pad.y + PAD_R <= SUP_Y + speed.y){
@@ -335,7 +337,7 @@ void field_set(void){
                         if(p[4].hp > bai(p[4].type + 6))
                             p[4].hp = bai(p[4].type + 6);     //          **//
                     }else{
-                        if((p[2].hp += 30) > bai(p[2].type + 6))
+                        if((p[2].hp += 60) > bai(p[2].type + 6))
                             p[2].hp = bai(p[2].type + 6);
                         game.co[1] = 0;
 		    }
@@ -363,7 +365,7 @@ void field_set(void){
 		  	game.defe[0][1] = 0;
 			def_ugoki2();
                     }else{
-                        if((p[2].hp += 30) > bai(p[2].type + 6))
+                        if((p[2].hp += 60) > bai(p[2].type + 6))
                             p[2].hp = bai(p[2].type + 6);
                         game.co[1] = 0;
 		    }
@@ -419,7 +421,7 @@ void field_set(void){
                         game.defe[1][1] = 0;
                         def_ugoki2();
                     }else{
-                        if((p[0].hp += 30) > bai(p[0].type + 6))
+                        if((p[0].hp += 60) > bai(p[0].type + 6))
                             p[0].hp = bai(p[0].type + 6);
                         game.co[0] = 0;
 		    }
@@ -465,7 +467,7 @@ void field_set(void){
                         if(p[5].hp > bai(p[5].type + 6))
                             p[5].hp = bai(p[5].type + 6);
                     }else{
-                        if((p[0].hp += 30) > bai(p[0].type + 6))
+                        if((p[0].hp += 60) > bai(p[0].type + 6))
                             p[0].hp = bai(p[0].type + 6);
                         game.co[0] = 0;
 		    }
@@ -493,7 +495,7 @@ void field_set(void){
                         def_ugoki2();
                         sound_flag = 1;
                     }else{
-                        if((p[0].hp += 30) > bai(p[0].type + 6))
+                        if((p[0].hp += 60) > bai(p[0].type + 6))
                             p[0].hp = bai(p[0].type + 6);
                         game.co[0] = 0;
 		    }
