@@ -225,7 +225,7 @@ int network(void)
             default:
                 s_flag[i] = 0; break;
             }
-
+            
             if (endflag) {
 		set_con(COM_EXIT);
                 result = 0;
