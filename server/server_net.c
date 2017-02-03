@@ -236,6 +236,8 @@ int network(void)
                         set_con(COM_LAUNCH);
                     else if (win == 1 && clients[i].cid == 0)
                         set_con(COM_LAUNCH);
+                    else if (num_clients < 3)
+                        set_con(COM_LAUNCH);
                     else
                         set_con(COM_NONE);
 

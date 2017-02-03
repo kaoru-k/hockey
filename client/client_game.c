@@ -105,10 +105,10 @@ int Keyevent(void)
         case SDL_JOYBUTTONDOWN:
             switch(event.jbutton.button){
             case 0 :
-                //if (recv_flag == 100)
+                if (recv_flag == 100)
                     send_flag = COM_START;
-                //else
-                    //send_flag = COM_NONE;
+                else
+                    send_flag = COM_NONE;
                 break;
             case 1 :
                 send_flag = COM_SPECIAL; break;

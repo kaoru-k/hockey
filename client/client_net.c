@@ -109,10 +109,10 @@ int network_recv(void)
         case COM_EXIT:
             endflag = 1; return 0;
         case COM_WIN:
-            fprintf(stderr,"WIN  [%d]-[%d]\n", point[0], point[1]);
+            //fprintf(stderr,"WIN  [%d]-[%d]\n", point[0], point[1]);
             recv_flag = 10; break;
         case COM_LOSE:
-            fprintf(stderr,"LOSE [%d]-[%d]\n", point[0], point[1]);
+            //fprintf(stderr,"LOSE [%d]-[%d]\n", point[0], point[1]);
             recv_flag = -1; break;
         case COM_LAUNCH:
             recv_flag = 100; break;
