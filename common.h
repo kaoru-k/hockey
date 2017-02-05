@@ -20,8 +20,10 @@
 #define COM_S_AND_B    'D'    // S anD B   必殺技+跳ね返る音
 #define COM_START      'T'    // sTart     ゲームスタート
 #define COM_LAUNCH     'A'    // lAunch    発射準備
-#define COM_QUESTION   'Q'    // Question  コンティニューするかどうか
+#define COM_QUE_Y      'Y'    // Yusho     コンティニューするかどうか
+#define COM_QUE_Z      'Z'    // Zanpai    同上
 #define COM_RESET      'R'    // Reset     初期化
+#define COM_ALLRESET   'E'    // allrEset  オールリセット
 #define COM_EXIT       'X'    // eXit      終了
 #define COM_WIN        'W'    // Win       「Win」表示   (点数送信)
 #define COM_LOSE       'L'    // Lose      「Lose」表示  (点数送信) 

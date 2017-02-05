@@ -26,6 +26,7 @@ static fd_set mask;
 static int num_socks;
 int s_flag[4] = {0};
 int start_flag = 0;
+int reset_flag = 0;
 int sound_flag = 0;
 int max_point;
 
@@ -217,14 +218,21 @@ int network(void)
             
             switch (out_con(i)) {
             case COM_EXIT :
-                endflag = 1;   break;
+                endflag = 1;
+                break;
             case COM_SPECIAL :
-		s_flag[i] = 1; break;
+                if (reset_flag == -1) endflag = 1;
+		else s_flag[i] = 1;
+                break;
             case COM_START :
-                start_flag = 1;
+                if (reset_flag == -1) reset_flag = 1;
+                else start_flag = 1;
+                break;
             default:
-                s_flag[i] = 0; break;
+                s_flag[i] = 0;
+                break;
             }
+
             
             if (endflag) {
 		set_con(COM_EXIT);
@@ -244,7 +252,7 @@ int network(void)
                     send_data(i, &send_con, sizeof(CONTAINER_S));
                 }
                 return 1;
-            }           
+            }
             else if (game.scene == 1) {
                 for (i = 0; i < 4; i++)
                     client_frame[i] = 0;
@@ -261,6 +269,25 @@ int network(void)
                     send_data(i, &send_con, sizeof(CONTAINER_S));
                 }
                 return 1;
+            }
+            else if (reset_flag == -1) {
+                for (i = 0; i < num_clients; i++) {
+                    if ( (win == 0 && (i == 0 || i == 1)) || (win == 1 && (i == 2 || i == 3)) ) 
+                        send_con.com = COM_QUE_Y;
+                    else
+                        send_con.com = COM_QUE_Z;
+                    
+                    send_data(i, &send_con, sizeof(CONTAINER_S));
+                }
+                return 1;
+            }
+            else if (reset_flag == 1) {
+                reset_flag = 0;
+                for (i = 0; i < 4; i++)
+                    client_frame[i] = 0;
+		current_frame = 0;
+
+                set_con(COM_ALLRESET);
             }
             else if (s_on() != -1) {
                 if (sound_flag) {

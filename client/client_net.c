@@ -116,6 +116,9 @@ int network_recv(void)
             recv_flag = -1; break;
         case COM_LAUNCH:
             recv_flag = 100; break;
+        case COM_QUE_Y:
+        case COM_QUE_Z:
+            recv_flag = 200; break;
 	case COM_BOUND:
             play_sound(M_BOUND); break;
         case COM_SPECIAL:
@@ -158,6 +161,18 @@ static char out_con(void)
         return recv_con.com;
     }
 
+    if (recv_con.com == COM_QUE_Y || recv_con.com == COM_QUE_Z)
+        return recv_con.com;
+    
+
+    if (recv_con.com == COM_ALLRESET) {
+        point[0] = 0;
+        point[1] = 0;
+        current_frame = 0;
+        latest_frame = 0;
+        return recv_con.com;
+    }
+    
     if (recv_con.frame > latest_frame) {
         recv_con.frame = latest_frame;
         copy_pad(&pad, &recv_con.pad);
