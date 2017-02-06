@@ -30,6 +30,7 @@ extern int    current_frame;
 extern int    client_frame[4];
 extern int    endflag;
 extern int    start_flag;
+extern int    reset_flag;
 extern int    sound_flag;
 extern int    win;
 extern int    max_point;

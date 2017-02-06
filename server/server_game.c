@@ -172,6 +172,9 @@ void shokika(void){
 	    game.han[1] = 10;
 	    speed.x = 0;speed.y = 0;
             if(game.point[0] == max_point || game.point[1] == max_point){//勝敗がついた時
+                reset_flag = -1;
+                while (reset_flag == -1 && endflag != 1); //プレイヤー選択を待機
+                reset_flag = 1;
                 game.point[0] = 0;
                 game.point[1] = 0;
                 for(i =0;i<4;i++)

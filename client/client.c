@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
 	    }
         }
         flag = 1;
+	setting.point = 3;
         while(flag){//設定画面
             SettingWindow();
             Keyevent();

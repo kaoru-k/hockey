@@ -19,8 +19,11 @@
 #define COM_SPECIAL    'S'    // Special   必殺技
 #define COM_S_AND_B    'D'    // S anD B   必殺技+跳ね返る音
 #define COM_START      'T'    // sTart     ゲームスタート
-#define COM_CONTINUE   'C'    // Continue  コンティニュー
+#define COM_LAUNCH     'A'    // lAunch    発射準備
+#define COM_QUE_Y      'Y'    // Yusho     コンティニューするかどうか
+#define COM_QUE_Z      'Z'    // Zanpai    同上
 #define COM_RESET      'R'    // Reset     初期化
+#define COM_ALLRESET   'E'    // allrEset  オールリセット
 #define COM_EXIT       'X'    // eXit      終了
 #define COM_WIN        'W'    // Win       「Win」表示   (点数送信)
 #define COM_LOSE       'L'    // Lose      「Lose」表示  (点数送信) 
@@ -41,11 +44,11 @@
 #define ATK_W          20     // アタッカーの幅
 
 /* 各キャラの体力 */
-#define DEF_HP0 		800
-#define ATK1_HP0		550
-#define ATK2_HP0		650
-#define SUP1_HP0		450
-#define SUP2_HP0		300
+#define DEF_HP0        800
+#define ATK1_HP0       550
+#define ATK2_HP0       650
+#define SUP1_HP0       450
+#define SUP2_HP0       300
 
 /* パッド */
 #define PAD_R          10     // パッドの半径
@@ -80,7 +83,7 @@ typedef struct{
     float y;                  // パッドのY座標
 }PAD;
 
-/* サーバ→クライアント用の構造体 */
+/* 座標などをサーバからクライアントに送るときに使う構造体 */
 typedef struct{
     char    com;               // コマンド
     int     frame;             // フレーム番号
@@ -88,18 +91,20 @@ typedef struct{
     PLAYER2 p[6];              // プレイヤー情報
 }CONTAINER_S;
 
-/* クライアント→サーバ用の構造体 */
+/* 座標などをクライアントからサーバに送るときに使う構造体 */
 typedef struct{
     char  com;                // コマンド
     int   frame;              // フレーム番号
     float x;                  // プレイヤーのX座標
 }CONTAINER_C;
 
+/* 設定をクライアントからサーバに送るときに使う構造体 */
 typedef struct{
     int point;                // 何点先取で勝ちになるか
     int chara;                // 選んだキャラクター
 }SETTING;
 
+/* 設定をサーバからクライアントに送るときに使う構造体 */
 typedef struct{
     int point;
     int type[6];
