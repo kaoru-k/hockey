@@ -198,6 +198,7 @@ void field_set(void){
     	if(p[i].ap == 100 && s_flag[p[i].cid] == 1 && game.scene == 0)
             Hcom(i);
     }
+
 //ゼニヤッタの必殺終了条件
     if(game.han[0] != 10){
 	if(game.now - game.time > 45) //　何秒間持続するか
@@ -320,7 +321,7 @@ void field_set(void){
 			}
                     }
                     if(game.co[1] != -5){
-                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 3){ 
                             speed.y = -speed.y * bai(p[1].type);
                             speed.x = speed.x * bai(p[1].type);
                         }else
@@ -356,7 +357,7 @@ void field_set(void){
 			p[4].hp = 0;
                     }
                     if(game.co[1] != -5){
-                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 3){ 
                             speed.y = -speed.y * 0.9;
                             speed.x = speed.x * 0.9;
                         }else
@@ -450,7 +451,7 @@ void field_set(void){
 			}
                     }
                     if(game.co[0] != 5){
-                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 3){ 
                             speed.y = -speed.y * bai(p[3].type);
                             speed.x = speed.x * bai(p[3].type);
                         }else
@@ -485,7 +486,7 @@ void field_set(void){
 	            p[5].hp = 0;
                     }
                     if(game.co[0] != 5){
-                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 2){ 
+                        if(sqrt(speed.x*speed.x + speed.y * speed.y) > 3){ 
                             speed.y = -speed.y * 0.9;
                             speed.x = speed.x * 0.9;
                         }else
