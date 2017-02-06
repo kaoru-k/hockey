@@ -47,8 +47,8 @@
 #define DEF_HP0        800
 #define ATK1_HP0       550
 #define ATK2_HP0       650
-#define SUP1_HP0       450
-#define SUP2_HP0       300
+#define SUP1_HP0       300
+#define SUP2_HP0       400
 
 /* パッド */
 #define PAD_R          10     // パッドの半径
