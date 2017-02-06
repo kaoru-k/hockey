@@ -119,8 +119,8 @@ int Keyevent(void)
             case 11:
                 endflag = 1; break;
             }
-	    if(settingflag == 0 || settingflag == 1)
-		settingflag = 3;
+	    if(0 <= settingflag && settingflag < 3)
+		settingflag++;
             break;
 	default:
             send_flag = COM_NONE; break;

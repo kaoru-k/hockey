@@ -10,7 +10,7 @@ static Mix_Music *bgm;
 static Mix_Chunk *bound_sound;
 
 static char bgm_file[]   = "";
-static char bound_file[] = "audio/bound.wav";
+static char bound_file[] = "audio/c.wav";
 
 int setup_sound(void)
 {

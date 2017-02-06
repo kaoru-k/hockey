@@ -59,7 +59,9 @@ int main(int argc, char *argv[])
         while(flag){//設定画面
             SettingWindow();
             Keyevent();
-            if(settingflag == 3)
+            if(myid == 0 && settingflag == 3)
+		flag = 0;
+            if(myid != 0 && settingflag == 1)
 		flag = 0;
         }
 
