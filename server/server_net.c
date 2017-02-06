@@ -238,7 +238,7 @@ int network(void)
 		set_con(COM_EXIT);
                 result = 0;
             }
-            else if (game.scene == 2 && (game.point[0] != 0 || game.point[1] != 0)) {
+            else if (game.scene == 2 && (game.point[0] != 0 || game.point[1] != 0) && reset_flag != -1) {
                 for (i = 0; i < num_clients; i++) {
                     if      (win == 0 && clients[i].cid == 2)
                         set_con(COM_LAUNCH);
