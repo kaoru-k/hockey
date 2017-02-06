@@ -14,16 +14,18 @@
 #define WINDOW_W 1024
 #define WINDOW_H 768
 
-PAD         pad        = {0,0};
-int         cameramode = 0;             // 0の時：初期or1p2p / 1の時:3p4p
-SDL_Rect    camera     = {0.0, 0.0};
-GLuint      texA[6]    = {0};           // キャラテクスチャ
-GLuint      Starttex   = 0;		//スタート画面
-GLuint	    AP	       = 0;		//必殺技ゲージ（満タン時用）
-GLuint      Result[2]  = {0};           //結果画像
-GLuint      GOAL  = 0;
-GLuint      PointTex[10]  = {0};
-int         flash      = 0;
+PAD         pad          = {0,0};
+int         cameramode   = 0;             // 0の時：初期or1p2p / 1の時:3p4p
+SDL_Rect    camera       = {0.0, 0.0};
+GLuint      texA[6]      = {0};           // キャラテクスチャ
+GLuint      Starttex     = 0;		//スタート画面
+GLuint	    AP	         = 0;		//必殺技ゲージ（満タン時用）
+GLuint      Result[2]    = {0};           //結果画像
+GLuint      GOAL         = 0;
+GLuint      PointTex[10] = {0};
+GLuint      cont_img     = 0;
+GLuint      hassha_img   = 0;
+int         flash        = 0;
 GLUquadric* quadric;
 GLUquadric* quadric2;
 GLUquadric* quadric3;
@@ -87,7 +89,9 @@ int init_sdl(void)
     creatTex("./image/7.bmp", &PointTex[7]);
     creatTex("./image/8.bmp", &PointTex[8]);
     creatTex("./image/9.bmp", &PointTex[9]);
-    creatTex("./image/10.bmp", &PointTex[10]);
+    creatTex("./image/10.bmp",&PointTex[10]);
+    creatTex("./image/hassha.bmp", &hassha_img);
+    creatTex("./image/continue.bmp",&cont_img);
 
 }
 
@@ -1049,7 +1053,7 @@ static void modelD(GLdouble alp)
    if(recv_flag == 100){
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture(GL_TEXTURE_2D, GOAL);
+	glBindTexture(GL_TEXTURE_2D, hassha_img);
 	glBegin(GL_QUADS);
 	glTexCoord2i(0, 0);  glVertex2d( 0, 40);
 	glTexCoord2i(1, 0);  glVertex2d( 0, -40);
@@ -1062,7 +1066,7 @@ static void modelD(GLdouble alp)
     if(recv_flag == 200){
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glBindTexture(GL_TEXTURE_2D, GOAL);
+	glBindTexture(GL_TEXTURE_2D, cont_img);
 	glBegin(GL_QUADS);
 	glTexCoord2i(0, 0);  glVertex2d( -10, 50);
 	glTexCoord2i(1, 0);  glVertex2d( -10, -50);
