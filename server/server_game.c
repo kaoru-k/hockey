@@ -17,6 +17,7 @@ static void  def_ugoki2(void);
 static int   sosei(int a);
 static int   hissatu(int type,int a);
 static void  Hcom(int id);
+struct timespec time_tmp;
 
 static float bai(int type)
 {
@@ -177,6 +178,8 @@ void shokika(void){
                 reset_flag = 1;
                 game.point[0] = 0;
                 game.point[1] = 0;
+                clock_gettime(CLOCK_REALTIME, &time_tmp);
+                game.time = time_tmp.tv_sec - 2;
                 for(i =0;i<4;i++)
                     p[i].ap = 0;
             }
@@ -184,7 +187,6 @@ void shokika(void){
 
 /* パッドの動きを計算する */
 void field_set(void){
-    struct timespec time_tmp;
     clock_gettime(CLOCK_REALTIME, &time_tmp);
     game.now = time_tmp.tv_sec;
 
