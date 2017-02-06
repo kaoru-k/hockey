@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
             Keyevent();
             if(myid == 0 && settingflag == 3)
 		flag = 0;
-            if(myid != 0 && settingflag == 1)
+            if(myid != 0 && settingflag == 2)
 		flag = 0;
         }
 

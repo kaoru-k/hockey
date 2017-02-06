@@ -25,6 +25,7 @@ GLuint      GOAL         = 0;
 GLuint      PointTex[10] = {0};
 GLuint      cont_img     = 0;
 GLuint      hassha_img   = 0;
+GLuint      Button[2]    = {0};
 int         flash        = 0;
 GLUquadric* quadric;
 GLUquadric* quadric2;
@@ -92,6 +93,9 @@ int init_sdl(void)
     creatTex("./image/10.bmp",&PointTex[10]);
     creatTex("./image/hassha.bmp", &hassha_img);
     creatTex("./image/continue.bmp",&cont_img);
+    creatTex("./image/button_2.bmp", &Button[0]);
+    creatTex("./image/button_1.bmp", &Button[1]);
+
 
 }
 
@@ -242,32 +246,44 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[3]), -55 + (5 * i[3]));
     glEnd();
 
+    
     if(myid == 0){
     glBindTexture(GL_TEXTURE_2D, PointTex[setting.point]);
-    glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( -10 + (5 * settingflag),  5 + (5 * settingflag));
-    glTexCoord2i(1, 0);  glVertex2i( -10 + (5 * settingflag),-15 - (5 * settingflag));
-    glTexCoord2i(1, 1);  glVertex2i( -30 - (5 * settingflag),-15 - (5 * settingflag));
-    glTexCoord2i(0, 1);  glVertex2i( -30 - (5 * settingflag),  5 + (5 * settingflag));
-    glEnd();
+	if(settingflag == 0 || settingflag == 2){
+    		glBegin(GL_QUADS);
+    		glTexCoord2i(0, 0);  glVertex2i( -10, 10 );
+    		glTexCoord2i(1, 0);  glVertex2i( -10,-10 );
+    		glTexCoord2i(1, 1);  glVertex2i( -30,-10 );
+    		glTexCoord2i(0, 1);  glVertex2i( -30, 10 );
+                glEnd();
+	}
+	if(settingflag == 1){
+    		glBegin(GL_QUADS);
+    		glTexCoord2i(0, 0);  glVertex2i( -5, 15 );
+    		glTexCoord2i(1, 0);  glVertex2i( -5,-15 );
+    		glTexCoord2i(1, 1);  glVertex2i( -35,-15 );
+    		glTexCoord2i(0, 1);  glVertex2i( -35, 15 );
+                glEnd();
+	}
     }
     
-    if(myid == 0 && settingflag == 2)
-    glBindTexture(GL_TEXTURE_2D, PointTex[setting.point]);
+    if((myid == 0 && settingflag == 2 )|| (myid != 0 && settingflag == 1 )){
+    glBindTexture(GL_TEXTURE_2D, Button[1]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( -10 , 20);
-    glTexCoord2i(1, 0);  glVertex2i( -10 ,-20);
-    glTexCoord2i(1, 1);  glVertex2i( -30 ,-20);
-    glTexCoord2i(0, 1);  glVertex2i( -30 , 20);
+    glTexCoord2i(0, 0);  glVertex2i( -40 , 20);
+    glTexCoord2i(1, 0);  glVertex2i( -40 ,-20);
+    glTexCoord2i(1, 1);  glVertex2i( -60 ,-20);
+    glTexCoord2i(0, 1);  glVertex2i( -60 , 20);
     glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, PointTex[setting.point]);
+    }else{
+    glBindTexture(GL_TEXTURE_2D, Button[0]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( -10 , 20);
-    glTexCoord2i(1, 0);  glVertex2i( -10 ,-20);
-    glTexCoord2i(1, 1);  glVertex2i( -30 ,-20);
-    glTexCoord2i(0, 1);  glVertex2i( -30 , 20);
+    glTexCoord2i(0, 0);  glVertex2i( -40 , 20);
+    glTexCoord2i(1, 0);  glVertex2i( -40 ,-20);
+    glTexCoord2i(1, 1);  glVertex2i( -60 ,-20);
+    glTexCoord2i(0, 1);  glVertex2i( -60 , 20);
     glEnd();
+    }
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
     GLfloat texture_color1[] = {0, 0, 1, alp};

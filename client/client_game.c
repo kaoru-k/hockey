@@ -96,9 +96,10 @@ int Keyevent(void)
             }
 	    if(event.jaxis.axis==1){
 		if(event.jaxis.value > 0){
-		    if(settingflag == 0 && myid == 0) settingflag = 1;
+		    if( (2 > settingflag && settingflag >= 0 && myid == 0) || ( 1 > settingflag && settingflag >= 0 && myid != 0)) 
+			settingflag++;
 		}else if(event.jaxis.value < 0){
-		    if(settingflag == 1) settingflag = 0;
+		    if(settingflag > 0) settingflag--;
 		}
 	    }
             break;
@@ -119,7 +120,7 @@ int Keyevent(void)
             case 11:
                 endflag = 1; break;
             }
-	    if(0 <= settingflag && settingflag < 3)
+	    if(( settingflag == 2 && myid == 0) || (settingflag = 1 && myid != 0))
 		settingflag++;
             break;
 	default:

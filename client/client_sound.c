@@ -18,9 +18,6 @@ static Mix_Chunk *sup2_sound;
 
 
 static char bgm_file[]   = "";
-<<<<<<< HEAD
-static char bound_file[] = "audio/c.wav";
-=======
 static char c[]     = "audio/c.wav";
 static char atk1[]  = "audio/atk1.wav";
 static char atk2[]  = "audio/atk2.wav";
@@ -30,7 +27,6 @@ static char sup1[]  = "audio/sup1.wav";
 static char sup2[]  = "audio/sup2.wav";
 
 
->>>>>>> 719efa417c0465285787098edf7c9ae8014396d9
 
 int setup_sound(void)
 {
