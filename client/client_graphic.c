@@ -958,7 +958,7 @@ static void modelD(GLdouble alp)
     GLfloat texture_color2[] = {0, 0, 1, alp};
 
     if(cameramode == 0){
-    glBindTexture(GL_TEXTURE_2D, texA[0]);
+    glBindTexture(GL_TEXTURE_2D, texA[p[0].type]);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
 
     if(p[0].hp == 0)
@@ -971,7 +971,7 @@ static void modelD(GLdouble alp)
     glTexCoord2i(0, 1);  glVertex2d( 50, 88);
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, texA[2]);
+    glBindTexture(GL_TEXTURE_2D, texA[p[1].type]);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     if(p[2].hp == 0)
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
@@ -996,7 +996,7 @@ static void modelD(GLdouble alp)
     glEnd();
 
     }else if(cameramode == 1){
-    glBindTexture(GL_TEXTURE_2D, texA[1]);
+    glBindTexture(GL_TEXTURE_2D, texA[p[2].type]);
     GLfloat texture_color[] = {1, 1, 1, alp};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     if(p[1].hp == 0)
@@ -1009,7 +1009,7 @@ static void modelD(GLdouble alp)
     glTexCoord2i(0, 1);  glVertex2d( 50, 88);
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, texA[3]);
+    glBindTexture(GL_TEXTURE_2D, texA[p[3].type]);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     if(p[3].hp == 0)
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
