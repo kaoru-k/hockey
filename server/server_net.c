@@ -289,7 +289,7 @@ int network(void)
                 }
                 return 1;
             }
-            else if (s_on() != -1) {
+            else if (hst_flag()) {
                 if (sound_flag) {
                     sound_flag = 0;
                     set_con(COM_S_AND_B);
