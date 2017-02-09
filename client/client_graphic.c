@@ -338,8 +338,8 @@ void WaitingWindow(void)
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     glBindTexture(GL_TEXTURE_2D, texA[1]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 40 , 10 );
-    glTexCoord2i(1, 0);  glVertex2i( 40 ,-10 );
+    glTexCoord2i(0, 0);  glVertex2i( 50 , 10 );
+    glTexCoord2i(1, 0);  glVertex2i( 50 ,-10 );
     glTexCoord2i(1, 1);  glVertex2i( 30 ,-10 );
     glTexCoord2i(0, 1);  glVertex2i( 30 , 10 );
     glEnd();
