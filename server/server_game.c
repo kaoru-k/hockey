@@ -194,6 +194,7 @@ void shokika(void){
 }
 
 int hst_flag(void){
+    if(hst != 0)
  	return 1;
     return 0;
 }
