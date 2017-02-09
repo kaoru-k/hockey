@@ -259,7 +259,7 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[3]), -55 + (5 * i[3]));
     glEnd();
 
-    
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     if(myid == 0){
     glBindTexture(GL_TEXTURE_2D, PointTex[setting.point]);
 	if(settingflag == 0 || settingflag == 2){
@@ -299,8 +299,7 @@ void SettingWindow(void)
     }
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
-    GLfloat texture_color1[] = {0, 0, 1, alp};
-    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color1);
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
 
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( 70, 94);
