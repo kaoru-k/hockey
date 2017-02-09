@@ -21,6 +21,7 @@ int  latest_frame;
 char send_flag;
 int  recv_flag = 0;
 int  point[2];
+SETTING2 setting2;
 CONTAINER_C send_con;
 CONTAINER_S recv_con;
 
@@ -67,7 +68,7 @@ void setup_client(char *server_name, u_short port)
 void setting_client(void)
 {
     int i;
-    SETTING2 setting2;
+    
     
     fprintf(stderr, "Send settings... ");
     send_data(&setting, sizeof(SETTING));

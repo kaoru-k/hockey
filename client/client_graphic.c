@@ -336,7 +336,7 @@ void WaitingWindow(void)
     GLfloat texture_color2[] = {0, 0, 1, alp};
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
-    glBindTexture(GL_TEXTURE_2D, texA[1]);
+    glBindTexture(GL_TEXTURE_2D, texA[p[control_id].type]);
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( 50 , 10 );
     glTexCoord2i(1, 0);  glVertex2i( 50 ,-10 );
@@ -344,7 +344,7 @@ void WaitingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( 30 , 10 );
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, PointTex[3]);
+    glBindTexture(GL_TEXTURE_2D, PointTex[setting2.point]);
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i(-20 , 60 );
     glTexCoord2i(1, 0);  glVertex2i(-20 , 40 );
@@ -468,7 +468,7 @@ void draw2D()
         }	  
   	glEnd();
 
-	if(p[0].ap == 100){
+/*	if(p[0].ap == 100){
         glEnable(GL_TEXTURE_2D);//テクスチャON
         glBindTexture(GL_TEXTURE_2D, AP);
         GLfloat texture_color[] = {1, 1, 1, 1};
@@ -484,18 +484,18 @@ void draw2D()
         }
 	glDisable(GL_TEXTURE_2D);//テクスチャOFF
         }else{
-
+*/
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_color);
 
-        /*if(p[0].ap == 100)
+        if(p[0].ap == 100)
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, AP_MAX_color);
-*/
+
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
 	    glVertex2dv(ATK_AP[i]);
         }	  
   	glEnd();
-        }
+
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, SUP_HP_color);
 	glBegin(GL_QUADS);
     	for (i = 0; i < 4; ++i) {
