@@ -77,7 +77,7 @@ int init_sdl(void)
     creatTex("./image/Dva.bmp", &texA[4]); 
     creatTex("./image/zaria.bmp", &texA[5]);
     creatTex("./image/H.bmp", &Starttex);
-    creatTex("./image/hs.bmp", &AP);
+    creatTex("./image/hsw.bmp", &AP);
     creatTex("./image/GOAL.bmp", &GOAL);
     creatTex("./image/kakuteiv.bmp", &Result[0]);
     creatTex("./image/kakuteid.bmp", &Result[1]);
