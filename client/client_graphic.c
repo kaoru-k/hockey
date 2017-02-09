@@ -356,10 +356,10 @@ void WaitingWindow(void)
     for(i = 0; i < 6; i++){
 	glBindTexture(GL_TEXTURE_2D, mozi[i]);
         glBegin(GL_QUADS);
-        glTexCoord2i(0, 0);  glVertex2i(-25 , 55 -(i * 5));
-        glTexCoord2i(1, 0);  glVertex2i(-20 , 45 -(i * 5));
-        glTexCoord2i(1, 1);  glVertex2i(-35 , 45 -(i * 5));
-        glTexCoord2i(0, 1);  glVertex2i(-35 , 55 -(i * 5));
+        glTexCoord2i(0, 0);  glVertex2i(-25 , 40 -(i * 10));
+        glTexCoord2i(1, 0);  glVertex2i(-25 , 30 -(i * 10));
+        glTexCoord2i(1, 1);  glVertex2i(-35 , 30 -(i * 10));
+        glTexCoord2i(0, 1);  glVertex2i(-35 , 40 -(i * 10));
         glEnd();
     }
 
