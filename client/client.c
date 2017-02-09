@@ -67,7 +67,17 @@ int main(int argc, char *argv[])
 
         flag = 1;
         setting_client();
-        
+        while(flag){//設定画面
+            WaitingWindow();
+            Keyevent();
+            if(SDL_PollEvent(&event)){
+		if(event.type == SDL_JOYBUTTONDOWN)
+		    flag = 0;
+	    }
+        }      
+
+        flag = 1;
+
         draw_field();
         if(myid == 0 || myid == 1){
             cameramode = 0;
