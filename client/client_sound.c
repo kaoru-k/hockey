@@ -38,7 +38,7 @@ int setup_sound(void)
     atk1_sound   = Mix_LoadWAV( atk1 );
     atk2_sound   = Mix_LoadWAV( atk2 );
     atk22_sound  = Mix_LoadWAV( atk22 );
-    bound_sound  = Mix_LoadWAV( bound );
+    bound_sound  = Mix_LoadWAV( sup2 );
     sup1_sound   = Mix_LoadWAV( sup1 );
     sup2_sound   = Mix_LoadWAV( sup2 );
    
