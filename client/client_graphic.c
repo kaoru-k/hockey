@@ -212,9 +212,13 @@ void SettingWindow(void)
     int i[4] = {0};
     i[setting.chara] = 1;
 
-    glBindTexture(GL_TEXTURE_2D, texA[0]);
     GLfloat texture_color[] = {1, 1, 1, alp};
+    GLfloat texture_color2[] = {0, 0, 1, alp};
+    glBindTexture(GL_TEXTURE_2D, texA[0]);
+    
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    if(settingflag == 0 && i[0] == 0)
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[0]), 75 + (5 * i[0]));
     glTexCoord2i(1, 0);  glVertex2i( 45 + (5 * i[0]), 55 - (5 * i[0]));
@@ -222,6 +226,9 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[0]), 75 + (5 * i[0]));
     glEnd();
 
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    if(settingflag == 0 && i[0] == 0)
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
     glBindTexture(GL_TEXTURE_2D, texA[1]);
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[1]), 30 + (5 * i[1]));
@@ -230,6 +237,9 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[1]), 30 + (5 * i[1]));
     glEnd();
 
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    if(settingflag == 0 && i[0] == 0)
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
     glBindTexture(GL_TEXTURE_2D, texA[2]);
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[2]), -10 + (5 * i[2]));
@@ -238,6 +248,9 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( 25 - (5 * i[2]), -10 + (5 * i[2]));
     glEnd();
 
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+    if(settingflag == 0 && i[0] == 0)
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
     glBindTexture(GL_TEXTURE_2D, texA[3]);
     glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex2i( 45 + (5 * i[3]), -55 + (5 * i[3]));
