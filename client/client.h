@@ -27,6 +27,7 @@ extern SDL_Rect     camera;
 extern SDL_Joystick *joystick;
 extern int settingflag;
 extern SETTING setting;
+extern SETTING2 setting2;
 
 /***** 外部関数 *****/
 // client_net.c

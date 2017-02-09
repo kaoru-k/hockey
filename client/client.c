@@ -69,7 +69,6 @@ int main(int argc, char *argv[])
         setting_client();
         while(flag){//設定画面
             WaitingWindow();
-            Keyevent();
             if(SDL_PollEvent(&event)){
 		if(event.type == SDL_JOYBUTTONDOWN)
 		    flag = 0;
