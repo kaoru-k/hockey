@@ -44,5 +44,6 @@ int  network(void);
 int  s_on(void);
 
 // server_game.c
+int  hst_flag(void);
 void field_set(void);
 

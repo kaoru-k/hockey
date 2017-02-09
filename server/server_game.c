@@ -190,8 +190,8 @@ void shokika(void){
             }
 }
 
-int hst_flag(int h[4]){
-    if(h[4]+h[3]+h[2]+h[1]+h[0] > 0)
+int hst_flag(void){
+    if(hst[3]+hst[2]+hst[1]+hst[0] > 0)
  	return 1;
     return 0;
 }
@@ -212,7 +212,6 @@ void field_set(void){
 //必殺
     for(i = 0;i < 4;i++){
     	if(p[i].ap == 100 && s_flag[p[i].cid] == 1 && game.scene == 0){
-	    hst[i] = 1;
             Hcom(i);
 	}
     }
@@ -522,10 +521,10 @@ void field_set(void){
                     }
                     if(game.co[0] != 5){
                         if(sqrt(speed.x*speed.x + speed.y * speed.y) > 3){ 
-                           // speed.y = -speed.y * 0.9;
+                           speed.y = -speed.y * 0.9;
                             speed.x = speed.x * 0.9;
                         }else
-                            //speed.y = -speed.y;
+                           speed.y = -speed.y;
                         game.defe[0][1] = def_ugoki(-1);
                         game.defe[1][1] = 0;
                         def_ugoki2();
