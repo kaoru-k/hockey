@@ -1224,19 +1224,19 @@ static void modelD(GLdouble alp)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, cont_img);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( -10, 50);
-	glTexCoord2i(1, 0);  glVertex2d( -10, -50);
-	glTexCoord2i(1, 1);  glVertex2d( -40, -50);
-   	glTexCoord2i(0, 1);  glVertex2d( -40, 50);
+	glTexCoord2i(0, 0);  glVertex2d( -30, 50);
+	glTexCoord2i(1, 0);  glVertex2d( -30, -50);
+	glTexCoord2i(1, 1);  glVertex2d( -60, -50);
+   	glTexCoord2i(0, 1);  glVertex2d( -60, 50);
 	glEnd();
         glDisable(GL_BLEND);
 
         glBindTexture(GL_TEXTURE_2D, Result[0]);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 70, 94);
-	glTexCoord2i(1, 0);  glVertex2d( 70, -94);
-	glTexCoord2i(1, 1);  glVertex2d( -70, -94);
-   	glTexCoord2i(0, 1);  glVertex2d( -70, 94);
+	glTexCoord2i(0, 0);  glVertex2d( 60, 60);
+	glTexCoord2i(1, 0);  glVertex2d( 60, -60);
+	glTexCoord2i(1, 1);  glVertex2d( -30, -60);
+   	glTexCoord2i(0, 1);  glVertex2d( -30, 60);
 	glEnd();
    }else if(recv_flag == 201){
         glEnable(GL_BLEND);
@@ -1244,19 +1244,19 @@ static void modelD(GLdouble alp)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, cont_img);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( -10, 50);
-	glTexCoord2i(1, 0);  glVertex2d( -10, -50);
-	glTexCoord2i(1, 1);  glVertex2d( -40, -50);
-   	glTexCoord2i(0, 1);  glVertex2d( -40, 50);
+	glTexCoord2i(0, 0);  glVertex2d( -30, 50);
+	glTexCoord2i(1, 0);  glVertex2d( -30, -50);
+	glTexCoord2i(1, 1);  glVertex2d( -60, -50);
+   	glTexCoord2i(0, 1);  glVertex2d( -60, 50);
 	glEnd();
         glDisable(GL_BLEND);
 
         glBindTexture(GL_TEXTURE_2D, Result[1]);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 70, 94);
-	glTexCoord2i(1, 0);  glVertex2d( 70, -94);
-	glTexCoord2i(1, 1);  glVertex2d( -70, -94);
-   	glTexCoord2i(0, 1);  glVertex2d( -70, 94);
+	glTexCoord2i(0, 0);  glVertex2d( 60, 60);
+	glTexCoord2i(1, 0);  glVertex2d( 60, -60);
+	glTexCoord2i(1, 1);  glVertex2d( -30, -60);
+   	glTexCoord2i(0, 1);  glVertex2d( -30, 60);
 	glEnd();
    }
 
