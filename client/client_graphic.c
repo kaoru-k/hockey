@@ -1254,7 +1254,7 @@ static void modelD(GLdouble alp)
 
     glBindTexture(GL_TEXTURE_2D, texA[p[1].type]);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
-    if(p[2].hp == 0)
+    if(p[1].hp == 0)
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
 
     glBegin(GL_QUADS);
@@ -1292,7 +1292,7 @@ static void modelD(GLdouble alp)
     GLfloat texture_color[] = {1, 1, 1, alp};
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
-    if(p[1].hp == 0)
+    if(p[2].hp == 0)
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
 
     glBegin(GL_QUADS);
