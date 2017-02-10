@@ -26,7 +26,9 @@ GLuint      PointTex[10] = {0};
 GLuint      mozi[6]      = {0};
 GLuint      cont_img     = 0;
 GLuint      hassha_img   = 0;
+GLuint      Wait[2]      = {0};
 GLuint      Button[2]    = {0};
+GLuint      Map[3]	 = {0};
 int         flash        = 0;
 GLUquadric* quadric;
 GLUquadric* quadric2;
@@ -102,7 +104,8 @@ int init_sdl(void)
     creatTex("./image/continue.bmp",&cont_img);
     creatTex("./image/button_2.bmp", &Button[0]);
     creatTex("./image/button_1.bmp", &Button[1]);
-
+    creatTex("./image/kaishi.bmp", &Wait[0]);
+    creatTex("./image/wait.bmp", &Wait[1]);
 
 }
 
@@ -203,7 +206,7 @@ void StartWindow(void)
     SDL_GL_SwapBuffers();
 }
 
-void SettingWindow(void)
+void SettingWindow(int flag)
 {
     view3D();
     view2D();
@@ -221,6 +224,8 @@ void SettingWindow(void)
 
     GLfloat texture_color[] = {1, 1, 1, alp};
     GLfloat texture_color2[] = {0, 0, 1, alp};
+
+    if(flag == 0){
     glBindTexture(GL_TEXTURE_2D, texA[0]);
     
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
@@ -304,6 +309,7 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( -60 , 20);
     glEnd();
     }
+    
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
@@ -314,6 +320,16 @@ void SettingWindow(void)
     glTexCoord2i(1, 1);  glVertex2i(-70,-94);
     glTexCoord2i(0, 1);  glVertex2i(-70, 94);
     glEnd();
+    }else{
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+ 	glBindTexture(GL_TEXTURE_2D, Wait[1]);
+   	glBegin(GL_QUADS);
+    	glTexCoord2i(0, 0);  glVertex2i(70 , 94 );
+    	glTexCoord2i(1, 0);  glVertex2i(70 ,-94 );
+    	glTexCoord2i(1, 1);  glVertex2i(-70 ,-94 );
+    	glTexCoord2i(0, 1);  glVertex2i(-70 , 94 );
+    	glEnd();
+   }
 
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 
@@ -338,28 +354,36 @@ void WaitingWindow(void)
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
     glBindTexture(GL_TEXTURE_2D, texA[p[control_id].type]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i( 50 , 10 );
-    glTexCoord2i(1, 0);  glVertex2i( 50 ,-10 );
-    glTexCoord2i(1, 1);  glVertex2i( 30 ,-10 );
-    glTexCoord2i(0, 1);  glVertex2i( 30 , 10 );
+    glTexCoord2i(0, 0);  glVertex2i( 50 , 15 );
+    glTexCoord2i(1, 0);  glVertex2i( 50 ,-15 );
+    glTexCoord2i(1, 1);  glVertex2i( 20 ,-15 );
+    glTexCoord2i(0, 1);  glVertex2i( 20 , 15 );
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, PointTex[setting2.point]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i(-20 , 60 );
-    glTexCoord2i(1, 0);  glVertex2i(-20 , 40 );
-    glTexCoord2i(1, 1);  glVertex2i(-40 , 40 );
+    glTexCoord2i(0, 0);  glVertex2i(-10 , 60 );
+    glTexCoord2i(1, 0);  glVertex2i(-10 , 30 );
+    glTexCoord2i(1, 1);  glVertex2i(-40 , 30 );
     glTexCoord2i(0, 1);  glVertex2i(-40 , 60 );
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, Wait[0]);
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex2i(-45 , 60 );
+    glTexCoord2i(1, 0);  glVertex2i(-45 ,-60 );
+    glTexCoord2i(1, 1);  glVertex2i(-68 ,-60 );
+    glTexCoord2i(0, 1);  glVertex2i(-68 , 60 );
     glEnd();
 
     int i;
     for(i = 0; i < 6; i++){
 	glBindTexture(GL_TEXTURE_2D, mozi[i]);
         glBegin(GL_QUADS);
-        glTexCoord2i(0, 0);  glVertex2i(-25 , 40 -(i * 10));
-        glTexCoord2i(1, 0);  glVertex2i(-25 , 30 -(i * 10));
-        glTexCoord2i(1, 1);  glVertex2i(-35 , 30 -(i * 10));
-        glTexCoord2i(0, 1);  glVertex2i(-35 , 40 -(i * 10));
+        glTexCoord2i(0, 0);  glVertex2i(-15 , 30 -(i * 20));
+        glTexCoord2i(1, 0);  glVertex2i(-15 , 10 -(i * 20));
+        glTexCoord2i(1, 1);  glVertex2i(-35 , 10 -(i * 20));
+        glTexCoord2i(0, 1);  glVertex2i(-35 , 30 -(i * 20));
         glEnd();
     }
 
@@ -934,6 +958,27 @@ static void draw3D(void)
     }	  
     glEnd();
 
+   /*glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);//テクスチャON
+
+    static GLdouble alp,vec;
+    if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
+    else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
+    
+
+    glBindTexture(GL_TEXTURE_2D, Starttex);
+    GLfloat texture_color[] = {1, 1, 1, alp};
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+
+    glBegin(GL_QUADS);
+    glTexCoord2i(0, 0);  glVertex3dv( 70, 94);
+    glTexCoord2i(1, 0);  glVertex3dv( 70,-94);
+    glTexCoord2i(1, 1);  glVertex3dv(-70,-94);
+    glTexCoord2i(0, 1);  glVertex3dv(-70, 94);
+    glEnd();
+
+    glDisable(GL_TEXTURE_2D);//テクスチャOFF
+*/
     /*
     glBegin(GL_QUADS);
     for (i = 0; i < 4; ++i) {
@@ -1145,10 +1190,10 @@ static void modelD(GLdouble alp)
     }
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
-
+    glColorMask(1, 1, 1, 1);  // Alphaも描画する設定
    if(recv_flag == 100){
         glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, hassha_img);
 	glBegin(GL_QUADS);
 	glTexCoord2i(0, 0);  glVertex2d( 0, 40);
@@ -1239,6 +1284,7 @@ static void modelD_test()
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 }
 
+/*必殺技（致命傷）*/
 static void flash_on(void)
 {
     static GLfloat positionh[4];
@@ -1251,8 +1297,6 @@ static void flash_on(void)
     glEnable(GL_LIGHT1);
 }
 
-
-/*必殺技（致命傷）*/
 static void flash_off(void)
 {
     glDisable(GL_LIGHT1);

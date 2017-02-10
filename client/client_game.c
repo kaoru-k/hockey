@@ -120,7 +120,7 @@ int Keyevent(void)
             case 11:
                 endflag = 1; break;
             }
-	    if(( settingflag == 2 && myid == 0) || (settingflag = 1 && myid != 0))
+	    if(( settingflag == 2 && myid == 0) || (settingflag == 1 && myid != 0))
 		settingflag++;
             break;
 	default:

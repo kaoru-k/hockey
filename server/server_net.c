@@ -108,12 +108,12 @@ void setting_server(void)
     SETTING  setting[4];
     SETTING2 setting2;
 
-    fprintf(stderr, "Receive settings ...");
+    fprintf(stderr, "Receive settings...");
     for (i = 0; i < num_clients; i++) {
         recv_data(i, &setting[i], sizeof(SETTING));
-        fprintf(stderr, "%d ", i);
+        //fprintf(stderr, "%d ", i);
     }
-    // あとで消す
+
     for (i = num_clients; i < 4; i++)
         setting[i].chara = 0;
     
@@ -187,17 +187,26 @@ void setting_server(void)
     p[4].type = 4;
     p[5].type = 4;
 
-    fprintf(stderr, "max_point: %d\n", max_point);
+    //fprintf(stderr, "max_point: %d\n", max_point);
     setting2.point = max_point;
     for (i = 0; i < 6; i++) {
-        fprintf(stderr, "p[%d] cid:%d type:%d\n", i, p[i].cid, p[i].type);
+        //fprintf(stderr, "p[%d] cid:%d type:%d\n", i, p[i].cid, p[i].type);
         setting2.type[i] = p[i].type;
     }
     
+    fprintf(stderr, "Sending settings... ", max_point);
     for (i = 0; i < num_clients; i++) {
         send_data(i, &clients[i].control, sizeof(int));
         send_data(i, &setting2, sizeof(SETTING2));
     }
+    fprintf(stderr, "done.\nWaiting clients... ", max_point);
+    
+    for (i = 0; i < num_clients; i++) {
+        recv_data(i, &setting[i], sizeof(SETTING));
+        //fprintf(stderr, "%d ", i);
+    }
+    fprintf(stderr, "done\n", max_point);
+
 }
 
 int network(void)
