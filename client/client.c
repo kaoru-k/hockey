@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 		    flag = 0;
 	    }
         }      
-
+	setting_done();
         flag = 1;
 
         draw_field();

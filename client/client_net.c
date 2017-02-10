@@ -78,7 +78,12 @@ void setting_client(void)
     recv_data(&setting2, sizeof(SETTING2));
     for (i = 0; i < 6; i++)
         p[i].type = setting2.type[i];
-    fprintf(stderr, "point:%d type:%d\n", setting2.point, p[control_id].type);
+    //fprintf(stderr, "point:%d type:%d\n", setting2.point, p[control_id].type);
+}
+
+void setting_done(void)
+{
+    send_data(&setting, sizeof(SETTING));
 }
 
 int network_send(void)
