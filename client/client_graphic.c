@@ -108,9 +108,9 @@ int init_sdl(void)
     creatTex("./image/kaishi.bmp", &Wait[0]);
     creatTex("./image/wait.bmp", &Wait[1]);
     creatTex("./image/ki.bmp", &Map[0]);
-    creatTex("./image/s.bmp", &Map[1]);
+    creatTex("./image/s3.bmp", &Map[1]);
     creatTex("./image/t.bmp", &Map[2]);
-    creatTex("./image/sib.bmp", &Mapchip[0]);
+    creatTex("./image/ht.bmp", &Mapchip[0]);
 }
 
 int draw_field(void)
