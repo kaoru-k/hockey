@@ -1001,9 +1001,7 @@ static void draw3D(void)
     glEnd();
         
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, g);
-    if(control_id == 2)
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
-  
+    
     glBegin(GL_QUADS);
     for (j = 0; j < 6; ++j) {
         for (i = 0; i < 4; ++i) {
@@ -1013,7 +1011,7 @@ static void draw3D(void)
     glEnd();
 
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, g);
-    if(control_id == 3)
+    if(control_id == 2)
 	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
 
     glBegin(GL_QUADS);
@@ -1023,7 +1021,9 @@ static void draw3D(void)
         }
     }	  
     glEnd();
-
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, g);
+    if(control_id == 3)
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
     glBegin(GL_QUADS);
     for (j = 0; j < 6; ++j) {
         for (i = 0; i < 4; ++i) {
@@ -1031,6 +1031,8 @@ static void draw3D(void)
         }
     }	  
     glEnd();
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, g);
 
     glBegin(GL_QUADS);
     for (j = 0; j < 6; ++j) {
@@ -1079,16 +1081,16 @@ static void draw3D(void)
     glEnd();
 */
     
-        for (i = 0; i < 4; ++i) {
+        /*for (i = 0; i < 4; ++i) {
 		glBindTexture(GL_TEXTURE_2D, Map[i%3]);
                
 		glBegin(GL_QUADS);
-                glTexCoord2i(0, 0);  glVertex3d( 100 -(i * 50),-160, 50);
-   		glTexCoord2i(1, 0);  glVertex3d( 100 -((i+1) * 50),-160, 50);
-  		glTexCoord2i(1, 1);  glVertex3d( 100 -((i+1) * 50), -160, 0);
-  		glTexCoord2i(0, 1);  glVertex3d( 100 -(i * 50)     , -160, 0);
+                glTexCoord2i(0, 0);  glVertex3d( 100 -(i * 50),-180, 50);
+   		glTexCoord2i(1, 0);  glVertex3d( 100 -((i+1) * 50),-180, 50);
+  		glTexCoord2i(1, 1);  glVertex3d( 100 -((i+1) * 50), -180, 0);
+  		glTexCoord2i(0, 1);  glVertex3d( 100 -(i * 50)     , -180, 0);
                 glEnd();
-        }
+        }*/
     
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 
