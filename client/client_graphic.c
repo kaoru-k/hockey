@@ -206,7 +206,7 @@ void StartWindow(void)
     SDL_GL_SwapBuffers();
 }
 
-void SettingWindow(void)
+void SettingWindow(int flag)
 {
     view3D();
     view2D();
@@ -224,6 +224,8 @@ void SettingWindow(void)
 
     GLfloat texture_color[] = {1, 1, 1, alp};
     GLfloat texture_color2[] = {0, 0, 1, alp};
+
+    if(flag == 0){
     glBindTexture(GL_TEXTURE_2D, texA[0]);
     
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
@@ -307,6 +309,7 @@ void SettingWindow(void)
     glTexCoord2i(0, 1);  glVertex2i( -60 , 20);
     glEnd();
     }
+    
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
@@ -317,6 +320,16 @@ void SettingWindow(void)
     glTexCoord2i(1, 1);  glVertex2i(-70,-94);
     glTexCoord2i(0, 1);  glVertex2i(-70, 94);
     glEnd();
+    }else{
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+ 	glBindTexture(GL_TEXTURE_2D, Wait[1]);
+   	glBegin(GL_QUADS);
+    	glTexCoord2i(0, 0);  glVertex2i(70 , 94 );
+    	glTexCoord2i(1, 0);  glVertex2i(70 ,-94 );
+    	glTexCoord2i(1, 1);  glVertex2i(-70 ,-94 );
+    	glTexCoord2i(0, 1);  glVertex2i(-70 , 94 );
+    	glEnd();
+   }
 
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 

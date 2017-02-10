@@ -46,7 +46,7 @@ extern int  Keyevent(void);
 extern int  init_sdl(void);
 extern int  draw_field(void);
 extern void  StartWindow(void);
-extern void  SettingWindow(void);
+extern void  SettingWindow(int flag);
 extern void  WaitingWindow(void);
 
 // client_sound.c

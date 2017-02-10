@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
         flag = 1;
 	setting.point = 3;
         while(flag){//設定画面
-            SettingWindow();
+            SettingWindow(0);
             Keyevent();
             if(myid == 0 && settingflag == 3)
 		flag = 0;
@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
 		flag = 0;
         }
 
+        SettingWindow(1);
         flag = 1;
         setting_client();
         while(flag){//設定画面
