@@ -1481,7 +1481,7 @@ static void modelD(GLdouble alp)
     if(recv_flag == 10 || recv_flag == -1){
         glEnable(GL_BLEND);
 	glBindTexture(GL_TEXTURE_2D, GOAL);
-        glBlendFunc(GL_ONE, GL_SRC_COLOR);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBegin(GL_QUADS);
 	glTexCoord2i(0, 0);  glVertex2d( 10, 20);
 	glTexCoord2i(1, 0);  glVertex2d( 10, -20);
