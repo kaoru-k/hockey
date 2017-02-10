@@ -56,6 +56,7 @@ void play_sound(int index)
 
 void play_bgm(int index)
 {
+    Mix_VolumeMusic(60);
     switch(index) {
     case 0:
         Mix_PlayMusic(bgm, -1); break;
