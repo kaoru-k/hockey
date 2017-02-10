@@ -81,8 +81,8 @@ int init_sdl(void)
     creatTex("./image/H.bmp", &Starttex);
     creatTex("./image/hsw.bmp", &AP);
     creatTex("./image/GOAL.bmp", &GOAL);
-    creatTex("./image/kakuteiv.bmp", &Result[0]);
-    creatTex("./image/kakuteid.bmp", &Result[1]);
+    creatTex("./image/yusho.bmp", &Result[0]);
+    creatTex("./image/make.bmp", &Result[1]);
     creatTex("./image/0.bmp", &PointTex[0]);
     creatTex("./image/1.bmp", &PointTex[1]);
     creatTex("./image/2.bmp", &PointTex[2]);
@@ -106,7 +106,9 @@ int init_sdl(void)
     creatTex("./image/button_1.bmp", &Button[1]);
     creatTex("./image/kaishi.bmp", &Wait[0]);
     creatTex("./image/wait.bmp", &Wait[1]);
-
+    creatTex("./image/ki.bmp", &Map[0]);
+    creatTex("./image/s.bmp", &Map[1]);
+    creatTex("./image/t.bmp", &Map[2]);
 }
 
 int draw_field(void)
@@ -225,7 +227,7 @@ void SettingWindow(int flag)
     GLfloat texture_color[] = {1, 1, 1, alp};
     GLfloat texture_color2[] = {0, 0, 1, alp};
 
-    if(flag == 0){
+    
     glBindTexture(GL_TEXTURE_2D, texA[0]);
     
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
@@ -310,6 +312,16 @@ void SettingWindow(int flag)
     glEnd();
     }
     
+    if(flag == 1){
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
+ 	glBindTexture(GL_TEXTURE_2D, Wait[1]);
+   	glBegin(GL_QUADS);
+    	glTexCoord2i(0, 0);  glVertex2i(15 , 30 );
+    	glTexCoord2i(1, 0);  glVertex2i(15 ,-30 );
+    	glTexCoord2i(1, 1);  glVertex2i(-15 ,-30 );
+    	glTexCoord2i(0, 1);  glVertex2i(-15 , 30 );
+    	glEnd();
+   }
 
     glBindTexture(GL_TEXTURE_2D, Starttex);
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color2);
@@ -320,16 +332,7 @@ void SettingWindow(int flag)
     glTexCoord2i(1, 1);  glVertex2i(-70,-94);
     glTexCoord2i(0, 1);  glVertex2i(-70, 94);
     glEnd();
-    }else{
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
- 	glBindTexture(GL_TEXTURE_2D, Wait[1]);
-   	glBegin(GL_QUADS);
-    	glTexCoord2i(0, 0);  glVertex2i(70 , 94 );
-    	glTexCoord2i(1, 0);  glVertex2i(70 ,-94 );
-    	glTexCoord2i(1, 1);  glVertex2i(-70 ,-94 );
-    	glTexCoord2i(0, 1);  glVertex2i(-70 , 94 );
-    	glEnd();
-   }
+    
 
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 
@@ -648,7 +651,7 @@ void draw2D()
 
 static void draw3D(void)
 {
-    //glColorMask(1, 1, 1, 1);  // Alphaも描画する設定
+    glColorMask(1, 1, 1, 1);  // Alphaも描画する設定
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     view3D;
 
@@ -958,7 +961,6 @@ static void draw3D(void)
     }	  
     glEnd();
 
-   /*glLoadIdentity();
     glEnable(GL_TEXTURE_2D);//テクスチャON
 
     static GLdouble alp,vec;
@@ -971,14 +973,26 @@ static void draw3D(void)
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
 
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex3dv( 70, 94);
-    glTexCoord2i(1, 0);  glVertex3dv( 70,-94);
-    glTexCoord2i(1, 1);  glVertex3dv(-70,-94);
-    glTexCoord2i(0, 1);  glVertex3dv(-70, 94);
+    glTexCoord2i(0, 0);  glVertex3d( 100,-160, 0);
+    glTexCoord2i(1, 0);  glVertex3d(-100,-160, 0);
+    glTexCoord2i(1, 1);  glVertex3d(-100, 160, 0);
+    glTexCoord2i(0, 1);  glVertex3d( 100, 160, 0);
     glEnd();
 
+    
+        for (i = 0; i < 4; ++i) {
+		glBindTexture(GL_TEXTURE_2D, Map[i%3]);
+               
+		glBegin(GL_QUADS);
+                glTexCoord2i(0, 0);  glVertex3d( 100 -(i * 50),-160, 50);
+   		glTexCoord2i(1, 0);  glVertex3d( 100 -((i+1) * 50),-160, 50);
+  		glTexCoord2i(1, 1);  glVertex3d( 100 -((i+1) * 50), -160, 0);
+  		glTexCoord2i(0, 1);  glVertex3d( 100 -(i * 50)     , -160, 0);
+                glEnd();
+        }
+    
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
-*/
+
     /*
     glBegin(GL_QUADS);
     for (i = 0; i < 4; ++i) {
@@ -1196,10 +1210,10 @@ static void modelD(GLdouble alp)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, hassha_img);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 0, 40);
-	glTexCoord2i(1, 0);  glVertex2d( 0, -40);
-	glTexCoord2i(1, 1);  glVertex2d( -20,-40);
-   	glTexCoord2i(0, 1);  glVertex2d( -20, 40);
+	glTexCoord2i(0, 0);  glVertex2d( -20, 40);
+	glTexCoord2i(1, 0);  glVertex2d( -20, -40);
+	glTexCoord2i(1, 1);  glVertex2d( -40,-40);
+   	glTexCoord2i(0, 1);  glVertex2d( -40, 40);
 	glEnd();
         glDisable(GL_BLEND);
    }
@@ -1212,10 +1226,38 @@ static void modelD(GLdouble alp)
 	glBegin(GL_QUADS);
 	glTexCoord2i(0, 0);  glVertex2d( -10, 50);
 	glTexCoord2i(1, 0);  glVertex2d( -10, -50);
-	glTexCoord2i(1, 1);  glVertex2d( -30, -50);
-   	glTexCoord2i(0, 1);  glVertex2d( -30, 50);
+	glTexCoord2i(1, 1);  glVertex2d( -40, -50);
+   	glTexCoord2i(0, 1);  glVertex2d( -40, 50);
 	glEnd();
         glDisable(GL_BLEND);
+
+        glBindTexture(GL_TEXTURE_2D, Result[0]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 70, 94);
+	glTexCoord2i(1, 0);  glVertex2d( 70, -94);
+	glTexCoord2i(1, 1);  glVertex2d( -70, -94);
+   	glTexCoord2i(0, 1);  glVertex2d( -70, 94);
+	glEnd();
+   }else if(recv_flag == 201){
+        glEnable(GL_BLEND);
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBindTexture(GL_TEXTURE_2D, cont_img);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( -10, 50);
+	glTexCoord2i(1, 0);  glVertex2d( -10, -50);
+	glTexCoord2i(1, 1);  glVertex2d( -40, -50);
+   	glTexCoord2i(0, 1);  glVertex2d( -40, 50);
+	glEnd();
+        glDisable(GL_BLEND);
+
+        glBindTexture(GL_TEXTURE_2D, Result[1]);
+	glBegin(GL_QUADS);
+	glTexCoord2i(0, 0);  glVertex2d( 70, 94);
+	glTexCoord2i(1, 0);  glVertex2d( 70, -94);
+	glTexCoord2i(1, 1);  glVertex2d( -70, -94);
+   	glTexCoord2i(0, 1);  glVertex2d( -70, 94);
+	glEnd();
    }
 
    if(cameramode == 0){
