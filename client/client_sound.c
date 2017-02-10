@@ -17,7 +17,7 @@ static Mix_Chunk *sup2_sound;
 
 
 
-static char bgm_file[]   = "";
+static char bgm_file[]   = "audio/Happy_Candle.mp3";
 //static char c[]     = "audio/c.wav";
 //static char atk1[]  = "audio/atk1.wav";
 //static char atk2[]  = "audio/atk2.wav";
@@ -33,7 +33,7 @@ int setup_sound(void)
     if ( (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024)) < 0 )
         return 0;
 
-    //bgm = Mix_LoadMUS( bgmfile );
+    bgm = Mix_LoadMUS( bgm_file );
     //c_sound      = Mix_LoadWAV( c );
     //atk1_sound   = Mix_LoadWAV( atk1 );
     //atk2_sound   = Mix_LoadWAV( atk2 );
@@ -51,5 +51,13 @@ void play_sound(int index)
     switch(index) {
     case M_BOUND :
         Mix_PlayChannel(-1, bound_sound, 0); break;
+    }
+}
+
+void play_bgm(int index)
+{
+    switch(index) {
+    case 0:
+        Mix_PlayMusic(bgm, -1); break;
     }
 }
