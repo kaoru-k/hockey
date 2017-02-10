@@ -1081,16 +1081,49 @@ static void draw3D(void)
     glEnd();
 */
     
-        /*for (i = 0; i < 4; ++i) {
+        for (i = 0; i < 4; ++i) {
 		glBindTexture(GL_TEXTURE_2D, Map[i%3]);
                
 		glBegin(GL_QUADS);
-                glTexCoord2i(0, 0);  glVertex3d( 100 -(i * 50),-180, 50);
-   		glTexCoord2i(1, 0);  glVertex3d( 100 -((i+1) * 50),-180, 50);
-  		glTexCoord2i(1, 1);  glVertex3d( 100 -((i+1) * 50), -180, 0);
-  		glTexCoord2i(0, 1);  glVertex3d( 100 -(i * 50)     , -180, 0);
+                glTexCoord2i(0, 0);  glVertex3d( 120 -(i * 60),-190, 50);
+   		glTexCoord2i(1, 0);  glVertex3d( 120 -((i+1) * 60),-190, 50);
+  		glTexCoord2i(1, 1);  glVertex3d( 120 -((i+1) * 60), -190, 0);
+  		glTexCoord2i(0, 1);  glVertex3d( 120 -(i * 60)     , -190, 0);
                 glEnd();
-        }*/
+        }
+
+        for (i = 0; i < 4; ++i) {
+		glBindTexture(GL_TEXTURE_2D, Map[i%3]);
+               
+		glBegin(GL_QUADS);
+                glTexCoord2i(0, 0);  glVertex3d( 120 -(i * 60),190, 50);
+   		glTexCoord2i(1, 0);  glVertex3d( 120 -((i+1) * 60),190, 50);
+  		glTexCoord2i(1, 1);  glVertex3d( 120 -((i+1) * 60), 190, 0);
+  		glTexCoord2i(0, 1);  glVertex3d( 120 -(i * 60)     , 190, 0);
+                glEnd();
+        }
+
+       for (i = 0; i < 6; ++i) {
+		glBindTexture(GL_TEXTURE_2D, Map[i%3]);
+               
+		glBegin(GL_QUADS);
+                glTexCoord2i(0, 0);  glVertex3d( 120 , 180 -(i * 60), 50);
+   		glTexCoord2i(1, 0);  glVertex3d( 120 , 180 -((i+1) * 60), 50);
+  		glTexCoord2i(1, 1);  glVertex3d( 120 , 180-((i+1) * 60), 0);
+  		glTexCoord2i(0, 1);  glVertex3d( 120 , 180-(i * 60), 0);
+                glEnd();
+        }
+
+        for (i = 0; i < 6; ++i) {
+		glBindTexture(GL_TEXTURE_2D, Map[i%3]);
+               
+		glBegin(GL_QUADS);
+                glTexCoord2i(0, 0);  glVertex3d( -120 , 180 -(i * 60), 50);
+   		glTexCoord2i(1, 0);  glVertex3d( -120 , 180 -((i+1) * 60), 50);
+  		glTexCoord2i(1, 1);  glVertex3d( -120 , 180-((i+1) * 60), 0);
+  		glTexCoord2i(0, 1);  glVertex3d( -120 , 180-(i * 60), 0);
+                glEnd();
+        }
     
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 
@@ -1247,8 +1280,8 @@ static void modelD(GLdouble alp)
 	glBegin(GL_QUADS);
         glTexCoord2i(0, 0);  glVertex2d( 48, 88);
         glTexCoord2i(1, 0);  glVertex2d( 48, 73);
-        glTexCoord2i(1, 1);  glVertex2d( 38, 73);
-        glTexCoord2i(0, 1);  glVertex2d( 38, 88);
+        glTexCoord2i(1, 1);  glVertex2d( 43, 73);
+        glTexCoord2i(0, 1);  glVertex2d( 43, 88);
         glEnd();
     }	
 
@@ -1270,8 +1303,8 @@ static void modelD(GLdouble alp)
 	glBegin(GL_QUADS);
         glTexCoord2i(0, 0);  glVertex2d( 48, 28);
         glTexCoord2i(1, 0);  glVertex2d( 48, 13);
-        glTexCoord2i(1, 1);  glVertex2d( 38, 13);
-        glTexCoord2i(0, 1);  glVertex2d( 38, 28);
+        glTexCoord2i(1, 1);  glVertex2d( 43, 13);
+        glTexCoord2i(0, 1);  glVertex2d( 43, 28);
         glEnd();
     }
 
@@ -1308,8 +1341,8 @@ static void modelD(GLdouble alp)
 	glBegin(GL_QUADS);
         glTexCoord2i(0, 0);  glVertex2d( 48, 88);
         glTexCoord2i(1, 0);  glVertex2d( 48, 73);
-        glTexCoord2i(1, 1);  glVertex2d( 38, 73);
-        glTexCoord2i(0, 1);  glVertex2d( 38, 88);
+        glTexCoord2i(1, 1);  glVertex2d( 43, 73);
+        glTexCoord2i(0, 1);  glVertex2d( 43, 88);
         glEnd();
     }	
 
@@ -1331,8 +1364,8 @@ static void modelD(GLdouble alp)
 	glBegin(GL_QUADS);
         glTexCoord2i(0, 0);  glVertex2d( 48, 28);
         glTexCoord2i(1, 0);  glVertex2d( 48, 13);
-        glTexCoord2i(1, 1);  glVertex2d( 38, 13);
-        glTexCoord2i(0, 1);  glVertex2d( 38, 28);
+        glTexCoord2i(1, 1);  glVertex2d( 43, 13);
+        glTexCoord2i(0, 1);  glVertex2d( 43, 28);
         glEnd();
     }
 
@@ -1410,35 +1443,35 @@ static void modelD(GLdouble alp)
    if(cameramode == 0){
         glBindTexture(GL_TEXTURE_2D, PointTex[point[0]]);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 30, 15);
-	glTexCoord2i(1, 0);  glVertex2d( 30, 5);
-	glTexCoord2i(1, 1);  glVertex2d( 20, 5);
-   	glTexCoord2i(0, 1);  glVertex2d( 20, 15);
+	glTexCoord2i(0, 0);  glVertex2d( 40, 20);
+	glTexCoord2i(1, 0);  glVertex2d( 40, 10);
+	glTexCoord2i(1, 1);  glVertex2d( 30, 10);
+   	glTexCoord2i(0, 1);  glVertex2d( 30, 20);
 	glEnd();
 
         glBindTexture(GL_TEXTURE_2D, PointTex[point[1]]);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 30, -5);
-	glTexCoord2i(1, 0);  glVertex2d( 30, -15);
-	glTexCoord2i(1, 1);  glVertex2d( 20, -15);
-   	glTexCoord2i(0, 1);  glVertex2d( 20, -5);
+	glTexCoord2i(0, 0);  glVertex2d( 40, -10);
+	glTexCoord2i(1, 0);  glVertex2d( 40, -20);
+	glTexCoord2i(1, 1);  glVertex2d( 30, -20);
+   	glTexCoord2i(0, 1);  glVertex2d( 30, -10);
 	glEnd();
 
    }else if(cameramode == 1){
         glBindTexture(GL_TEXTURE_2D, PointTex[point[1]]);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 30, 15);
-	glTexCoord2i(1, 0);  glVertex2d( 30, 5);
-	glTexCoord2i(1, 1);  glVertex2d( 20, 5);
-   	glTexCoord2i(0, 1);  glVertex2d( 20, 15);
+	glTexCoord2i(0, 0);  glVertex2d( 40, 20);
+	glTexCoord2i(1, 0);  glVertex2d( 40, 10);
+	glTexCoord2i(1, 1);  glVertex2d( 30, 10);
+   	glTexCoord2i(0, 1);  glVertex2d( 30, 20);
 	glEnd();
 
         glBindTexture(GL_TEXTURE_2D, PointTex[point[0]]);
 	glBegin(GL_QUADS);
-	glTexCoord2i(0, 0);  glVertex2d( 30, -5);
-	glTexCoord2i(1, 0);  glVertex2d( 30, -15);
-	glTexCoord2i(1, 1);  glVertex2d( 20, -15);
-   	glTexCoord2i(0, 1);  glVertex2d( 20, -5);
+	glTexCoord2i(0, 0);  glVertex2d( 40, -10);
+	glTexCoord2i(1, 0);  glVertex2d( 40, -20);
+	glTexCoord2i(1, 1);  glVertex2d( 30, -20);
+   	glTexCoord2i(0, 1);  glVertex2d( 30, -10);
 	glEnd();
    }
 
