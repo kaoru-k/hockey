@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
     setup_client(server_name, port);
     init_sdl();
     setup_sound();
+    play_bgm(0);
 
     int test = 0;
     SDL_Event event;

@@ -52,3 +52,4 @@ extern void  WaitingWindow(void);
 // client_sound.c
 extern int  setup_sound(void);
 extern void play_sound(int index);
+extern void play_bgm(int index);
