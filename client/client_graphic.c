@@ -1271,6 +1271,7 @@ static void modelD_test()
     glDisable(GL_TEXTURE_2D);//テクスチャOFF
 }
 
+/*必殺技（致命傷）*/
 static void flash_on(void)
 {
     static GLfloat positionh[4];
@@ -1283,8 +1284,6 @@ static void flash_on(void)
     glEnable(GL_LIGHT1);
 }
 
-
-/*必殺技（致命傷）*/
 static void flash_off(void)
 {
     glDisable(GL_LIGHT1);

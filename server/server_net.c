@@ -108,7 +108,7 @@ void setting_server(void)
     SETTING  setting[4];
     SETTING2 setting2;
 
-    fprintf(stderr, "Receive settings ...");
+    fprintf(stderr, "Receive settings...");
     for (i = 0; i < num_clients; i++) {
         recv_data(i, &setting[i], sizeof(SETTING));
         //fprintf(stderr, "%d ", i);
@@ -203,7 +203,7 @@ void setting_server(void)
     
     for (i = 0; i < num_clients; i++) {
         recv_data(i, &setting[i], sizeof(SETTING));
-        fprintf(stderr, "%d ", i);
+        //fprintf(stderr, "%d ", i);
     }
     fprintf(stderr, "done\n", max_point);
 
