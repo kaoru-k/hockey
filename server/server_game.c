@@ -118,7 +118,7 @@ static int hissatu(int type,int a){
 	return -1;
     case 1:
 	if(a == -1)
-            game.co[1] = 1;
+            game.co[1] = -1;
 	else
 	    game.co[0] = 1;
         return -1;

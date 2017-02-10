@@ -29,6 +29,7 @@ GLuint      hassha_img   = 0;
 GLuint      Wait[2]      = {0};
 GLuint      Button[2]    = {0};
 GLuint      Map[3]	 = {0};
+GLuint      Mapchip[3]   = {0};
 int         flash        = 0;
 GLUquadric* quadric;
 GLUquadric* quadric2;
@@ -107,8 +108,9 @@ int init_sdl(void)
     creatTex("./image/kaishi.bmp", &Wait[0]);
     creatTex("./image/wait.bmp", &Wait[1]);
     creatTex("./image/ki.bmp", &Map[0]);
-    creatTex("./image/s.bmp", &Map[1]);
+    creatTex("./image/s3.bmp", &Map[1]);
     creatTex("./image/t.bmp", &Map[2]);
+    creatTex("./image/ht.bmp", &Mapchip[0]);
 }
 
 int draw_field(void)
@@ -123,8 +125,8 @@ int draw_field(void)
 	           -1.0f,  0.0f, 0.0f);
     }
     draw3D();
-    drawPlane();
-    drawAxis();
+    //drawPlane();
+    //drawAxis();
     draw2D();
     modelD_test();
     SDL_GL_SwapBuffers();
@@ -985,20 +987,23 @@ static void draw3D(void)
     GLdouble y;
 
 
-    glBindTexture(GL_TEXTURE_2D, texA[0]);
+    glBindTexture(GL_TEXTURE_2D, Mapchip[0]);
     GLfloat texture_color[] = {1, 1, 1, alp};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
 
-    glBegin(GL_QUADS);
-    for( y = -ysize; y <= ysize; y += ysize/ynum)
-        for( x = -xsize; x <= xsize; x += xsize/xnum) 
+    for( y = ysize; y > -ysize; y -= ysize/ynum){
+        for( x = xsize; x > -xsize; x -= xsize/xnum){
+            glBegin(GL_QUADS);
 	    glTexCoord2i(0, 0);  glVertex3d( x, y, 0);
-	    glTexCoord2i(1, 0);  glVertex3d( x, y, 0);
-	    glTexCoord2i(1, 1);  glVertex3d( x, y, 0);
-	    glTexCoord2i(0, 1);  glVertex3d( x, y, 0);
+	    glTexCoord2i(1, 0);  glVertex3d( x, y - 16, 0);
+	    glTexCoord2i(1, 1);  glVertex3d( x-10, y - 16, 0);
+	    glTexCoord2i(0, 1);  glVertex3d( x-10, y, 0);
+            glEnd();
+	}
+    }
     glEnd();
     
-    glDisable(GL_TEXTURE_2D);//テクスチャOFF
+    //glDisable(GL_TEXTURE_2D);//テクスチャOFF
 
     /*glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex3d( 100,-160, 0);
