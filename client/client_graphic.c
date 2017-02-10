@@ -22,7 +22,7 @@ GLuint      Starttex     = 0;		//スタート画面
 GLuint	    AP	         = 0;		//必殺技ゲージ（満タン時用）
 GLuint      Result[2]    = {0};           //結果画像
 GLuint      GOAL         = 0;
-GLuint      PointTex[10] = {0};
+GLuint      PointTex[11] = {0};
 GLuint      mozi[6]      = {0};
 GLuint      cont_img     = 0;
 GLuint      hassha_img   = 0;
@@ -278,21 +278,32 @@ void SettingWindow(int flag)
     glBindTexture(GL_TEXTURE_2D, PointTex[setting.point]);
 	if(settingflag == 0 || settingflag == 2){
     		glBegin(GL_QUADS);
-    		glTexCoord2i(0, 0);  glVertex2i( -10, 10 );
-    		glTexCoord2i(1, 0);  glVertex2i( -10,-10 );
-    		glTexCoord2i(1, 1);  glVertex2i( -30,-10 );
-    		glTexCoord2i(0, 1);  glVertex2i( -30, 10 );
+    		glTexCoord2i(0, 0);  glVertex2i( -15, 60 );
+    		glTexCoord2i(1, 0);  glVertex2i( -15, 40 );
+    		glTexCoord2i(1, 1);  glVertex2i( -35, 40 );
+    		glTexCoord2i(0, 1);  glVertex2i( -35, 60 );
                 glEnd();
 	}
 	if(settingflag == 1){
     		glBegin(GL_QUADS);
-    		glTexCoord2i(0, 0);  glVertex2i( -5, 15 );
-    		glTexCoord2i(1, 0);  glVertex2i( -5,-15 );
-    		glTexCoord2i(1, 1);  glVertex2i( -35,-15 );
-    		glTexCoord2i(0, 1);  glVertex2i( -35, 15 );
+    		glTexCoord2i(0, 0);  glVertex2i( -10, 70 );
+    		glTexCoord2i(1, 0);  glVertex2i( -10, 40 );
+    		glTexCoord2i(1, 1);  glVertex2i( -40, 40 );
+    		glTexCoord2i(0, 1);  glVertex2i( -40, 70 );
                 glEnd();
 	}
     }
+    int j;
+    for(j = 0; j < 6; j++){
+	glBindTexture(GL_TEXTURE_2D, mozi[j]);
+        glBegin(GL_QUADS);
+        glTexCoord2i(0, 0);  glVertex2i(-15 , 40 -(j * 20));
+        glTexCoord2i(1, 0);  glVertex2i(-15 , 20 -(j * 20));
+        glTexCoord2i(1, 1);  glVertex2i(-35 , 20 -(j * 20));
+        glTexCoord2i(0, 1);  glVertex2i(-35 , 40 -(j * 20));
+        glEnd();
+    }
+
     
     if((myid == 0 && settingflag == 2 )|| (myid != 0 && settingflag == 1 )){
     glBindTexture(GL_TEXTURE_2D, Button[1]);
@@ -365,10 +376,10 @@ void WaitingWindow(void)
 
     glBindTexture(GL_TEXTURE_2D, PointTex[setting2.point]);
     glBegin(GL_QUADS);
-    glTexCoord2i(0, 0);  glVertex2i(-10 , 60 );
-    glTexCoord2i(1, 0);  glVertex2i(-10 , 30 );
-    glTexCoord2i(1, 1);  glVertex2i(-40 , 30 );
-    glTexCoord2i(0, 1);  glVertex2i(-40 , 60 );
+    glTexCoord2i(0, 0);  glVertex2i(-10 , 70 );
+    glTexCoord2i(1, 0);  glVertex2i(-10 , 40 );
+    glTexCoord2i(1, 1);  glVertex2i(-40 , 40 );
+    glTexCoord2i(0, 1);  glVertex2i(-40 , 70 );
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, Wait[0]);
@@ -383,10 +394,10 @@ void WaitingWindow(void)
     for(i = 0; i < 6; i++){
 	glBindTexture(GL_TEXTURE_2D, mozi[i]);
         glBegin(GL_QUADS);
-        glTexCoord2i(0, 0);  glVertex2i(-15 , 30 -(i * 20));
-        glTexCoord2i(1, 0);  glVertex2i(-15 , 10 -(i * 20));
-        glTexCoord2i(1, 1);  glVertex2i(-35 , 10 -(i * 20));
-        glTexCoord2i(0, 1);  glVertex2i(-35 , 30 -(i * 20));
+        glTexCoord2i(0, 0);  glVertex2i(-15 , 40 -(i * 20));
+        glTexCoord2i(1, 0);  glVertex2i(-15 , 20 -(i * 20));
+        glTexCoord2i(1, 1);  glVertex2i(-35 , 20 -(i * 20));
+        glTexCoord2i(0, 1);  glVertex2i(-35 , 40 -(i * 20));
         glEnd();
     }
 
@@ -966,19 +977,36 @@ static void draw3D(void)
     static GLdouble alp,vec;
     if     ( (vec==0)&&(alp+=0.01)>1){alp=1; vec=1;}//透過計算
     else if( (vec==1)&&(alp-=0.01)<0){alp=0; vec=0;}
-    
+    const GLdouble xsize = 100.0f;
+    const GLdouble ysize = 160.0f;
+    const int xnum = 10;
+    const int ynum = 10;
+    GLdouble x;
+    GLdouble y;
 
-    glBindTexture(GL_TEXTURE_2D, Starttex);
+
+    glBindTexture(GL_TEXTURE_2D, texA[0]);
     GLfloat texture_color[] = {1, 1, 1, alp};
     glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, texture_color);
 
     glBegin(GL_QUADS);
+    for( y = -ysize; y <= ysize; y += ysize/ynum)
+        for( x = -xsize; x <= xsize; x += xsize/xnum) 
+	    glTexCoord2i(0, 0);  glVertex3d( x, y, 0);
+	    glTexCoord2i(1, 0);  glVertex3d( x, y, 0);
+	    glTexCoord2i(1, 1);  glVertex3d( x, y, 0);
+	    glTexCoord2i(0, 1);  glVertex3d( x, y, 0);
+    glEnd();
+    
+    glDisable(GL_TEXTURE_2D);//テクスチャOFF
+
+    /*glBegin(GL_QUADS);
     glTexCoord2i(0, 0);  glVertex3d( 100,-160, 0);
     glTexCoord2i(1, 0);  glVertex3d(-100,-160, 0);
     glTexCoord2i(1, 1);  glVertex3d(-100, 160, 0);
     glTexCoord2i(0, 1);  glVertex3d( 100, 160, 0);
     glEnd();
-
+*/
     
         for (i = 0; i < 4; ++i) {
 		glBindTexture(GL_TEXTURE_2D, Map[i%3]);
@@ -1049,6 +1077,8 @@ static void drawPlane(void)
         glVertex3d(  xsize, y, 0.0 );
     }
     glEnd();
+
+    
 }
 
 static int Pot(int inSize)
