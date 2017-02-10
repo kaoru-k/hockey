@@ -8,3 +8,6 @@ make CFLAGS=-DTEST test
 
 <http://ankohouse.sblo.jp/article/100867598.html>
 
+http://dova-s.jp/bgm/download5607.html BGM
+
+http://soundeffect-lab.info/sound/anime/ kokaon
