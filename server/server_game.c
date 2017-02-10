@@ -84,7 +84,8 @@ static int sosei(int a){
 	p[0].x = 0;
 	hst -= 2;
 	return 0;
-    }else if(p[4].hp == 0){
+    }
+    if(p[4].hp == 0){
 	p[4].hp = bai(p[4].type+6);
 	p[4].x = 0;
 	hst -= 2;
@@ -97,7 +98,8 @@ static int sosei(int a){
 	p[2].x = 0;
 	hst -= 4;
 	return 0;
-    }else if(p[5].hp == 0){
+    }
+    if(p[5].hp == 0){
 	p[5].hp = bai(p[5].type + 6);
  	p[5].x = 0;
 	hst -= 4;
@@ -481,8 +483,8 @@ void field_set(void){
 			    p[3].hp = 0;
 			}
 			if(p[5].hp > 0){
-			    if( (p[3].hp = p[5].hp) > bai(p[i].type+6) )
-				p[3].hp = bai(p[i].type+6);
+			    if( (p[3].hp = p[5].hp) > bai(p[3].type+6) )
+				p[3].hp = bai(p[3].type+6);
 			    p[5].hp = 0;
 			    p[5].x = 1000;
 			}
