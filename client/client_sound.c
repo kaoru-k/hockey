@@ -18,13 +18,13 @@ static Mix_Chunk *sup2_sound;
 
 
 static char bgm_file[]   = "";
-static char c[]     = "audio/c.wav";
-static char atk1[]  = "audio/atk1.wav";
-static char atk2[]  = "audio/atk2.wav";
-static char atk22[] = "audio/atk22.wav";
+//static char c[]     = "audio/c.wav";
+//static char atk1[]  = "audio/atk1.wav";
+//static char atk2[]  = "audio/atk2.wav";
+//static char atk22[] = "audio/atk22.wav";
 static char bound[] = "audio/bound.wav";
-static char sup1[]  = "audio/sup1.wav";
-static char sup2[]  = "audio/sup2.wav";
+//static char sup1[]  = "audio/sup1.wav";
+//static char sup2[]  = "audio/sup2.wav";
 
 
 
@@ -34,13 +34,13 @@ int setup_sound(void)
         return 0;
 
     //bgm = Mix_LoadMUS( bgmfile );
-    c_sound      = Mix_LoadWAV( c );
-    atk1_sound   = Mix_LoadWAV( atk1 );
-    atk2_sound   = Mix_LoadWAV( atk2 );
-    atk22_sound  = Mix_LoadWAV( atk22 );
-    bound_sound  = Mix_LoadWAV( sup2 );
-    sup1_sound   = Mix_LoadWAV( sup1 );
-    sup2_sound   = Mix_LoadWAV( sup2 );
+    //c_sound      = Mix_LoadWAV( c );
+    //atk1_sound   = Mix_LoadWAV( atk1 );
+    //atk2_sound   = Mix_LoadWAV( atk2 );
+    //atk22_sound  = Mix_LoadWAV( atk22 );
+    bound_sound  = Mix_LoadWAV( bound );
+    //sup1_sound   = Mix_LoadWAV( sup1 );
+    //sup2_sound   = Mix_LoadWAV( sup2 );
    
 
     return 1;

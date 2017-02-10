@@ -123,8 +123,9 @@ int network_recv(void)
         case COM_LAUNCH:
             recv_flag = 100; break;
         case COM_QUE_Y:
+            recv_flag = 200
         case COM_QUE_Z:
-            recv_flag = 200; break;
+            recv_flag = 201; break;
 	case COM_BOUND:
             play_sound(M_BOUND); break;
         case COM_SPECIAL:
